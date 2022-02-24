@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "jsx": "react",
+        "outDir": "./dist",
+        "sourceMap": true,
+        "noImplicitAny": false,
+        "module": "commonjs",
+        "target": "ES2015",
+        "lib": [
+            "ES2015",
+            "ES2015.Promise",
+            "ES7",
+            "DOM"
+        ],
+        "baseUrl": ".",
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true
+    },
+    "include": [
+        "./src/**/*"
+    ]
+}
