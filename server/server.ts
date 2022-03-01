@@ -20,13 +20,13 @@ const init = async (): Promise<void> => {
 
     app.use(BuildResourceRouter());
     app.use(LoginRouter());
-    app.use(withAuth);
+    // app.use(withAuth);
 
     app.listen(process.env.PORT || 3000, () => {
         console.log(`Server is running on port ${process.env.PORT || 3000}`)
     })
 
-    app.post('/welcome', (req, res) => {
+    app.post('/welcome', withAuth, (req, res) => {
         res.status(200).send("Welcome 🙌 ");
       });
 }
