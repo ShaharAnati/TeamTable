@@ -1,3 +1,4 @@
+import './App.css';
 import {
   BrowserRouter as Router,
   Routes,
@@ -11,7 +12,6 @@ import HomeScreen from './screens/home/Home';
 import AppBar from './AppBar/AppBar';
 
 const App: React.FC = (props): JSX.Element => {
-
   return (
     <Router>
       <AppBar />

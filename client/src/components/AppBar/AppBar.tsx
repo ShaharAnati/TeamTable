@@ -77,7 +77,7 @@ export default function MenuAppBar() {
                   logout
                 </MenuItem>
                 :
-                <>
+                <div>
                   <MenuItem
                     component={Link}
                     to="/login-screen"
@@ -90,7 +90,7 @@ export default function MenuAppBar() {
                     onClick={handleClose}>
                     register
                   </MenuItem>
-                </>
+                </div>
               }
             </Menu>
           </div>

@@ -17,7 +17,7 @@ const Login = (): JSX.Element => {
 
     if (auth.user) {
         return <Navigate to="/" state={{ from: location }} replace />;
-    } 
+    }
 
     const validate = (): void => {
         if (!!username) {
@@ -61,33 +61,39 @@ const Login = (): JSX.Element => {
     };
 
     return (
-        <Grid className={'login-container'}>
-            <Paper elevation={10} className={'paper-style'}>
-                <Grid textAlign={'center'}>
-                    <h2>Sign In</h2>
-                </Grid>
-                <TextField label='Username'
-                    name="username"
-                    placeholder='Enter username'
-                    variant="standard"
-                    value={username}
-                    onChange={usernameChange}
-                    error={isUsernameInvalid}
-                    helperText={isUsernameInvalid && "required field"}
-                    fullWidth required />
-                <TextField label='Password'
-                    name="password"
-                    placeholder='Enter password'
-                    variant="standard"
-                    type='password'
-                    value={password}
-                    onChange={passwordChange}
-                    error={isPasswordInvalid}
-                    helperText={isPasswordInvalid && "required field"}
-                    fullWidth required />
-                <Button type='submit' color='primary' variant="contained" className={'button-style'} fullWidth onClick={validate}>Sign in</Button>
-            </Paper>
-        </Grid>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Grid>
+                <Paper elevation={10} className={'paper-style'} style={{ padding: '10px' }}>
+                    <div style={{ marginBottom: '10px' }}>
+                        <Grid textAlign={'center'}>
+                            <h2>Sign In</h2>
+                        </Grid>
+                        <TextField label='Username'
+                            name="username"
+                            placeholder='Enter username'
+                            variant="standard"
+                            value={username}
+                            onChange={usernameChange}
+                            error={isUsernameInvalid}
+                            helperText={isUsernameInvalid && "required field"}
+                            fullWidth required />
+                        <TextField label='Password'
+                            name="password"
+                            placeholder='Enter password'
+                            variant="standard"
+                            type='password'
+                            value={password}
+                            onChange={passwordChange}
+                            error={isPasswordInvalid}
+                            helperText={isPasswordInvalid && "required field"}
+                            fullWidth required />
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <Button type='submit' color='primary' variant="contained" className={'button-style'} style={{ width: '50%' }} onClick={validate}>Sign in</Button>
+                    </div>
+                </Paper>
+            </Grid>
+        </div>
     )
 }
 
