@@ -104,5 +104,6 @@ build/
 # TernJS port file
 .tern-port
 
+*.idea
 *.iml
 *.hot-update.[js|json]
