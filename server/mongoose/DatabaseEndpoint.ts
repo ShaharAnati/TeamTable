@@ -1,9 +1,7 @@
 const mongoose = require("mongoose");
+const { config } = require('dotenv'); 
 
 export const connectToDatabase = async () => {
-    require('dotenv').config();
-    console.log(process.env.MONGO_URI);
-    // Connecting to the database
     mongoose
       .connect(process.env.MONGO_URI || 'mongodb+srv://admin:Aa123456@teamtable.mii7y.mongodb.net/TeamTable', {
         useNewUrlParser: true,
