@@ -1,6 +1,5 @@
 import * as express from "express";
 import * as bodyParser from 'body-parser';
-
 import { initLogger } from "./conf/Logger";
 import BuildResourceRouter from './routers/ResourcesRouter';
 import LoginRouter from './routers/LoginRouter';
