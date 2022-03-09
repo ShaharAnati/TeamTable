@@ -2,14 +2,13 @@ import './App.css';
 import {
   BrowserRouter as Router,
   Routes,
-  Route,
-  useLocation,
-  Navigate
+  Route
 } from 'react-router-dom';
 import React from 'react';
 import LogInScreen from './screens/login/LoginScreen';
 import HomeScreen from './screens/home/Home';
 import AppBar from './AppBar/AppBar';
+import Register from './screens/register/RegisterScreen';
 
 const App: React.FC = (props): JSX.Element => {
   return (
@@ -18,7 +17,7 @@ const App: React.FC = (props): JSX.Element => {
       <Routes >
         <Route path='/' element={<HomeScreen />} />
         <Route path='login-screen' element={<LogInScreen />} />
-        <Route path='register-screen' element={<> register </>} />
+        <Route path='register-screen' element={<Register />} />
       </Routes>
     </Router>
   )
