@@ -17,17 +17,18 @@ const init = async (): Promise<void> => {
 
     app.use(bodyParser.json());
 
-    app.use(BuildResourceRouter());
     app.use(LoginRouter());
-    app.use(withAuth);
+    // app.use(withAuth);
+
+    app.post('/welcome', withAuth, (req, res) => {
+        res.status(200).send("Welcome 🙌 ");
+    });
+
+    app.use(BuildResourceRouter());
 
     app.listen(process.env.PORT || 3000, () => {
         console.log(`Server is running on port ${process.env.PORT || 3000}`)
     })
-
-    app.post('/welcome', (req, res) => {
-        res.status(200).send("Welcome 🙌 ");
-      });
 }
 
 
