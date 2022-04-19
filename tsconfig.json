@@ -8,7 +8,8 @@
         ],
         "strict": true,
         "sourceMap": true,
-        "strictPropertyInitialization": true
+        "strictPropertyInitialization": true,
+        "esModuleInterop": true
     },
     "include": [
         "./**/*"
