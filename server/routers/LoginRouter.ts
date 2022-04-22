@@ -10,6 +10,19 @@ const buildRouter = (): Router => {
 
     // Register
     router.post("/register", async (req, res) => {
+        /*
+            #swagger.tags = ['Authentication']
+            #swagger.parameters['body'] = {
+                in: 'body',
+                description: 'User register data.',
+                required: true,
+                schema: {
+                    email: "user@mail.com",
+                    password: "1234"
+                }
+            }
+        */
+
         try {
             const { email, password } = req.body;
 
@@ -49,6 +62,19 @@ const buildRouter = (): Router => {
 
     // Login
     router.post("/login", async (req, res) => {
+        /* 
+        #swagger.tags = ['Authentication']
+        #swagger.parameters['body'] = {
+                in: 'body',
+                description: 'User login data.',
+                required: true,
+                schema: {
+                    email: "user@mail.com",
+                    password: "1234"
+                }
+            }
+        */
+
         try {
             // Get user input
             const { email, password } = req.body;
