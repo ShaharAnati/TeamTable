@@ -5,6 +5,6 @@ const userSchema = new mongoose.Schema({
   password: { type: String }
 });
 
-const schema: any = mongoose.model("admins", userSchema);
+const schema: any = mongoose.model("users", userSchema);
 
 export default schema;

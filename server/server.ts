@@ -1,4 +1,4 @@
-import * as express from "express";
+import express from "express";
 import * as bodyParser from 'body-parser';
 import { initLogger } from "./conf/Logger";
 import BuildResourceRouter from './routers/ResourcesRouter';
@@ -12,8 +12,9 @@ const swaggerDocument = require("../swagger.json")
 
 require('dotenv').config();
 
+const app: express.Application = express();
+
 const init = async (): Promise<void> => {
-    const app: express.Application = express();
 
     await initLogger();
     await connectToDatabase();
@@ -42,3 +43,5 @@ const init = async (): Promise<void> => {
 
 
 init();
+
+export default app;
