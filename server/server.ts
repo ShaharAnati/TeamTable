@@ -7,6 +7,9 @@ import LoginRouter from './routers/LoginRouter';
 import { withAuth } from './middlewares/auth'
 import { connectToDatabase } from './mongoose/DatabaseEndpoint';
 
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("../swagger.json")
+
 require('dotenv').config();
 
 const app: express.Application = express();
@@ -20,6 +23,12 @@ const init = async (): Promise<void> => {
 
     app.use(LoginRouter());
     // app.use(withAuth);
+
+    app.use(
+        '/api-docs',
+        swaggerUi.serve,
+        swaggerUi.setup(swaggerDocument)
+    )
 
     app.post('/welcome', withAuth, (req, res) => {
         res.status(200).send("Welcome 🙌 ");

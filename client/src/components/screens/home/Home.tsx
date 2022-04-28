@@ -1,5 +1,5 @@
 import React from "react";
-import {useLocation} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import {useAuth} from "../../../auth/AuthProvider";
 // @ts-ignore
 import TeamTableTheme from '../../../../assets/images/TeamTableTheme.jpg';
@@ -29,6 +29,8 @@ const Home: React.FC = (props): JSX.Element => {
                     </Typography>
                     <Button variant="contained"
                             endIcon={<ArrowForward />}
+                            component={Link}
+                            to="/create-group-screen"
                             sx={{backgroundColor: '#3ED3D6'}}>
                         Find us a table
                     </Button>

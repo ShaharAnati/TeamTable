@@ -64,7 +64,9 @@ export default function MenuAppBar() {
               onClose={handleClose}
             >
               {auth.user ?
-                <MenuItem onClick={
+                <MenuItem  component={Link}
+                           to="/"
+                           onClick={
                   () => {
                     auth.signout()
                     handleClose();
