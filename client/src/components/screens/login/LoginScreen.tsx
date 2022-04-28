@@ -1,9 +1,8 @@
-import { useState } from 'react';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { Button, Grid, Paper, TextField, Typography } from "@mui/material";
-import { LocationState, useAuth } from '../../../auth/AuthProvider';
+import React, {useState} from 'react';
+import {useLocation, useNavigate} from 'react-router-dom';
+import {Button, Grid, Paper, TextField} from "@mui/material";
+import {LocationState, useAuth} from '../../../auth/AuthProvider';
 import './Login.css'
-import React from 'react';
 
 const Login = (): JSX.Element => {
     const [username, setUsername] = useState('');
@@ -14,10 +13,6 @@ const Login = (): JSX.Element => {
     const auth = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
-
-    if (auth.user) {
-        return <Navigate to="/" state={{ from: location }} replace />;
-    }
 
     const validate = (): void => {
         if (!!username) {
@@ -54,6 +49,7 @@ const Login = (): JSX.Element => {
                 const from = state?.from?.pathname || "/";
 
                 navigate(from, { replace: true })
+
             } catch (err) {
                 // Failed login. show something to the user
             }
