@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState } from "react";
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { ConflictError } from "src/errors/ConflictError";
+import React, {createContext, useContext, useState} from "react";
+import axios, {AxiosResponse} from "axios";
+import {ConflictError} from "src/errors/ConflictError";
 
 export type LocationState = {
   from: {
@@ -41,7 +41,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else {
         console.log("failed to log in");
       }
-    };
+    }
   }
 
   const signout = async () => {
