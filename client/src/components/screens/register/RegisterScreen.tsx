@@ -96,7 +96,7 @@ const Register = (): JSX.Element => {
         if (!isUsernameInvalid && !isPasswordInvalid) {
             // proceed to submit
             try {
-                await auth.register(username, password);
+                await auth.register(username, password, phoneNumber, name);
 
                 const state = location.state as LocationState;
                 const from = state?.from?.pathname || "/";

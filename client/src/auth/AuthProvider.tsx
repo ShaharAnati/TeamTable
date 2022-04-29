@@ -12,7 +12,7 @@ interface AuthContextInterface {
   user: any;
   signin: (email: string, password: string) => Promise<any>;
   signout: () => void;
-  register: (email: string, password: string) => Promise<void>;
+  register: (email: string, password: string, phoneNumber: string, fullName: string) => Promise<void>;
 }
 
 
@@ -50,11 +50,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return;
   };
 
-  const register = async (email: string, password: string): Promise<void> => {
+  const register = async (email: string, password: string, phoneNumber: string, fullName: string): Promise<void> => {
     try {
       const res: AxiosResponse<any> = await axios.post("http://localhost:3000/register", {
         email,
-        password
+        password, 
+        phoneNumber,
+        fullName
       });
 
       setUser(res.data.token);
