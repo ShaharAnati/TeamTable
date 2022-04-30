@@ -12,6 +12,9 @@
             "ES7",
             "DOM"
         ],
+        "paths": {
+            "@assets/*": ["assets/*"]
+        },
         "baseUrl": ".",
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true

@@ -1,14 +1,12 @@
-
 import React from 'react';
-import {Navigate, Route, useLocation} from "react-router-dom";
-// @ts-ignore
-import {Redirect} from "react-router";
+import { useAuth } from './AuthProvider';
+import {Navigate, useLocation} from "react-router-dom";
 
 function RequireAuth({ children }: { children: JSX.Element }) {
-    let auth = sessionStorage.getItem('user_token');
+    const { loggedInUser } = useAuth();
     let location = useLocation();
 
-    if (!auth) {
+    if (!loggedInUser) {
         return <Navigate to="/login-screen" state={{ from: location }} replace />;
     }
 
