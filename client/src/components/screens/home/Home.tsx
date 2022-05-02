@@ -1,14 +1,19 @@
 import React from "react";
 import {Link, useLocation} from "react-router-dom";
 import {useAuth} from "../../../auth/AuthProvider";
+
 // @ts-ignore
 import TeamTableTheme from '../../../../assets/images/TeamTableTheme.jpg';
 import {Box, Button, Container, Paper, Typography} from "@mui/material";
 import {ArrowForward} from "@mui/icons-material";
+import { AllRestaurants } from "../restaurants/allRestaurants";
+import { FindRestaurants } from "../findRestaurants/FindRestaurans";
 
 const Home: React.FC = (props): JSX.Element => {
     const auth = useAuth();
     const location = useLocation();
+
+    return <FindRestaurants />
 
     // if (!auth.user) {
     //   return <Navigate to="/login-screen" state={{ from: location }} replace />;
