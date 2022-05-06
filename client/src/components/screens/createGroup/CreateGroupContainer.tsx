@@ -1,19 +1,24 @@
+import axios from 'axios';
 import React from 'react';
-import { useState, useEffect } from 'react';
-import { Navigate } from 'react-router';
+import { useState } from 'react';
+import { useAuth } from 'src/auth/AuthProvider';
 import CreateGroup from './CreateGroup';
 
-export interface CreateGroupProps {
-    
-}
 
 const CreateGroupContainer: React.FC = (): JSX.Element => {
     
-    const onSubmitGroupCreationForm = (): void => {
-        console.log('submitted')
+    const [groupName, setGroupName] = useState<string>('');
+    const { loggedInUser: {email: creator} } = useAuth()
+
+    const onSubmitGroupCreationForm = async (): Promise<void> => {
+        const newGroup = await axios.post('http://localhost:3000/groups', {name: groupName, creator}) // TODO: remove localhost
     }
 
-    return <CreateGroup onSubmit={onSubmitGroupCreationForm}/>
+    return <CreateGroup 
+                onSubmit={onSubmitGroupCreationForm}
+                groupName={groupName} 
+                onGroupNameChange={event => setGroupName(event.target.value)}
+            />
 }
 
 export default CreateGroupContainer;

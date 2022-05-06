@@ -8,8 +8,13 @@ export type LocationState = {
   };
 };
 
+interface LoggedInUser {
+  email: string;
+  token: string;
+}
+
 interface AuthContextInterface {
-  loggedInUser: any;
+  loggedInUser: LoggedInUser;
   signin: (email: string, password: string) => Promise<any>;
   signout: () => void;
   register: (email: string, password: string) => Promise<void>;
@@ -30,7 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         password,
       });
 
-      setLoggedInUser(res.data.token);
+      setLoggedInUser({email, token: res.data.token});
       sessionStorage.setItem('user_token', res.data.token);
 
       console.log("Succesfully logged in");
