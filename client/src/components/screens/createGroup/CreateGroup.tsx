@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import './createGroup.css'
+import './CreateGroup.css'
 
 interface CreateGroupProps {
     onSubmit?: () => void;
