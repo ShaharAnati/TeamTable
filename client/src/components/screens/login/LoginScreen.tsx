@@ -4,7 +4,13 @@ import {Button, Grid, Paper, TextField} from "@mui/material";
 import {LocationState, useAuth} from '../../../auth/AuthProvider';
 import './Login.css'
 
-const Login = (): JSX.Element => {
+interface LoginScreenProps {
+    postLoginFunc?: () => void
+}
+
+const Login: React.FC<LoginScreenProps> = (props): JSX.Element => {
+    const { postLoginFunc } = props;
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isUsernameInvalid, setIsUsernameInvalid] = useState(false);
@@ -45,10 +51,11 @@ const Login = (): JSX.Element => {
             try {
                 await auth.signin(username, password);
 
-                const state = location.state as LocationState;
-                const from = state?.from?.pathname || "/";
+                const { state } = location as { state: LocationState }
+                const navigationDest = state?.from?.pathname || "/";
 
-                navigate(from, { replace: true })
+                postLoginFunc && postLoginFunc();
+                navigate(navigationDest, { replace: true })
 
             } catch (err) {
                 // Failed login. show something to the user

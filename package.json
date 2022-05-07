@@ -31,6 +31,7 @@
     "swagger-ui-express": "^4.3.0",
     "ts-node": "^10.5.0",
     "typescript": "^4.5.5",
+    "uuidv4": "^6.2.13",
     "winston": "^3.6.0"
   },
   "devDependencies": {
@@ -44,8 +45,7 @@
     "file-loader": "^6.2.0",
     "jest": "^27.5.1",
     "supertest": "^6.2.2",
-    "ts-jest": "^27.1.4",
-    "file-loader": "^6.2.0",
-    "swagger-autogen": "^2.21.1"
+    "swagger-autogen": "^2.21.1",
+    "ts-jest": "^27.1.4"
   }
 }
