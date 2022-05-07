@@ -8,8 +8,11 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
+import Chip from "@mui/material/Chip";
+import _ from "lodash";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import React from "react";
+import restaurants from "./restaurants.json";
 import "./restaurant.css";
 
 const styles = {
@@ -26,17 +29,13 @@ type Props = {
   onFavoriteClick?: Function;
   name: string;
   description: string;
+  tags: string[];
+  chosedTags: string[];
   imgUrl: string;
 };
 
 const Restaurant = (props: Props): JSX.Element => {
-  const { name, description, imgUrl, onFavoriteClick } = props;
-
-  const handleFavoriteClick = () => {
-    if (onFavoriteClick) {
-      onFavoriteClick();
-    }
-  };
+  const { name, description, imgUrl, tags, chosedTags } = props;
 
   return (
     <Card sx={{ maxWidth: 345 }}>
@@ -49,19 +48,31 @@ const Restaurant = (props: Props): JSX.Element => {
       <CardContent>
         <div style={styles.header}>
           <div style={styles.title}>{name}</div>
-          <IconButton onClick={handleFavoriteClick}>
+          <IconButton>
             <FavoriteIcon />
           </IconButton>
         </div>
         <Typography variant="body2" color="text.secondary">
           {description}
         </Typography>
+        {tags.map((tag) => (
+          <Chip
+            key={tag}
+            label={tag}
+            size="small"
+            variant="outlined"
+            {...(chosedTags.includes(tag)
+              ? { variant: "filled", color: "success" }
+              : {})}
+          />
+        ))}
       </CardContent>
     </Card>
   );
 };
 
 export const AllRestaurants = (props): JSX.Element => {
+  const { chosedTags } = props;
   return (
     <div
       style={{
@@ -70,17 +81,23 @@ export const AllRestaurants = (props): JSX.Element => {
         justifyContent: "flex-start",
       }}
     >
-      {Array.from(Array(30)).map((a, i) => (
-        <div key={i} style={{ margin: "16px" }}>
-          <Restaurant
-            name={"ddsds"}
-            description={"sdfdsfsd"}
-            imgUrl={
-              "https://media.istockphoto.com/photos/table-top-view-of-spicy-food-picture-id1316145932?b=1&k=20&m=1316145932&s=170667a&w=0&h=feyrNSTglzksHoEDSsnrG47UoY_XX4PtayUPpSMunQI="
-            }
-          />
-        </div>
-      ))}
+      {restaurants
+        .filter(
+          (rest) =>
+            chosedTags.length === 0 ||
+            _.intersection(chosedTags, rest.tags).length > 0
+        )
+        .map((restaurant, i) => (
+          <div key={i} style={{ margin: "16px" }}>
+            <Restaurant
+              name={restaurant.name}
+              description={restaurant.description}
+              imgUrl={restaurant.imgeUrl}
+              tags={restaurant.tags}
+              chosedTags={chosedTags}
+            />
+          </div>
+        ))}
     </div>
   );
 

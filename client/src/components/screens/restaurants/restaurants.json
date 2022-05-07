@@ -1,0 +1,23 @@
+[
+  {
+    "id": 0,
+    "name": "New York Burger",
+    "description": "burger",
+    "imgeUrl": "https://imageproxy.wolt.com/venue/5fa90ffb4c6da42a16b54ad4/7fbb81ce-28aa-11eb-99ab-ca443f971f6b_yaelitz_11.jpg",
+    "tags": ["meat", "vegan"]
+  },
+  {
+    "id": 1,
+    "name": "Ohio Shwarma",
+    "description": "best Shwarma",
+    "imgeUrl": "https://www.afeliaskitchen.com/wp-content/uploads/2019/04/Chicken-Shawarma.jpg",
+    "tags": ["meat", "good"]
+  },
+  {
+    "id": 2,
+    "name": "California Pizza",
+    "description": "pizza",
+    "imgeUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlfJ2sDO4ZgY0B4f9LcfLqY-37H-cFic303Q&usqp=CAU",
+    "tags": ["vegan"]
+  }
+]
