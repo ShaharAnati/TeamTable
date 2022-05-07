@@ -61,7 +61,7 @@ export default function MenuAppBar() {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              {auth?.loggedInUser?.email ?
+              {auth?.loggedInUser ?
                 <MenuItem  component={Link}
                            to="/"
                            onClick={
