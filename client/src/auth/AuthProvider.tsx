@@ -8,8 +8,13 @@ export type LocationState = {
   };
 };
 
+interface LoggedInUser {
+  email: string;
+  token: string;
+}
+
 interface AuthContextInterface {
-  user: any;
+  loggedInUser: LoggedInUser;
   signin: (email: string, password: string) => Promise<any>;
   signout: () => void;
   register: (email: string, password: string) => Promise<void>;
@@ -21,7 +26,7 @@ export const AuthContext = createContext<AuthContextInterface>(null!);
 const sessionStorageUser = sessionStorage.getItem('user_token');
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<any>(sessionStorageUser);
+  const [loggedInUser, setLoggedInUser] = useState<any>(sessionStorageUser);
 
   const signin = async (email: string, password: string): Promise<void> => {
     try {
@@ -30,7 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         password,
       });
 
-      setUser(res.data.token);
+      setLoggedInUser({email, token: res.data.token});
       sessionStorage.setItem('user_token', res.data.token);
 
       console.log("Succesfully logged in");
@@ -38,6 +43,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("failed to log in", error.message);
+
+        if ((error.toJSON() as any).status === 400) throw error;
       } else {
         console.log("failed to log in");
       }
@@ -46,7 +53,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signout = async () => {
     sessionStorage.removeItem('user_token')
-    setUser(null);
+    setLoggedInUser(null);
     return;
   };
 
@@ -57,7 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         password
       });
 
-      setUser(res.data.token);
+      setLoggedInUser(res.data.token);
       sessionStorage.setItem('user_token', res.data.token);
 
       console.log("Registration completed succesfully");
@@ -75,7 +82,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  const value = { user, signin, signout, register };
+  const value = { loggedInUser, signin, signout, register };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

@@ -98,7 +98,7 @@ const buildRouter = (): Router => {
 
                 res.status(200).json({ user, token });
             }
-            res.status(400).send("Invalid Credentials");
+            res.status(400).json("Invalid Credentials");
         } catch (err) {
             console.log(err);
         }

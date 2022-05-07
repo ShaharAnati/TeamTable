@@ -3,6 +3,7 @@ import * as bodyParser from 'body-parser';
 import { initLogger } from "./conf/Logger";
 import BuildResourceRouter from './routers/ResourcesRouter';
 import LoginRouter from './routers/LoginRouter';
+import GroupsRouter from './routers/GroupsRouter';
 
 import { withAuth } from './middlewares/auth'
 import { connectToDatabase } from './mongoose/DatabaseEndpoint';
@@ -22,6 +23,7 @@ const init = async (): Promise<void> => {
     app.use(bodyParser.json());
 
     app.use(LoginRouter());
+    app.use('/groups', GroupsRouter());
     // app.use(withAuth);
 
     app.use(

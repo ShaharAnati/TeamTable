@@ -17,7 +17,7 @@ const Register = (): JSX.Element => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    if (auth.user) {
+    if (auth?.loggedInUser?.email) {
         return <Navigate to="/" state={{ from: location }} replace />;
     }
 

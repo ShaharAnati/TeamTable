@@ -45,9 +45,9 @@ module.exports = (env, argv) => {
                     loader: 'html-loader'
                 },
                 {
-                    test: /\.css$/,
-                    loader: 'css-loader'
-                }, 
+                    test: /\.css$/i,
+                    use: ["style-loader", "css-loader"],
+                  },
                 {
                     test: /\.(png|jpg|jpeg|gif|ico)$/,
                     use: [
