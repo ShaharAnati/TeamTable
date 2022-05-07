@@ -23,7 +23,7 @@ const App: React.FC = (props): JSX.Element => {
                 <CreateGroupContainer />
             </RequireAuth>} 
         />
-        <Route path='group-page' element={
+        <Route path='group-page/:id' element={
             <RequireAuth>
                 <GroupView />
             </RequireAuth> 
