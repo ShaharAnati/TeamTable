@@ -72,7 +72,7 @@ const Restaurant = (props: Props): JSX.Element => {
 };
 
 export const AllRestaurants = (props): JSX.Element => {
-  const { chosedTags } = props;
+  const { chosedTags, day } = props;
   return (
     <div
       style={{
@@ -86,7 +86,9 @@ export const AllRestaurants = (props): JSX.Element => {
           (rest) =>
             chosedTags.length === 0 ||
             _.intersection(chosedTags, rest.tags).length > 0
-        )
+        ).filter(rest => (
+          rest.openingTimes[day] != null
+        ))
         .map((restaurant, i) => (
           <div key={i} style={{ margin: "16px" }}>
             <Restaurant
