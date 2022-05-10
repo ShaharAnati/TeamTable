@@ -6,7 +6,7 @@ function RequireAuth({ children }: { children: JSX.Element }) {
     const { loggedInUser } = useAuth();
     let location = useLocation();
 
-    if (!loggedInUser?.email) {
+    if (!loggedInUser) {
         return <Navigate to="/login-screen" state={{ from: location }} replace />;
     }
 

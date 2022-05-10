@@ -15,7 +15,8 @@ module.exports = (env, argv) => {
         },
         output: {
             path: BUILD_DIR,
-            filename: '[name].bundle.js'
+            publicPath: '/',
+            filename: 'bundle.js',
         },
         devtool: argv.mode === 'development' ? 'inline-source-map' : false,
         resolve: {
