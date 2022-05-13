@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const restaurantSchema = new mongoose.Schema({
   id: { type: String },
@@ -12,6 +12,8 @@ const restaurantSchema = new mongoose.Schema({
     "3": [{ type: String }],
     "4": [{ type: String }],
     "5": [{ type: String }],
+    "6": [{ type: String }],
+    "7": [{ type: String }],
   },
   location: { type: String },
   contactIndo: {

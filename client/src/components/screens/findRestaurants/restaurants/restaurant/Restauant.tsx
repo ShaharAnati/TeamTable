@@ -53,7 +53,7 @@ import {
           <div className="openingHours-day-row" key={day}>
             <div className="openingHours-day-label">{dayMapping[day]}</div>
             <div className="openingHours-day-times">
-              {openingTimes[day]
+              {openingTimes[day] && openingTimes[day].length !== 0
                 ? `${openingTimes[day][0]} - ${openingTimes[day][1]}`
                 : "סגור"}
             </div>
