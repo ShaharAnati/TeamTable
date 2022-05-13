@@ -7,6 +7,7 @@ import GroupsRouter from './routers/GroupsRouter';
 
 import { withAuth } from './middlewares/auth'
 import { connectToDatabase } from './mongoose/DatabaseEndpoint';
+import RestaurantsRouter from "./routers/RestaurantsRouter";
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("../swagger.json")
@@ -24,6 +25,7 @@ const init = async (): Promise<void> => {
 
     app.use(LoginRouter());
     app.use('/groups', GroupsRouter());
+    app.use("/restaurants", RestaurantsRouter());
     // app.use(withAuth);
 
     app.use(

@@ -9,7 +9,8 @@
         "strict": true,
         "sourceMap": true,
         "strictPropertyInitialization": true,
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "resolveJsonModule": true
     },
     "include": [
         "./**/*"

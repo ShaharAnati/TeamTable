@@ -1,15 +1,12 @@
 import dayjs from "dayjs";
 import Grid from "@mui/material/Grid";
-import Chip from "@mui/material/Chip";
-import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import React, { useState } from "react";
-import { AllRestaurants } from "../restaurants/allRestaurants";
+import { AllRestaurants } from "./restaurants/allRestaurants";
 import Switch from "@mui/material/Switch";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";

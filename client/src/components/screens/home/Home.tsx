@@ -5,16 +5,12 @@ import {useAuth} from "../../../auth/AuthProvider";
 import TeamTableTheme from '../../../../assets/images/TeamTableTheme.jpg';
 import {Box, Button, Container, Paper, Typography} from "@mui/material";
 import {ArrowForward} from "@mui/icons-material";
-import { AllRestaurants } from "../restaurants/allRestaurants";
 import { FindRestaurants } from "../findRestaurants/FindRestaurans";
 
 const Home: React.FC = (props): JSX.Element => {
 
-    return <FindRestaurants />
+    // return <FindRestaurants />
 
-    // if (!auth.user) {
-    //   return <Navigate to="/login-screen" state={{ from: location }} replace />;
-    // }
     return (
         <Box sx={{flexGrow: 1}}>
             <Container maxWidth="lg">
