@@ -11,7 +11,18 @@ const buildRouter = (): Router => {
             
             const restaurants = await RestaurantsSchema.find();
             
-            return res.status(201).json(restaurants);
+            return res.status(200).json(restaurants);
+        } catch (error) { }
+    });
+
+    router.post("/", async (req, res) => {
+        try {
+
+            const restaurant  = req.body;
+
+            const newRestaurant = await RestaurantsSchema.create(restaurant);
+            
+            return res.status(201).json(newRestaurant);
         } catch (error) { }
     });
 

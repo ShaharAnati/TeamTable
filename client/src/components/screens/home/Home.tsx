@@ -9,7 +9,7 @@ import { FindRestaurants } from "../findRestaurants/FindRestaurans";
 
 const Home: React.FC = (props): JSX.Element => {
 
-    return <FindRestaurants />
+    // return <FindRestaurants />
 
     return (
         <Box sx={{flexGrow: 1}}>
@@ -33,6 +33,15 @@ const Home: React.FC = (props): JSX.Element => {
                         sx={{backgroundColor: '#3ED3D6'}}
                     >
                         Find us a table
+                    </Button>
+                    <Button 
+                        variant="contained"
+                        to="/create-restaurant"
+                        component={Link}
+                        size="small"
+                        sx={{backgroundColor: '#0a6c6e'}}
+                    >
+                        Add Restaurant
                     </Button>
                     </Box>
                 </Paper>

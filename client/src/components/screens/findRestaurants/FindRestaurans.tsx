@@ -1,8 +1,8 @@
+import React, { useState } from "react";
 import dayjs from "dayjs";
+
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
-import React, { useState } from "react";
-import { AllRestaurants } from "./restaurants/allRestaurants";
 import Switch from "@mui/material/Switch";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -13,20 +13,11 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+
+import { RESTAURANT_TAGS } from "../../../types/Resturants";
+import { AllRestaurants } from "./restaurants/allRestaurants";
 import TagFilters from "./TagFilters";
 import "./FindRestaurans.css";
-
-const tags = [
-  "meat",
-  "vegan",
-  "good",
-  "dsfsd",
-  "gdfsf",
-  "dfhfgfdgdf",
-  "sdfgsdg",
-  "fsdfdsfs",
-  "dsfdsf",
-];
 
 type TagCetegory = "common" | "cuisine" | "kashrut";
 
@@ -104,7 +95,7 @@ export const FindRestaurants = (props): JSX.Element => {
             </FormGroup>
           </FormControl>
           <TagFilters
-            tags={tags}
+            tags={RESTAURANT_TAGS}
             selectedTags={filters.tags}
             onChange={handleTagsChange}
           />
@@ -131,7 +122,7 @@ export const FindRestaurants = (props): JSX.Element => {
               label="Day"
               onChange={handleDayChange}
             >
-              {[1,   2, 3, 4, 5, 6, 7].map((day) => (
+              {[1, 2, 3, 4, 5, 6, 7].map((day) => (
                 <MenuItem value={day}>{day}</MenuItem>
               ))}
             </Select>

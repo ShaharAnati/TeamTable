@@ -16,10 +16,12 @@ const restaurantSchema = new mongoose.Schema({
     "7": [{ type: String }],
   },
   location: { type: String },
-  contactIndo: {
+  contactInfo: {
     phoneNumber: { type: String },
     email: { type: String }
-  }  
+  },
+  url: { type: String },
+  isVerified: { type: Boolean }
 });
 
 const schema: any = mongoose.model("restaurants", restaurantSchema);
