@@ -16,6 +16,10 @@ import {
   import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
   import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
   import "../restaurant.css";
+  import {
+    dayMapping,
+    Restaurant,
+  } from "../../../../../types/Resturants";
   
   dayjs.extend(isSameOrAfter);
   dayjs.extend(isSameOrBefore);
@@ -31,29 +35,19 @@ import {
   };
   
   type Props = {
-    restaurant: any;
+    restaurant: Restaurant;
     onFavoriteClick?: Function;
     chosedTags: string[];
   };
   
   const OpeningHours = ({ openingTimes }): JSX.Element => {
-    const dayMapping = {
-      "1": "א",
-      "2": "ב",
-      "3": "ג",
-      "4": "ד",
-      "5": "ה",
-      "6": "ו",
-      "7": "ש",
-    };
-  
     return (
       <div>
         {Object.keys(dayMapping).map((day) => (
           <div className="openingHours-day-row" key={day}>
             <div className="openingHours-day-label">{dayMapping[day]}</div>
             <div className="openingHours-day-times">
-              {openingTimes[day] && openingTimes[day].length !== 0
+              {openingTimes[day] && openingTimes[day].length !== 0 && (openingTimes[day][0] != null && openingTimes[day][1] != null)
                 ? `${openingTimes[day][0]} - ${openingTimes[day][1]}`
                 : "סגור"}
             </div>
@@ -63,7 +57,7 @@ import {
     );
   };
   
-  export const Restaurant = (props: Props): JSX.Element => {
+  export const RestaurantComponent = (props: Props): JSX.Element => {
     const { restaurant, chosedTags = [] } = props;
     const { name, description, tags, imgUrl, openingTimes } = restaurant;
   
@@ -101,3 +95,5 @@ import {
       </Card>
     );
   };
+
+  export default RestaurantComponent;

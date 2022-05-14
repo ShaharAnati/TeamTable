@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import "./restaurant.css";
-import { Restaurant } from "./restaurant/Restauant";
+import Restaurant from "./restaurant/Restauant";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -17,7 +17,6 @@ export const AllRestaurants = (props): JSX.Element => {
 
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
 
-
   const {
     isLoading,
     error,
@@ -25,7 +24,9 @@ export const AllRestaurants = (props): JSX.Element => {
   } = useQuery("repoData", () =>
     axios
       .get("http://localhost:3000/restaurants")
-      .then((res) =>  { return res.data })
+      .then((res) => {
+        return res.data;
+      })
       .catch((err) => {
         if (axios.isAxiosError(error)) {
           console.log("failed to fetch restaurants", error.message);
@@ -65,7 +66,12 @@ export const AllRestaurants = (props): JSX.Element => {
     };
 
     setFilteredRestaurants(
-      restaurants ?  restaurants.filter(filterByTags).filter(filterByDay).filter(filterByHour): []
+      restaurants
+        ? restaurants
+            .filter(filterByTags)
+            .filter(filterByDay)
+            .filter(filterByHour)
+        : []
     );
   }, [filters]);
 

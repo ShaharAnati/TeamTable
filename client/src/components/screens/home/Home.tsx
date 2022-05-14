@@ -9,7 +9,7 @@ import { FindRestaurants } from "../findRestaurants/FindRestaurans";
 
 const Home: React.FC = (props): JSX.Element => {
 
-    // return <FindRestaurants />
+    return <FindRestaurants />
 
     return (
         <Box sx={{flexGrow: 1}}>

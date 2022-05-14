@@ -17,13 +17,13 @@ export interface Restaurant {
 }
 
 export const dayMapping = {
-  "1": "א",
-  "2": "ב",
-  "3": "ג",
-  "4": "ד",
-  "5": "ה",
-  "6": "ו",
-  "7": "ש",
+  "1": "Sunday",
+  "2": "Monday",
+  "3": "Thirsday",
+  "4": "Wednesday",
+  "5": "Thursday",
+  "6": "Firday",
+  "7": "Saturday",
 };
 
 
