@@ -1,11 +1,16 @@
-import { useState } from 'react';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { Button, Grid, Paper, TextField, Typography } from "@mui/material";
-import { LocationState, useAuth } from '../../../auth/AuthProvider';
+import React, {useState} from 'react';
+import {useLocation, useNavigate} from 'react-router-dom';
+import {Button, Grid, Paper, TextField} from "@mui/material";
+import {LocationState, useAuth} from '../../../auth/AuthProvider';
 import './Login.css'
-import React from 'react';
 
-const Login = (): JSX.Element => {
+interface LoginScreenProps {
+    postLoginFunc?: () => void
+}
+
+const Login: React.FC<LoginScreenProps> = (props): JSX.Element => {
+    const { postLoginFunc } = props;
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isUsernameInvalid, setIsUsernameInvalid] = useState(false);
@@ -14,10 +19,6 @@ const Login = (): JSX.Element => {
     const auth = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
-
-    if (auth.user) {
-        return <Navigate to="/" state={{ from: location }} replace />;
-    }
 
     const validate = (): void => {
         if (!!username) {
@@ -50,10 +51,12 @@ const Login = (): JSX.Element => {
             try {
                 await auth.signin(username, password);
 
-                const state = location.state as LocationState;
-                const from = state?.from?.pathname || "/";
+                const { state } = location as { state: LocationState }
+                const navigationDest = state?.from?.pathname || "/";
 
-                navigate(from, { replace: true })
+                postLoginFunc && postLoginFunc();
+                navigate(navigationDest, { replace: true })
+
             } catch (err) {
                 // Failed login. show something to the user
             }

@@ -1,0 +1,16 @@
+
+.create-group-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5vh 4vw;
+    height: 20vh;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 35vw;
+    height: -webkit-fill-available;
+}

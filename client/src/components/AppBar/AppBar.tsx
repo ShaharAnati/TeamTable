@@ -9,11 +9,9 @@ import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
 import {Link} from 'react-router-dom';
 // @ts-ignore
-import logo from '../../../assets/images/TeamTableLogo.png'
-
+import logo from '@assets/images/TeamTableLogo.png'
 
 export default function MenuAppBar() {
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const auth = useAuth();
@@ -63,8 +61,10 @@ export default function MenuAppBar() {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              {auth.user ?
-                <MenuItem onClick={
+              {auth?.loggedInUser ?
+                <MenuItem  component={Link}
+                           to="/"
+                           onClick={
                   () => {
                     auth.signout()
                     handleClose();

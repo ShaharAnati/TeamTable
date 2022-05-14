@@ -15,7 +15,8 @@ module.exports = (env, argv) => {
         },
         output: {
             path: BUILD_DIR,
-            filename: '[name].bundle.js'
+            publicPath: '/',
+            filename: 'bundle.js',
         },
         devtool: argv.mode === 'development' ? 'inline-source-map' : false,
         resolve: {
@@ -45,9 +46,9 @@ module.exports = (env, argv) => {
                     loader: 'html-loader'
                 },
                 {
-                    test: /\.css$/,
-                    loader: 'css-loader'
-                }, 
+                    test: /\.css$/i,
+                    use: ["style-loader", "css-loader"],
+                  },
                 {
                     test: /\.(png|jpg|jpeg|gif|ico)$/,
                     use: [

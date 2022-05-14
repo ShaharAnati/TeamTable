@@ -1,8 +1,9 @@
-import * as express from "express";
+import express from "express";
 import * as bodyParser from 'body-parser';
 import { initLogger } from "./conf/Logger";
 import BuildResourceRouter from './routers/ResourcesRouter';
 import LoginRouter from './routers/LoginRouter';
+import GroupsRouter from './routers/GroupsRouter';
 
 import { withAuth } from './middlewares/auth'
 import { connectToDatabase } from './mongoose/DatabaseEndpoint';
@@ -12,8 +13,9 @@ const swaggerDocument = require("../swagger.json")
 
 require('dotenv').config();
 
+const app: express.Application = express();
+
 const init = async (): Promise<void> => {
-    const app: express.Application = express();
 
     await initLogger();
     await connectToDatabase();
@@ -21,6 +23,7 @@ const init = async (): Promise<void> => {
     app.use(bodyParser.json());
 
     app.use(LoginRouter());
+    app.use('/groups', GroupsRouter());
     // app.use(withAuth);
 
     app.use(
@@ -42,3 +45,5 @@ const init = async (): Promise<void> => {
 
 
 init();
+
+export default app;
