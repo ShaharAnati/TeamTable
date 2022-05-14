@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import _ from "lodash";
-import { useQuery } from "react-query";
 
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
@@ -11,7 +10,7 @@ import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import Autocomplete from "@mui/material/Autocomplete";
 
 import {
   dayMapping,
@@ -59,7 +58,7 @@ export const CreateRestaurant = (): JSX.Element => {
           phoneNumber: formik.values.phoneNumber,
           email: formik.values.email,
         },
-        isVerified: false
+        isVerified: false,
       };
 
       axios.post("http://localhost:3000/restaurants", res).catch((err) => {
@@ -108,20 +107,19 @@ export const CreateRestaurant = (): JSX.Element => {
           />
 
           <Autocomplete
-            classes={{ root: "form-input" }}
             multiple
-            id="tags"
+            id="restaurant-tags"
             value={formik.values.tags}
             options={RESTAURANT_TAGS}
             getOptionLabel={(option) => option}
             defaultValue={formik.values.tags}
-            onChange={(e, value) => formik.setFieldValue("tags", value)}
+            onChange={(event, value) => formik.setFieldValue("tags", value)}
             renderInput={(params) => (
               <TextField
+                sx={{ marginBottom: "10px" }}
                 {...params}
                 variant="standard"
                 label="tags"
-                placeholder="tags"
                 error={formik.touched.tags && Boolean(formik.errors.tags)}
                 helperText={formik.touched.tags && formik.errors.tags}
               />
