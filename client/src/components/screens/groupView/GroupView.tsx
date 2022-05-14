@@ -17,38 +17,34 @@ const GroupView: React.FC = (): JSX.Element => {
 
     function initWebsocket() {
         socket = io(connectionPort);
-        socket.on("welcome", (data) => {
-            console.log("Message: ", data);
+        socket.on('connected', () => {
+            getGroup();
+        })
+        socket.on('updateClient', (data: Group) => {
+            console.log("client new members: " + data.members);
         });
-
-        socket.on('groupUpdate', (data) => {
-            console.log("Message: ", data);
-        });
-
-        socket.emit('connectedToScreen');
     }
 
     const getGroup = async (): Promise<void> => {
-        try {
-            const res: AxiosResponse<any> = await axios
-                .get('http://localhost:3000/groups/get/' + id, {params: {id: id}});
-            const group = res.data;
-            console.log(res.data);
-            const curUser = sessionStorage.getItem('user_email');
-            if(!group.members.include(curUser)) {
-                group.members = [...group.members, curUser];
-                setGroup(group);
-                await axios.put('http://localhost:3000/groups/update/' + id, {params: {id: id}, group});
-            }
-        } catch {
-            console.log('fuck this')
+        const res: AxiosResponse<any> = await axios
+            .get('http://localhost:3000/groups/get/' + id, {params: {id: id}});
+        const group = res.data;
+        const curUser = sessionStorage.getItem('user_email');
+        socket.emit('joinGroup', id);
+        if (!group.members.includes(curUser)) {
+            group.members = [...group.members, curUser];
+            setGroup(group);
+            await axios.put('http://localhost:3000/groups/update/' + id, {params: {id: id}, group});
         }
     }
 
     useEffect(() => {
         initWebsocket();
-        getGroup();
     }, [connectionPort])
+
+    useEffect(() => {
+        /*getGroup();*/
+    })
 
     return (
         <Button variant="outlined"

@@ -28,6 +28,13 @@ const buildRouter = (ioServer: Server): Router => {
                 filters
             })
 
+            /*ioServer.on('connectedToScreen', socket =>
+            {
+                socket.join(newGroup.id);
+                // and then later
+                socket.to(newGroup.id).emit("hi");
+            });*/
+
             res.status(201).json(newGroup);
         } catch (error) {
 
@@ -39,7 +46,7 @@ const buildRouter = (ioServer: Server): Router => {
             const id = req.params.id;
             const body = req.body.group;
             groupSchema.updateOne({id: id}, {members: req.body.group.members}).lean().exec(function () {
-                ioServer.emit('groupUpdate', body);
+                ioServer.emit('updateClient', body);
                 return res.status(201);
             });
         } catch (error) {

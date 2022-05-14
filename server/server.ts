@@ -7,6 +7,7 @@ import GroupsRouter from './routers/GroupsRouter';
 
 import {withAuth} from './middlewares/auth'
 import {connectToDatabase} from './mongoose/DatabaseEndpoint';
+import {Group} from "./models/Group";
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("../swagger.json")
@@ -23,11 +24,22 @@ const httpServer = app.listen(process.env.PORT || 3000, () => {
 const io = new Server(httpServer);
 
 io.on('connection', (socket: any) => {
-    console.log("New Client is Connected!");
-    socket.emit('welcome', "Hello and Welcome to the Server");
+    console.log(socket.id);
+    socket.on('joinGroup', (groupId: string) => {
+        socket.join(groupId);
+        console.log("joined group: " + groupId);
+    })
+
+    socket.on("groupUpdate", (data: Group) => {
+        console.log(data);
+        socket.to(data.id).emit("updateClient", data);
+    });
+
     socket.on('disconnect', () => {
         console.log('disconnected');
     });
+
+    io.emit('connected')
 });
 
 const init = async (): Promise<void> => {
