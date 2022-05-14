@@ -45,7 +45,7 @@ export const CreateRestaurant = (): JSX.Element => {
         .required("Required"),
       tags: Yup.array()
         .min(2, "At least two tags")
-        .max(50, "Too Long!")
+        .max(15, "Too Long!")
         .required("Required"),
       email: Yup.string().email("Invalid email"),
       phoneNumber: Yup.string().matches(/\d{10}/, "must be 10 digits"),
@@ -59,6 +59,7 @@ export const CreateRestaurant = (): JSX.Element => {
           phoneNumber: formik.values.phoneNumber,
           email: formik.values.email,
         },
+        isVerified: false
       };
 
       axios.post("http://localhost:3000/restaurants", res).catch((err) => {
@@ -78,11 +79,12 @@ export const CreateRestaurant = (): JSX.Element => {
   });
 
   return (
-    <div>
-      <h1>Add Restauran</h1>
+    <div className={"form-class"}>
+      <h1>Add Restaurant</h1>
       <Grid item xs={2}>
-        <form onSubmit={formik.handleSubmit} className={"form-class"}>
+        <form onSubmit={formik.handleSubmit}>
           <TextField
+            sx={{ marginBottom: "10px" }}
             classes={{ root: "form-input" }}
             id="name"
             name="name"
@@ -94,7 +96,8 @@ export const CreateRestaurant = (): JSX.Element => {
           />
 
           <TextField
-            classes={{ "root": "form-input" }}
+            sx={{ marginBottom: "10px" }}
+            classes={{ root: "form-input" }}
             id="description"
             name="description"
             label="description"
@@ -126,6 +129,7 @@ export const CreateRestaurant = (): JSX.Element => {
           />
 
           <TextField
+            sx={{ marginBottom: "10px" }}
             className={"form-input"}
             id="email"
             name="email"
@@ -137,6 +141,7 @@ export const CreateRestaurant = (): JSX.Element => {
           />
 
           <TextField
+            sx={{ marginBottom: "10px" }}
             className={"form-input"}
             id="phoneNumber"
             name="phoneNumber"
