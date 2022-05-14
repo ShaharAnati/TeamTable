@@ -24,10 +24,10 @@ const buildRouter = (): Router => {
         */
 
         try {
-            const { email, password } = req.body;
+            const { email, password, phoneNumber, fullName } = req.body;
 
             // Validate user input
-            if (!(email && password)) {
+            if (!(email && password && phoneNumber && fullName)) {
                 return res.status(400).send("All input is required");
             }
 
@@ -43,6 +43,8 @@ const buildRouter = (): Router => {
             const user = await UserSchema.create({
                 email: email.toLowerCase(), // sanitize: convert email to lowercase
                 password: encryptedPassword,
+                phoneNumber: phoneNumber,
+                fullName: fullName
             });
 
             // Create token
