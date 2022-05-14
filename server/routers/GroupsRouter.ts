@@ -11,8 +11,8 @@ const buildRouter = (ioServer: Server): Router => {
     router.get('/get/:id', async (req, res) => {
 
         const id = req.params.id;
-        groupSchema.findOne({id}).lean().exec(function (err: any, users: any) {
-            return res.end(JSON.stringify(users));
+        groupSchema.findOne({id}).lean().exec(function (err: any, group: any) {
+            return res.end(JSON.stringify(group));
         });
     })
 
@@ -28,16 +28,9 @@ const buildRouter = (ioServer: Server): Router => {
                 filters
             })
 
-            /*ioServer.on('connectedToScreen', socket =>
-            {
-                socket.join(newGroup.id);
-                // and then later
-                socket.to(newGroup.id).emit("hi");
-            });*/
-
             res.status(201).json(newGroup);
         } catch (error) {
-
+            console.log(error);
         }
     })
 
@@ -50,7 +43,7 @@ const buildRouter = (ioServer: Server): Router => {
                 return res.status(201);
             });
         } catch (error) {
-
+            console.log(error);
         }
     })
 

@@ -31,7 +31,6 @@ io.on('connection', (socket: any) => {
     })
 
     socket.on("groupUpdate", (data: Group) => {
-        console.log(data);
         socket.to(data.id).emit("updateClient", data);
     });
 
