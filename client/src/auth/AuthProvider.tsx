@@ -37,6 +37,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       setLoggedInUser({email, token: res.data.token});
       sessionStorage.setItem('user_token', res.data.token);
+      sessionStorage.setItem('user_email', email);
 
       console.log("Succesfully logged in");
     }
@@ -66,6 +67,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       setLoggedInUser(res.data.token);
       sessionStorage.setItem('user_token', res.data.token);
+      sessionStorage.setItem('user_email', email);
 
       console.log("Registration completed succesfully");
     } catch (error) {

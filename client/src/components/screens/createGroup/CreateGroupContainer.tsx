@@ -7,11 +7,11 @@ import {useNavigate} from "react-router-dom";
 const CreateGroupContainer: React.FC = (): JSX.Element => {
     
     const [groupName, setGroupName] = useState<string>('');
-    const { loggedInUser: {email: creator} } = useAuth()
+    const { loggedInUser: {email: creator} } = useAuth();
     const navigate = useNavigate();
-
+    const creatorEmail = sessionStorage.getItem('user_email')
     const onSubmitGroupCreationForm = async (): Promise<void> => {
-        const newGroup = await axios.post('http://localhost:3000/groups', {name: groupName, creator}) // TODO: remove localhost
+        const newGroup = await axios.post('http://localhost:3000/groups', {name: groupName, creator, members: [creatorEmail]}) // TODO: remove localhost
         navigate('/group-page/' + newGroup.data.id)
     }
 
