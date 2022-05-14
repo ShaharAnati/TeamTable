@@ -15,6 +15,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import TagFilters from "./TagFilters";
 import "./FindRestaurans.css";
+import { Filters } from "src/types/Filters";
 
 const tags = [
   "meat",
@@ -30,38 +31,28 @@ const tags = [
 
 type TagCetegory = "common" | "cuisine" | "kashrut";
 
-type Tag = {
-  id: string;
-  category: TagCetegory;
-  label: string;
-};
-
-type Filters = {
-  timeRange?: string[2];
-  day?: string;
-  hour?: string;
-  tags?: any[];
-};
-
 export const FindRestaurants = (props): JSX.Element => {
-  const [filters, setFilters] = useState<Filters>({});
+  // const [filters, setFilters] = useState<Filters>({});
+
+
+  const { filters, onFiltersChange } = props;
 
   const handleTagsChange = (value) => {
-    setFilters({
+    onFiltersChange({
       ...filters,
       tags: value,
     });
   };
 
   const handleDayChange = (event: SelectChangeEvent, value) => {
-    setFilters({
+    onFiltersChange({
       ...filters,
       day: event.target.value,
     });
   };
 
   const handleHourChange = (value) => {
-    setFilters({
+    onFiltersChange({
       ...filters,
       hour: dayjs(value).format("HH:mm"),
     });
@@ -70,39 +61,7 @@ export const FindRestaurants = (props): JSX.Element => {
   return (
     <Grid container spacing={2}>
       <Grid item xs={2}>
-        <div
-          style={{
-            height: "100px",
-            border: "black",
-            borderWidth: "1px",
-            borderStyle: "dashed",
-          }}
-        >
-          Group Details
-        </div>
         <div>
-          <FormControl component="fieldset">
-            <FormGroup aria-label="position" row>
-              <FormControlLabel
-                value="start"
-                control={<Switch color="primary" />}
-                label="Kosher"
-                labelPlacement="start"
-              />
-              <FormControlLabel
-                value="start"
-                control={<Switch color="primary" />}
-                label="Vegan"
-                labelPlacement="start"
-              />
-              <FormControlLabel
-                value="start"
-                control={<Switch color="primary" />}
-                label="Vegetarian"
-                labelPlacement="start"
-              />
-            </FormGroup>
-          </FormControl>
           <TagFilters
             tags={tags}
             selectedTags={filters.tags}

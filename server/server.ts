@@ -36,6 +36,10 @@ io.on('connection', (socket: any) => {
         socket.to(data.id).emit("updateClient", data);
     });
 
+    // socket.on("groupFiltersChange", (data: Group) => {
+    //     socket.to(data.id).emit("groupFiltersChange", data.filters);
+    // });
+
     socket.on('disconnect', () => {
         console.log('disconnected');
     });
