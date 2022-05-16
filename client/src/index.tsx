@@ -1,20 +1,25 @@
-import './index.css';
+import "./index.css";
 import React from "react";
 import ReactDOM from "react-dom";
-import { AuthProvider } from "./auth/AuthProvider";
-import reportWebVitals from '../reportWebVitals';
+import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 
-import App from './components/App';
+import { AuthProvider } from "./auth/AuthProvider";
+import reportWebVitals from "../reportWebVitals";
+
+import App from "./components/App";
+
+const queryClient = new QueryClient();
 
 ReactDOM.render(
   <React.StrictMode>
-    <AuthProvider>
-      <App />
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </QueryClientProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
-
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

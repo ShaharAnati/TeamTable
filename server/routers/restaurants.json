@@ -1,0 +1,32 @@
+[
+  {
+    "id": 0,
+    "name": "New York Burger",
+    "description": "burger",
+    "imgUrl": "https://imageproxy.wolt.com/venue/5fa90ffb4c6da42a16b54ad4/7fbb81ce-28aa-11eb-99ab-ca443f971f6b_yaelitz_11.jpg",
+    "tags": ["meat", "vegan"],
+    "openingTimes": {}
+  },
+  {
+    "id": 1,
+    "name": "Ohio Shwarma",
+    "description": "best Shwarma",
+    "imgUrl": "https://www.afeliaskitchen.com/wp-content/uploads/2019/04/Chicken-Shawarma.jpg",
+    "tags": ["meat", "good"],
+    "openingTimes": {
+      "1": ["8:00",  "21:00"],
+      "2": ["8:00", "21:00"],
+      "3": ["8:00", "21:00"],
+      "4": ["11:00", "19:00"],
+      "5": ["8:00", "21:00"]
+    }
+  },
+  {
+    "id": 2,
+    "name": "California Pizza",
+    "description": "pizza",
+    "imgUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlfJ2sDO4ZgY0B4f9LcfLqY-37H-cFic303Q&usqp=CAU",
+    "tags": ["vegan"],
+    "openingTimes": {}
+  }
+]
