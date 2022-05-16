@@ -34,7 +34,6 @@ type TagCetegory = "common" | "cuisine" | "kashrut";
 export const FindRestaurants = (props): JSX.Element => {
   // const [filters, setFilters] = useState<Filters>({});
 
-
   const { filters, onFiltersChange } = props;
 
   const handleTagsChange = (value) => {
@@ -90,8 +89,10 @@ export const FindRestaurants = (props): JSX.Element => {
               label="Day"
               onChange={handleDayChange}
             >
-              {[1,   2, 3, 4, 5, 6, 7].map((day) => (
-                <MenuItem value={day}>{day}</MenuItem>
+              {[1, 2, 3, 4, 5, 6, 7].map((day) => (
+                <MenuItem key={day} value={day}>
+                  {day}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
