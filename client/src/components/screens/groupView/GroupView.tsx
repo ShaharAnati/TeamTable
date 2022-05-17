@@ -1,19 +1,11 @@
-import React, { useEffect, useState } from "react";
-import {
-  Avatar,
-  Button,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-} from "@mui/material";
+import React, {useEffect, useState} from "react";
+import {Button,} from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import axios, { AxiosResponse } from "axios";
-import { useParams } from "react-router";
-import { Group } from "../../../../../server/models/Group";
-import ImageIcon from "@mui/icons-material/Image";
-import { FindRestaurants } from "../findRestaurants/FindRestaurans";
-import { Filters } from "src/types/Filters";
+import {useParams} from "react-router";
+import {Group} from "../../../../../server/models/Group";
+import {FindRestaurants} from "../findRestaurants/FindRestaurans";
+import {Filters} from "src/types/Filters";
+import GroupMembersList from "../../GroupMembersList/GroupMembersList";
 
 const io = require("socket.io-client");
 let socket;
@@ -32,6 +24,7 @@ const GroupView: React.FC = (): JSX.Element => {
 
     socket.on("groupData", (data: Group) => {
       setGroup(data);
+      console.log(data)
     });
   }
 
@@ -56,29 +49,7 @@ const GroupView: React.FC = (): JSX.Element => {
       >
         {window.location.href}
       </Button>
-      {group
-        ? group.members.map((member) => {
-            return (
-              <List
-                key={member}
-                sx={{
-                  width: "100%",
-                  maxWidth: 360,
-                  bgcolor: "background.paper",
-                }}
-              >
-                <ListItem>
-                  <ListItemAvatar>
-                    <Avatar>
-                      <ImageIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText primary={member} />
-                </ListItem>
-              </List>
-            );
-          })
-        : null}
+      <GroupMembersList group={group}></GroupMembersList>
       {group && (
         <FindRestaurants
           filters={group.filters || {}}
