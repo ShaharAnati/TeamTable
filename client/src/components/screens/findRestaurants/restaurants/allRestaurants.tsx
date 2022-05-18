@@ -73,7 +73,7 @@ export const AllRestaurants = (props): JSX.Element => {
             .filter(filterByHour)
         : []
     );
-  }, [filters]);
+  }, [restaurants, filters]);
 
   return (
     <div
