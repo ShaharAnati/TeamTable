@@ -11,16 +11,21 @@ const GroupMembersList: React.FC<GroupMembersListProps> = (props): JSX.Element =
 
     const { group } = props;
 
-    return (<div style={{height: "50vh"}}>
+    return (<div style={{
+        height: "45vh",
+        textAlign: "-webkit-center",
+    }}>
         {group
             ? group.members.map((member) => {
                 return (
                     <List
                         key={member}
                         sx={{
-                            width: "100%",
+                            width: "-webkit-fill-available",
                             maxWidth: 360,
                             bgcolor: "background.paper",
+                            height: "35vh",
+                            overflowY: "auto"
                         }}
                     >
                         <ListItem>

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Button, Container, Grid,} from "@mui/material";
+import {Button, Container, Grid, Typography,} from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {useParams} from "react-router";
 import {Group} from "../../../../../server/models/Group";
@@ -57,6 +57,10 @@ const GroupView: React.FC = (): JSX.Element => {
               <ContentCopyIcon style={{backgroundColor: "white"}}/>
           </span>
                     </Button>
+                    <Typography color="inherit"
+                                style={{marginLeft: "6%", fontSize: "2vw", paddingTop: "5%"}}>
+                        Table Members
+                    </Typography>
                     <GroupMembersList group={group}></GroupMembersList>
                     <div>
                         {group && (
@@ -71,10 +75,16 @@ const GroupView: React.FC = (): JSX.Element => {
                 <Grid item xs={8}>
                     {group && (
                         <div>
-                            <div style={{display: "flex", flexDirection: "row-reverse", marginRight: "2%"}}>
-                            <DateTimeFilter filters={group.filters}
-                                            onFiltersChange={handleFiltersChange}
-                            />
+                            <div style={{display: "flex", justifyContent: "space-between"}}>
+                                <Typography color="inherit"
+                                            style={{marginLeft: "8%", fontSize: "2vw"}}>
+                                    Best Matches
+                                </Typography>
+                                <div style={{marginRight: "2%"}}>
+                                    <DateTimeFilter filters={group.filters}
+                                                    onFiltersChange={handleFiltersChange}
+                                    />
+                                </div>
                             </div>
                             <AllRestaurants filters={group.filters || {}}/>
                         </div>
