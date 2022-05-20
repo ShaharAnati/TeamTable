@@ -38,7 +38,7 @@ dayjs.extend(isSameOrAfter);
       "6": "ו",
       "7": "ש",
     };
-  
+
     return (
       <div>
         {Object.keys(dayMapping).map((day) => (
@@ -60,7 +60,7 @@ dayjs.extend(isSameOrAfter);
     const { name, description, tags, imgUrl, openingTimes } = restaurant;
   
     return (
-      <Card sx={{ width: "17vw", height: "53vh" }}>
+      <Card sx={{ width: "17vw", height: "45vh" }}>
         <CardMedia
           component="img"
           height="140"
@@ -91,11 +91,18 @@ dayjs.extend(isSameOrAfter);
                 : {})}
             />
           ))}
-          {/*<Tooltip title="OpeningHours">
-            <IconButton>
-              <AccessTimeIcon />
-            </IconButton>
-          </Tooltip>*/}
+         {/* <Accordion>
+            <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel2a-content"
+                id="panel2a-header"
+            >
+              <Typography>Opening hours</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <OpeningHours openingTimes={openingTimes} />
+            </AccordionDetails>
+          </Accordion>*/}
           {/*<OpeningHours openingTimes={openingTimes} />*/}
         </CardContent>
       </Card>

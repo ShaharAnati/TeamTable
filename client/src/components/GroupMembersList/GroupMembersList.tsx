@@ -11,7 +11,7 @@ const GroupMembersList: React.FC<GroupMembersListProps> = (props): JSX.Element =
 
     const { group } = props;
 
-    return (<div>
+    return (<div style={{height: "50vh"}}>
         {group
             ? group.members.map((member) => {
                 return (

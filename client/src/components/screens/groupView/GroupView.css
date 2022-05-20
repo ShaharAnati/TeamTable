@@ -6,3 +6,25 @@
 .TagFilters-chip {
     margin: 4px;
 }
+
+.ContentCopyIcon {
+    position: absolute;
+    width: inherit;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.CopyToClipboardButton {
+    width: -webkit-fill-available;
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
+    padding: 3% !important;
+}
+
+.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+    padding: 5%;
+}

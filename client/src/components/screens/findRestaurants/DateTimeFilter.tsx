@@ -38,7 +38,7 @@ function DateTimeFilter({onFiltersChange, filters}: Props): JSX.Element {
             label="Hour"
             value={filters.hour ? dayjs(`01-01-2000 ${filters.hour}`) : null}
             onChange={handleHourChange}
-            renderInput={(params) => <TextField {...params} />}
+            renderInput={(params) => <TextField {...params}/>}
         />
         <FormControl style={{width: "10vw"}}>
             <InputLabel id="demo-simple-select-label">Day</InputLabel>
