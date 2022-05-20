@@ -13,7 +13,7 @@ const GroupMembersList: React.FC<GroupMembersListProps> = (props): JSX.Element =
 
     return (<div style={{
         height: "45vh",
-        textAlign: "-webkit-center",
+        textAlign: "center"
     }}>
         {group
             ? group.members.map((member) => {
