@@ -10,8 +10,9 @@ interface CreateGroupProps {
     groupName: string;
     onGroupNameChange: (event) => void;
 }
+
 const CreateGroup: React.FC<CreateGroupProps> = (props): JSX.Element => {
-    
+
     const { onSubmit, groupName, onGroupNameChange } = props;
 
     
