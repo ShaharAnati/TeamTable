@@ -1,36 +1,29 @@
+import {Card, CardContent, CardMedia, IconButton, Typography,} from "@mui/material";
+import Chip from "@mui/material/Chip";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import React from "react";
+import dayjs from "dayjs";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+
 import {
-    Button,
-    Card,
-    CardActions,
-    CardContent,
-    CardMedia,
-    Grid,
-    IconButton,
-    Typography,
-  } from "@mui/material";
-  import Chip from "@mui/material/Chip";
-  import _ from "lodash";
-  import FavoriteIcon from "@mui/icons-material/Favorite";
-  import React, { useEffect, useState } from "react";
-  import dayjs from "dayjs";
-  import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
-  import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
-  import "../restaurant.css";
-  import {
-    dayMapping,
-    Restaurant,
-  } from "../../../../../types/Resturants";
-  
-  dayjs.extend(isSameOrAfter);
+  dayMapping,
+  Restaurant
+} from '../../../../../types/Resturants'
+import "../restaurant.css";
+
+dayjs.extend(isSameOrAfter);
   dayjs.extend(isSameOrBefore);
   
   const styles = {
     header: {
       display: "flex",
       justifyContent: "space-between",
+      alignItems: "center"
     },
     title: {
-      fontSize: "28px",
+      fontSize: "1.3vw",
+      fontWeight: "bold"
     },
   };
   
@@ -57,23 +50,27 @@ import {
     );
   };
   
+  // TODO: opening hours
   export const RestaurantComponent = (props: Props): JSX.Element => {
     const { restaurant, chosedTags = [] } = props;
     const { name, description, tags, imgUrl, openingTimes } = restaurant;
   
     return (
-      <Card sx={{ maxWidth: 345 }}>
+      <Card sx={{ width: "17vw", height: "45vh" }}>
         <CardMedia
           component="img"
           height="140"
           image={imgUrl}
           alt="green iguana"
         />
-        <CardContent>
+        <CardContent style={{padding: "3%"}}>
           <div style={styles.header}>
             <div style={styles.title}>{name}</div>
-            <IconButton>
-              <FavoriteIcon />
+            <IconButton style={{
+              padding: 0,
+              height: "inherit"
+            }}>
+              <FavoriteIcon/>
             </IconButton>
           </div>
           <Typography variant="body2" color="text.secondary">
@@ -90,7 +87,19 @@ import {
                 : {})}
             />
           ))}
-          <OpeningHours openingTimes={openingTimes} />
+         {/* <Accordion>
+            <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel2a-content"
+                id="panel2a-header"
+            >
+              <Typography>Opening hours</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <OpeningHours openingTimes={openingTimes} />
+            </AccordionDetails>
+          </Accordion>*/}
+          {/*<OpeningHours openingTimes={openingTimes} />*/}
         </CardContent>
       </Card>
     );
