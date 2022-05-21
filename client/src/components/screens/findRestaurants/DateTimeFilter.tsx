@@ -9,6 +9,7 @@ import InputLabel from "@mui/material/InputLabel";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import React from "react";
+import {dayMapping} from "../../../types/Resturants";
 
 type Props = { onFiltersChange: Function, filters: Filters };
 
@@ -49,9 +50,9 @@ function DateTimeFilter({ onFiltersChange, filters }: Props): JSX.Element {
                 label="Day"
                 onChange={handleDayChange}
             >
-                {[1, 2, 3, 4, 5, 6, 7].map((day) => (
+                {Object.keys(dayMapping).map((day) => (
                     <MenuItem key={day} value={day}>
-                        {day}
+                        {dayMapping[day]}
                     </MenuItem>
                 ))}
             </Select>

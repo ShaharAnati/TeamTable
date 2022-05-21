@@ -12,8 +12,10 @@ const GroupMembersList: React.FC<GroupMembersListProps> = (props): JSX.Element =
     const { group } = props;
 
     return (<div style={{
-        height: "45vh",
-        textAlign: "center"
+        height: "40vh",
+        textAlign: "center",
+        overflowY: "auto",
+        marginBottom: "3%"
     }}>
         {group
             ? group.members.map((member) => {
@@ -23,9 +25,7 @@ const GroupMembersList: React.FC<GroupMembersListProps> = (props): JSX.Element =
                         sx={{
                             width: "-webkit-fill-available",
                             maxWidth: 360,
-                            bgcolor: "background.paper",
-                            height: "35vh",
-                            overflowY: "auto"
+                            bgcolor: "background.paper"
                         }}
                     >
                         <ListItem>

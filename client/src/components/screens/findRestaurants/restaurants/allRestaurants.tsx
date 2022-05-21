@@ -79,12 +79,11 @@ export const AllRestaurants = (props): JSX.Element => {
     <div
       style={{
         display: "flex",
-        flexWrap: "wrap",
-        justifyContent: "flex-end",
+        flexWrap: "wrap"
       }}
     >
       {filteredRestaurants?.map((restaurant, i) => (
-        <div key={i} style={{ margin: "16px" }}>
+        <div key={i} style={{ margin: "2%" }}>
           <Restaurant restaurant={restaurant} chosedTags={filters.tags} />
         </div>
       ))}

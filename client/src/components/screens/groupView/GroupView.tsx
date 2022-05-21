@@ -74,12 +74,13 @@ const GroupView: React.FC = (): JSX.Element => {
                 <Grid item xs={8}>
                     {group && (
                         <div>
-                            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                            <div style={{ display: "flex", justifyContent: "space-between",
+                                marginLeft: "2%", marginRight: "3%" }}>
                                 <Typography color="inherit"
-                                    style={{ marginLeft: "8%", fontSize: "2vw" }}>
+                                    style={{ fontSize: "2vw" }}>
                                     Best Matches
                                 </Typography>
-                                <div style={{ marginRight: "2%" }}>
+                                <div>
                                     <DateTimeFilter filters={group.filters}
                                         onFiltersChange={handleFiltersChange}
                                     />

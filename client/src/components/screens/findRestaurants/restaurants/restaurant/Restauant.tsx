@@ -57,7 +57,7 @@ export const RestaurantComponent = (props: Props): JSX.Element => {
   const { name, description, tags, imgUrl, openingTimes } = restaurant;
 
   return (
-    <Card sx={{ width: "17vw", height: "45vh" }}>
+    <Card sx={{ width: "18vw", height: "fit-content" }}>
       <CardMedia
         component="img"
         height="140"
