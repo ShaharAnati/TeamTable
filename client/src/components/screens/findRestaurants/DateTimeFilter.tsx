@@ -1,18 +1,18 @@
-import {Filters} from "../../../types/Filters";
-import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
-import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import {TimePicker} from "@mui/x-date-pickers/TimePicker";
+import { Filters } from "../../../types/Group";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import dayjs from "dayjs";
 import TextField from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
-import Select, {SelectChangeEvent} from "@mui/material/Select";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import React from "react";
 
 type Props = { onFiltersChange: Function, filters: Filters };
 
-function DateTimeFilter({onFiltersChange, filters}: Props): JSX.Element {
+function DateTimeFilter({ onFiltersChange, filters }: Props): JSX.Element {
     const handleDayChange = (event: SelectChangeEvent, value) => {
         onFiltersChange({
             ...filters,
@@ -38,9 +38,9 @@ function DateTimeFilter({onFiltersChange, filters}: Props): JSX.Element {
             label="Hour"
             value={filters.hour ? dayjs(`01-01-2000 ${filters.hour}`) : null}
             onChange={handleHourChange}
-            renderInput={(params) => <TextField {...params}/>}
+            renderInput={(params) => <TextField {...params} />}
         />
-        <FormControl style={{width: "10vw"}}>
+        <FormControl style={{ width: "10vw" }}>
             <InputLabel id="demo-simple-select-label">Day</InputLabel>
             <Select
                 labelId="demo-simple-select-label"
