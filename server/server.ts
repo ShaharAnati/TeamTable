@@ -76,6 +76,7 @@ io.on("connection", (socket: any) => {
 
       groupsUserSocketId.delete(socket.id);
       socket.to(groupId).emit("groupData", group);
+      updateGroup(groupId, group);
     }
 
     // TODO
