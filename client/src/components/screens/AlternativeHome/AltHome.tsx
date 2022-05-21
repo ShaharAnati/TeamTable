@@ -28,6 +28,13 @@ function AltHome({}: Props) {
         >
           Find us a table
         </Button>
+
+        <div className="add-restaurant-text">
+          <span className="own-restaurant">Didn't find a restaurant?</span>
+          <span className="add-now-button">
+            Add it <u>here</u> now!
+          </span>
+        </div>
       </div>
 
       <div className="all-restaurant-area">

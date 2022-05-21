@@ -17,6 +17,25 @@
   padding-bottom: 25px;
 }
 
+.add-restaurant-text {
+  background-color: #00000059;
+  width: 100%;
+  height: 43px;
+  bottom: 0;
+  position: absolute;
+  color: #eeeeee;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-now-button {
+  margin-left: 4px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
 .all-restaurant-area {
   background-color: #fafafa;
   padding: 0 100px;
