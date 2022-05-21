@@ -62,7 +62,7 @@ io.on("connection", (socket: any) => {
     const { id: groupId } = data;
 
     groupsDataCache.set(groupId, data);
-    socket.broadcast.to(groupId).emit("groupData", data);
+    socket.to(groupId).emit("groupData", data);
   });
 
   socket.on("disconnect", () => {
@@ -73,7 +73,7 @@ io.on("connection", (socket: any) => {
       group.members.splice(group.members.indexOf(user), 1);
 
       groupsUserSocketId.delete(socket.id);
-      io.to(groupId).emit("groupData", group);
+      socket.to(groupId).emit("groupData", group);
     }
 
     // TODO

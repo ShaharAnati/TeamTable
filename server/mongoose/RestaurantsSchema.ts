@@ -15,11 +15,22 @@ const restaurantSchema = new mongoose.Schema({
     "6": [{ type: String }],
     "7": [{ type: String }],
   },
-  location: { type: String },
-  contactIndo: {
+  address: {
+    city: { type: String },
+    country: { type: String },
+    street: { type: String },
+    house_number: { type: String },
+  },
+  location: {
+    lat: { type: Number },
+    lng: { type: Number }
+  },
+  contactInfo: {
     phoneNumber: { type: String },
     email: { type: String }
-  }  
+  },
+  url: { type: String },
+  isVerified: { type: Boolean }
 });
 
 const schema: any = mongoose.model("restaurants", restaurantSchema);
