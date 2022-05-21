@@ -23,10 +23,10 @@ export interface Restaurant {
 export const dayMapping = {
   "1": "Sunday",
   "2": "Monday",
-  "3": "Thirsday",
+  "3": "Tuesday",
   "4": "Wednesday",
   "5": "Thursday",
-  "6": "Firday",
+  "6": "Friday",
   "7": "Saturday",
 };
 

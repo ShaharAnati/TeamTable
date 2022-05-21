@@ -269,7 +269,9 @@ export const CreateRestaurant = (): JSX.Element => {
             </Grid>
           </Grid>
           <Map setAddress={setAddress} setMarker={setLocation} marker={location} />
-          <Button color="primary" variant="contained" disabled={datesError != ""} onClick={() => { formik.handleSubmit() }}>
+          <Button color="primary" variant="contained"
+            // disabled={datesError != ""} 
+            onClick={() => { formik.handleSubmit() }}>
             ADD
           </Button>
         </div>
