@@ -1,14 +1,21 @@
 import * as React from "react";
-import { Map as ReactMap, Marker } from "react-map-gl";
+import { Map as ReactMap, Marker, useControl } from "react-map-gl";
 import maplibregl from "maplibre-gl";
+import Geocoder from 'react-map-gl-geocoder'
+
 import "maplibre-gl/dist/maplibre-gl.css";
+import 'react-map-gl-geocoder/dist/mapbox-gl-geocoder.css'
+import GeocoderControl from "./GeocoderControl";
+
 
 export const Map = (props) => {
-    const [markers, setMarkers] = React.useState([]);
-
+    // const [marker, setMarker] = React.useState(null);
+    const mapRef = React.useRef();
+    const geocoderContainerRef = React.useRef();
     return (
-        <div style={{ height: 600, width: 1000 }}>
+        <div ref={geocoderContainerRef} style={{ height: 500, width: 1000, margin: '10px 0' }} >
             <ReactMap
+                ref={mapRef}
                 mapLib={maplibregl}
                 mapStyle="https://api.maptiler.com/maps/streets/style.json?key=ytGeppRI3n5wUxjfP8oH"
                 initialViewState={{
@@ -17,22 +24,29 @@ export const Map = (props) => {
                     zoom: 14,
                 }}
                 onClick={(data) => {
-                    console.log(data);
-                    setMarkers((oldMarkers) => [...oldMarkers, { ...data.lngLat }]);
+                    props.setMarker(data.lngLat);
                 }}
             >
-                {markers.map((marker) => {
-                    return (
-                        <Marker
-                            style={{ background: 'pink', color: 'white', padding: '0 4px' }}
-                            longitude={marker.lng}
-                            latitude={marker.lat}
-                            anchor="bottom"
-                        >
-                            Illi The Queen
-                        </Marker>
-                    );
-                })}
+                {props.marker && (
+                    <Marker
+                        style={{ color: 'white', padding: '0 4px' }}
+                        longitude={props.marker?.lng}
+                        latitude={props.marker?.lat}
+                        anchor="bottom"
+
+                    />)
+                }
+                <GeocoderControl position="top-left" SetCurrentMarker={props.setMarker} setAddress={props.setAddress} />
+                {/* <Geocoder
+                    mapRef={mapRef}
+                    containerRef={geocoderContainerRef}
+                    // onViewportChange={(data) => {
+                    //     console.log(data);
+                    //     setMarker(data.lngLat);
+                    // }}
+                    mapboxApiAccessToken={"ytGeppRI3n5wUxjfP8oH"}
+                    position="top-left"
+                /> */}
             </ReactMap>
         </div>
     );

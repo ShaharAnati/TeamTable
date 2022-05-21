@@ -15,7 +15,16 @@ const restaurantSchema = new mongoose.Schema({
     "6": [{ type: String }],
     "7": [{ type: String }],
   },
-  location: { type: String },
+  address: {
+    city: { type: String },
+    country: { type: String },
+    street: { type: String },
+    houseNumber: { type: String },
+  },
+  location: {
+    lat: { type: Number },
+    lng: { type: Number }
+  },
   contactInfo: {
     phoneNumber: { type: String },
     email: { type: String }
