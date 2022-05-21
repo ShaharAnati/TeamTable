@@ -8,6 +8,7 @@ import HomeScreen from "./screens/home/Home";
 import LogInScreen from "./screens/login/LoginScreen";
 import Register from "./screens/register/RegisterScreen";
 import { CreateRestaurant } from "./screens/createRestaurant/CreateRestaurant";
+import VerifyRestaurants from "./screens/verifyRestaurants/VerifyRestaurants";
 
 import CreateGroupContainer from "./screens/createGroup/CreateGroupContainer";
 import GroupView from "./screens/groupView/GroupView";
@@ -38,6 +39,7 @@ const App: React.FC = (props): JSX.Element => {
           }
         />
         <Route path="create-restaurant" element={<CreateRestaurant />} />
+        <Route path="verify-restaurant" element={<VerifyRestaurants />} />
       </Routes>
     </Router>
   );
