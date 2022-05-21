@@ -19,7 +19,7 @@ const restaurantSchema = new mongoose.Schema({
     city: { type: String },
     country: { type: String },
     street: { type: String },
-    houseNumber: { type: String },
+    house_number: { type: String },
   },
   location: {
     lat: { type: Number },
