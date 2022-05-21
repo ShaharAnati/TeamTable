@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import { Document } from 'mongoose';
+import { Restaurant } from "../models/Restaurant";
 
 const restaurantSchema = new mongoose.Schema({
   id: { type: String },
@@ -23,5 +25,9 @@ const restaurantSchema = new mongoose.Schema({
 });
 
 const schema: any = mongoose.model("restaurants", restaurantSchema);
+
+export const getAllRestaurants = async (): Promise<Restaurant[]> => {
+  return ((await schema.find({})) as Document[]).map(rest => rest.toObject() as Restaurant);
+}
 
 export default schema;
