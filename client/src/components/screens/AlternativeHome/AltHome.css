@@ -1,0 +1,24 @@
+.background-img {
+  height: 440px;
+  background-size: auto 1157px;
+  background-position-y: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.image-text {
+  margin: 0 auto;
+  width: fit-content;
+  color: white;
+  font-size: 34px;
+  padding-top: 110px;
+  padding-bottom: 25px;
+}
+
+.all-restaurant-area {
+  background-color: #fafafa;
+  padding: 0 100px;
+  padding-top: 50px;
+}

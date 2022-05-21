@@ -1,7 +1,7 @@
 import _ from "lodash";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {useQuery} from "react-query";
+import { useQuery } from "react-query";
 
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
@@ -80,11 +80,11 @@ export const AllRestaurants = (props): JSX.Element => {
       style={{
         display: "flex",
         flexWrap: "wrap",
-        justifyContent: "flex-end",
+        justifyContent: "flex-start",
       }}
     >
       {filteredRestaurants?.map((restaurant, i) => (
-        <div key={i} style={{ margin: "16px" }}>
+        <div key={i} style={{ margin: "auto", padding: "0 16px 50px 16px" }}>
           <Restaurant restaurant={restaurant} chosedTags={filters.tags} />
         </div>
       ))}
