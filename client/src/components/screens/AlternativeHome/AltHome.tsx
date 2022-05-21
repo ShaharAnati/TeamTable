@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // @ts-ignore
 import BackgroundImg from "../../../../assets/images/background.jpg";
@@ -12,6 +12,8 @@ import "./AltHome.css";
 type Props = {};
 
 function AltHome({}: Props) {
+  const navigate = useNavigate();
+
   return (
     <div>
       <div
@@ -31,7 +33,10 @@ function AltHome({}: Props) {
 
         <div className="add-restaurant-text">
           <span className="own-restaurant">Didn't find a restaurant?</span>
-          <span className="add-now-button">
+          <span
+            className="add-now-button"
+            onClick={() => navigate("/create-restaurant", { replace: true })}
+          >
             Add it <u>here</u> now!
           </span>
         </div>
