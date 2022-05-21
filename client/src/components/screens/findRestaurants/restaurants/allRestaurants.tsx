@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import "./restaurant.css";
-import {Restaurant} from "./restaurant/Restauant";
+import Restaurant from "./restaurant/Restauant";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
