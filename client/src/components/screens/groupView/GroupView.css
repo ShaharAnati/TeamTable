@@ -29,3 +29,8 @@
 .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
     padding: 5%;
 }
+
+.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root,
+.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root {
+    top: -20% !important;
+}
