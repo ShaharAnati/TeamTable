@@ -1,7 +1,7 @@
 import React from "react";
 import _ from "lodash";
 import Chip from "@mui/material/Chip";
-import {Filters} from "../../../types/Filters";
+import { Filters } from "../../../types/Group";
 
 const tags = [
   "meat",

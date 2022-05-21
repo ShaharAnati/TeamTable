@@ -10,6 +10,7 @@ import BuildResourceRouter from "./routers/ResourcesRouter";
 import LoginRouter from "./routers/LoginRouter";
 import GroupsRouter from "./routers/GroupsRouter";
 import RestaurantsRouter from "./routers/RestaurantsRouter";
+import { updateGroup } from "./BL/groupsService";
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("../swagger.json");
@@ -56,6 +57,7 @@ io.on("connection", (socket: any) => {
     io.to(groupId).emit("groupData", group);
 
     console.log("joined group: " + groupId);
+    updateGroup(groupId, group);
   });
 
   socket.on("filtersUpdate", (data: Group) => {
@@ -92,7 +94,7 @@ const init = async (): Promise<void> => {
   app.use(bodyParser.json());
 
   app.use(LoginRouter());
-  app.use("/groups", GroupsRouter(io));
+  app.use("/groups", GroupsRouter());
   app.use("/restaurants", RestaurantsRouter());
 
   // app.use(withAuth);

@@ -5,7 +5,11 @@ const groupSchema = new mongoose.Schema({
     creator: { type: String },
     name: { type: String },
     members: { type: [String] },
-    filters: { type: [String] }
+    filters: {
+        tags: { type: [String] },
+        hour: { type: String },
+        day: { type: String }
+    }
 });
 
 const schema: any = mongoose.model("groups", groupSchema);
