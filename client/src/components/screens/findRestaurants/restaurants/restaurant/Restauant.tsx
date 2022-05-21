@@ -1,4 +1,4 @@
-import {Card, CardContent, CardMedia, IconButton, Typography,} from "@mui/material";
+import {Card, CardContent, CardMedia, IconButton, Tooltip, Typography,} from "@mui/material";
 import Chip from "@mui/material/Chip";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import React from "react";
@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import "../restaurant.css";
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 dayjs.extend(isSameOrAfter);
   dayjs.extend(isSameOrBefore);
@@ -30,13 +31,13 @@ dayjs.extend(isSameOrAfter);
   
   const OpeningHours = ({ openingTimes }): JSX.Element => {
     const dayMapping = {
-      "1": "א",
-      "2": "ב",
-      "3": "ג",
-      "4": "ד",
-      "5": "ה",
-      "6": "ו",
-      "7": "ש",
+      "1": "Sunday",
+      "2": "Monday",
+      "3": "Tuesday",
+      "4": "Wednesday",
+      "5": "Thursday",
+      "6": "Friday",
+      "7": "Saturday",
     };
 
     return (
@@ -47,7 +48,7 @@ dayjs.extend(isSameOrAfter);
             <div className="openingHours-day-times">
               {openingTimes[day] && openingTimes[day].length !== 0
                 ? `${openingTimes[day][0]} - ${openingTimes[day][1]}`
-                : "סגור"}
+                : "closed"}
             </div>
           </div>
         ))}
@@ -58,7 +59,7 @@ dayjs.extend(isSameOrAfter);
   export const Restaurant = (props: Props): JSX.Element => {
     const { restaurant, chosedTags = [] } = props;
     const { name, description, tags, imgUrl, openingTimes } = restaurant;
-  
+
     return (
       <Card sx={{ width: "17vw", height: "45vh" }}>
         <CardMedia
@@ -77,9 +78,11 @@ dayjs.extend(isSameOrAfter);
               <FavoriteIcon/>
             </IconButton>
           </div>
+          <div>
           <Typography variant="body2" color="text.secondary">
             {description}
           </Typography>
+          </div>
           {tags.map((tag) => (
             <Chip
               key={tag}
@@ -91,19 +94,16 @@ dayjs.extend(isSameOrAfter);
                 : {})}
             />
           ))}
-         {/* <Accordion>
-            <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel2a-content"
-                id="panel2a-header"
-            >
-              <Typography>Opening hours</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <OpeningHours openingTimes={openingTimes} />
-            </AccordionDetails>
-          </Accordion>*/}
-          {/*<OpeningHours openingTimes={openingTimes} />*/}
+          <div style={{textAlign: "right"}}>
+            <Tooltip title={<div><OpeningHours openingTimes={openingTimes}/></div>}>
+              <IconButton style={{
+                padding: 0,
+                height: "inherit"
+              }}>
+                <AccessTimeIcon/>
+              </IconButton>
+            </Tooltip>
+          </div>
         </CardContent>
       </Card>
     );
