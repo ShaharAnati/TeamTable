@@ -10,6 +10,7 @@ import BuildResourceRouter from "./routers/ResourcesRouter";
 import LoginRouter from "./routers/LoginRouter";
 import GroupsRouter from "./routers/GroupsRouter";
 import RestaurantsRouter from "./routers/RestaurantsRouter";
+import { updateGroup } from "./BL/groupsService";
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("../swagger.json");
@@ -56,13 +57,14 @@ io.on("connection", (socket: any) => {
     io.to(groupId).emit("groupData", group);
 
     console.log("joined group: " + groupId);
+    updateGroup(groupId, group);
   });
 
   socket.on("filtersUpdate", (data: Group) => {
     const { id: groupId } = data;
 
     groupsDataCache.set(groupId, data);
-    socket.broadcast.to(groupId).emit("groupData", data);
+    socket.to(groupId).emit("groupData", data);
   });
 
   socket.on("disconnect", () => {
@@ -73,7 +75,8 @@ io.on("connection", (socket: any) => {
       group.members.splice(group.members.indexOf(user), 1);
 
       groupsUserSocketId.delete(socket.id);
-      io.to(groupId).emit("groupData", group);
+      socket.to(groupId).emit("groupData", group);
+      updateGroup(groupId, group);
     }
 
     // TODO
@@ -92,8 +95,10 @@ const init = async (): Promise<void> => {
   app.use(bodyParser.json());
 
   app.use(LoginRouter());
-  app.use("/groups", withAuth, GroupsRouter(io));
-  app.use("/restaurants", withAuth, RestaurantsRouter());
+  app.use("/groups",withAuth, GroupsRouter(io));
+  app.use("/restaurants",withAuth, RestaurantsRouter());
+
+  // app.use(withAuth);
 
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

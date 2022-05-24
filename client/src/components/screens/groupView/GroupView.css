@@ -1,0 +1,36 @@
+.TagFilters {
+    display: flex;
+    flex-wrap: wrap;
+    place-content: center;
+}
+
+.TagFilters-chip {
+    margin: 4px;
+}
+
+.ContentCopyIcon {
+    position: absolute;
+    width: inherit;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.CopyToClipboardButton {
+    width: -webkit-fill-available;
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
+    padding: 3% !important;
+}
+
+.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+    padding: 5%;
+}
+
+.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root,
+.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root {
+    top: -20% !important;
+}
