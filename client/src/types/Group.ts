@@ -1,8 +1,9 @@
-type Filters = {
+export type Filters = {
     day?: string;
     hour?: string;
     tags: string[]
 }
+
 export interface Group {
     id: any;
     creator?: string;

@@ -16,6 +16,17 @@ const buildRouter = (): Router => {
         } catch (error) { }
     });
 
+    router.post("/", async (req, res) => {
+        try {
+
+            const restaurant  = req.body;
+
+            const newRestaurant = await RestaurantsSchema.create(restaurant);
+            
+            return res.status(201).json(newRestaurant);
+        } catch (error) { }
+    });
+
     router.get("/:tags", async (req: Request, res: Response) => {
         try {
             const { tags } = req.params;
