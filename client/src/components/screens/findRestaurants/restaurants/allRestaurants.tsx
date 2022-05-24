@@ -16,6 +16,7 @@ export const AllRestaurants = (props): JSX.Element => {
   const { filters } = props;
 
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
+  const sessionStorageUser = sessionStorage.getItem('user_token');
 
   const {
     isLoading,
@@ -23,7 +24,11 @@ export const AllRestaurants = (props): JSX.Element => {
     data: restaurants,
   } = useQuery("repoData", () =>
     axios
-      .get("http://localhost:3000/restaurants")
+      .get("http://localhost:3000/restaurants", {headers: {
+        'x-access-token': sessionStorageUser,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }})
       .then((res) => {
         return res.data;
       })

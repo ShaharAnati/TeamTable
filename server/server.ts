@@ -92,18 +92,17 @@ const init = async (): Promise<void> => {
   app.use(bodyParser.json());
 
   app.use(LoginRouter());
-  app.use("/groups", GroupsRouter(io));
-  app.use("/restaurants", RestaurantsRouter());
-
-  // app.use(withAuth);
+  app.use("/groups", withAuth, GroupsRouter(io));
+  app.use("/restaurants", withAuth, RestaurantsRouter());
 
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-  app.post("/welcome", withAuth, (req, res) => {
+  app.post("/welcome", (req, res) => {
     res.status(200).send("Welcome 🙌 ");
   });
 
   app.use(BuildResourceRouter());
+
 };
 
 init();

@@ -1,6 +1,6 @@
-import React, {createContext, useContext, useState} from "react";
-import axios, {AxiosResponse} from "axios";
-import {ConflictError} from "src/errors/ConflictError";
+import React, { createContext, useContext, useState } from "react";
+import axios, { AxiosResponse } from "axios";
+import { ConflictError } from "src/errors/ConflictError";
 
 export type LocationState = {
   from: {
@@ -21,6 +21,22 @@ interface AuthContextInterface {
 }
 
 
+
+export const getRefreshToken = async (): Promise<boolean> => {
+  const res = await axios.post('http://localhost:3000/refresh', {
+    headers: {
+        'authorization' : sessionStorage.getItem('refresh_token')
+    },
+  })
+  
+  if (res.status == 200) {
+    sessionStorage.setItem('user_token', res.data.token);
+    return true;
+  } else { 
+    return false;
+  }
+};
+
 export const AuthContext = createContext<AuthContextInterface>(null!);
 
 const sessionStorageUser = sessionStorage.getItem('user_token');
@@ -32,12 +48,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const res: AxiosResponse<any> = await axios.post("http://localhost:3000/login", {
         email,
-        password,
+        password
       });
 
-      setLoggedInUser({email, token: res.data.token});
+      setLoggedInUser({ email, token: res.data.token });
       sessionStorage.setItem('user_token', res.data.token);
       sessionStorage.setItem('user_email', email);
+      sessionStorage.setItem('refresh_token', res.data.refreshToken);
 
       console.log("Succesfully logged in");
     }
@@ -62,7 +79,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const res: AxiosResponse<any> = await axios.post("http://localhost:3000/register", {
         email,
-        password, 
+        password,
         phoneNumber,
         fullName
       });
@@ -70,6 +87,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setLoggedInUser(res.data.token);
       sessionStorage.setItem('user_token', res.data.token);
       sessionStorage.setItem('user_email', email);
+      sessionStorage.setItem('refresh_token', res.data.refreshToken);
+
 
       console.log("Registration completed succesfully");
     } catch (error) {
@@ -85,6 +104,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       throw error;
     }
   }
+  
 
   const value = { loggedInUser, signin, signout, register };
 

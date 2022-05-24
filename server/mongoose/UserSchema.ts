@@ -4,7 +4,8 @@ const userSchema = new mongoose.Schema({
   email: { type: String, unique: true },
   password: { type: String },
   phoneNumber: {type: String },
-  fullName: {type: String}
+  fullName: {type: String},
+  tokens: {type:[String]}
 });
 
 const schema: any = mongoose.model("users", userSchema);

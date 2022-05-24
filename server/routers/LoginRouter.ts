@@ -52,13 +52,31 @@ const buildRouter = (): Router => {
                 { user_id: user._id, email },
                 process.env.TOKEN_KEY || "",
                 {
-                    expiresIn: "2h",
+                    expiresIn: "2m",
                 }
             );
+
+            const refreshToken = jwt.sign(
+                { user_id: user._id, email },
+                process.env.REFRESH_KEY || "",
+                {
+                    expiresIn: "24h",
+                }
+            );
+
+
+            if (user.tokens == null) {
+                user.tokens = [refreshToken]
+            } else {
+                user.tokens.push(refreshToken);
+            }
+            await user.save();
+
             // return new user
-            res.status(201).json({ user, token });
+            res.status(200).json({ user, token, refreshToken });
         } catch (err) {
             console.log(err);
+            return res.status(409).send("User Already Exist. Please Login");
         }
     });
 
@@ -94,19 +112,87 @@ const buildRouter = (): Router => {
                     { user_id: user._id, email },
                     process.env.TOKEN_KEY || "",
                     {
-                        expiresIn: "2h",
+                        expiresIn: "2m",
                     }
                 );
 
-                res.status(200).json({ user, token });
+                const refreshToken = jwt.sign(
+                    { user_id: user._id, email },
+                    process.env.TOKEN_KEY || "",
+                    {
+                        expiresIn: "24h",
+                    }
+                );
+
+                if (user.tokens == null) {
+                    user.tokens = [refreshToken]
+                } else {
+                    user.tokens.push(refreshToken);
+                }
+                await user.save()
+
+                return res.status(200).json({ user, token, refreshToken });
             }
-            res.status(400).json("Invalid Credentials");
+            return res.status(400).json("Invalid Credentials");
         } catch (err) {
             console.log(err);
+            return res.status(400).json("Invalid Credentials");
         }
     });
+
+
+    router.post("/refresh", async (req, res) => {
+        let authHeaders = req.headers['authorization']
+        const token = authHeaders && authHeaders.split(' ')[1];
+
+        if (!token) {
+            return res.status(401).json("Invalid token,try login again");
+        }
+        jwt.verify(token, process.env.REFRESH_KEY || ""),
+            async (err: any, userInfo: any) => {
+                if (err) {
+                    // Wrong Refesh Token
+                    return res.status(406).json({ message: 'Unauthorized' });
+                }
+                try {
+                    const userId = userInfo._id;
+                    let user = await UserSchema.findById(userId)
+                    if (!user) {
+                        return res.status(403).send('Invalid request');
+                    }
+                    if (!user.tokens.includes(token)) {
+                        user.tokens = []
+                        await user.save();
+                        return res.status(403).send('Invalid request');
+                    }
+                    // Correct token we send a new access token
+                    const accessToken = jwt.sign(
+                        { user_id: user._id },
+                        process.env.TOKEN_KEY || "",
+                        {
+                            expiresIn: "2m",
+                        }
+                    );
+
+                    // Correct token we send a new access token
+                    const refreshToken = jwt.sign(
+                        { user_id: user._id },
+                        process.env.TOKEN_KEY || ""
+                    );
+
+                    user.tokens[user.tokens.indexOf(token)] = refreshToken;
+                    await user.save();
+                    return res.status(200).send({ user, accessToken, refreshToken });
+                } catch (e) {
+                    res.status(403).send(err.message);
+                }
+            }
+    });
+
     return router;
+
 }
+
 
 export default buildRouter;
 
