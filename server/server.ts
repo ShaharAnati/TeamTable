@@ -95,7 +95,7 @@ const init = async (): Promise<void> => {
   app.use(bodyParser.json());
 
   app.use(LoginRouter());
-  app.use("/groups",withAuth, GroupsRouter(io));
+  app.use("/groups",withAuth, GroupsRouter());
   app.use("/restaurants",withAuth, RestaurantsRouter());
 
   // app.use(withAuth);
