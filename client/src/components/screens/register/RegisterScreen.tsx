@@ -90,7 +90,7 @@ const Register = (): JSX.Element => {
     const validatePassword = (password: string): void => {
         if (!password) { 
             setPasswordErrorText('Field is required');
-        } else if (validator.isStrongPassword(password, {
+        } else if (!validator.isStrongPassword(password, {
             minLength: 8, 
             minLowercase: 1,
             minUppercase: 1,
