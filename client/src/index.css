@@ -18,8 +18,6 @@ body {
 #root {
   height: 100%;
   width: 100%;
-  overflow: auto;
-  background-color: rgb(243 247 247);
 }
 
 code {
