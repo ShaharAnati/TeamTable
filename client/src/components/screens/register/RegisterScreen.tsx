@@ -1,6 +1,6 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { Button, Grid, InputAdornment, makeStyles, Paper, TextField, Tooltip, Typography } from "@mui/material";
+import { Button, Grid, InputAdornment, Paper, TextField, Tooltip, Typography } from "@mui/material";
 import { LocationState, useAuth } from '../../../auth/AuthProvider';
 import './Login.css'
 import React from 'react';
@@ -122,59 +122,57 @@ const Register = (): JSX.Element => {
     return (
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}>
             <Grid>
-                <Paper elevation={10} className={'paper-style'} style={{ padding: '10px' }}>
+                <Paper elevation={0} classes={{ root: 'paper-style' }} >
+                    <Grid textAlign={'center'}>
+                        <Typography variant='h5' color='primary' sx={{fontWeight: 600, margin: '24px 0'}}>
+                            Register
+                        </Typography>
+                    </Grid>
                     <div style={{ marginBottom: '10px', maxWidth:'500px' }}>
-                        <Grid textAlign={'center'}>
-                            <h2>Register</h2>
-                        </Grid>
                         <TextField label='Username'
                             name="username"
-                            placeholder='Enter username'
-                            variant="standard"
+                            variant="outlined"              
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             onBlur={() => validateUsername(username)}
                             error={!!usernameErrorText}
-                            helperText={usernameErrorText}
-                            style={{height:'80px' }}
-                            fullWidth required 
+                            helperText={usernameErrorText || ' '}
+                            fullWidth 
+                            required 
                         />
                         <TextField label='Full Name'
                             name="fullname"
                             placeholder='Enter full name'
-                            variant="standard"
+                            variant="outlined"
                             value={fullName}
                             onChange={(e) => setName(e.target.value)}
                             onBlur={() => validateFullName(fullName)}
                             error={!!fullnameErrorText}
-                            helperText={(fullnameErrorText)}
-                            style={{height:'80px' }}
+                            helperText={fullnameErrorText || ' '}
                             fullWidth required 
                         />
                         <TextField label='Phone Number'
                             name="phone"
                             placeholder='Enter phone number'
-                            variant="standard"
+                            variant="outlined"
                             value={phoneNumber}
                             onChange={(e) => setPhoneNumber(e.target.value)}
                             onBlur={() => validatePhoneNumber(phoneNumber)}
                             error={!!phoneNumberErrorText }
-                            helperText={phoneNumberErrorText}
-                            style={{height:'80px' }}
+                            helperText={phoneNumberErrorText || ' '}
                             fullWidth 
                         />
                         <TextField label='Password'
                             name="password"
                             placeholder='Enter password'
-                            variant="standard"
+                            variant="outlined"
                             type='password'
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             onBlur={() => validatePassword(password)}
                             error={!!passwordErrorText}
-                            helperText={passwordErrorText}
+                            helperText={passwordErrorText || ' '}
                             fullWidth required 
-                            style={{height:'80px' }}
                             InputProps={{
                                 startAdornment: ( 
                                   <InputAdornment position="start">
@@ -204,13 +202,27 @@ const Register = (): JSX.Element => {
                             color='primary'
                             variant="contained"
                             className={'button-style'}
-                            style={{ width: '50%' }}
                             disabled={!areAllFieldsValid}
                             onClick={() => handleSubmit()}
+                            fullWidth
                         >
                             Sign up
                         </Button>
                     </div>
+                    
+                    <Typography
+                        variant="subtitle2"
+                        sx={{
+                            width: "fit-content",
+                            color: "#414141",
+                            fontWeight: 600,
+                            margin: "auto",
+                            cursor: "pointer",
+                        }}
+                        onClick={() => navigate("/login-screen", { state: { from: location }, replace: true })}
+                        >
+                        Already have an account?
+                    </Typography>
                 </Paper>
             </Grid>
         </div>
