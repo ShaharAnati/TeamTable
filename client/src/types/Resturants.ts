@@ -6,11 +6,11 @@ export interface Restaurant {
   tags: string[];
   openingTimes?: {
     [day: string]: string[];
-  },
+  };
   location?: {
     lat: number;
     lng: number;
-  }
+  };
   address?: Address;
   contactInfo?: {
     phoneNumber?: string;
