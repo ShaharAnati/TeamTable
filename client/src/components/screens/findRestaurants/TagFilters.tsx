@@ -6,17 +6,26 @@ import { Filters } from "../../../types/Group";
 const tags = [
   "meat",
   "vegan",
-  "good",
-  "dsfsd",
-  "gdfsf",
-  "dfhfgfdgdf",
-  "sdfgsdg",
-  "fsdfdsfs",
-  "dsfdsf",
+  "gluten-free",
+  "dairy",
+  "light",
+  "fish",
+  "soup",
+  "asian",
+  "hummus",
 ];
-type Props = { selectedTags: any[]; onFiltersChange: Function, filters: Filters };
 
-function TagFilters({ selectedTags = [], onFiltersChange, filters }: Props): JSX.Element {
+type Props = {
+  selectedTags: any[];
+  onFiltersChange: Function;
+  filters: Filters;
+};
+
+function TagFilters({
+  selectedTags = [],
+  onFiltersChange,
+  filters,
+}: Props): JSX.Element {
   const handleTagsChange = (value) => {
     onFiltersChange({
       ...filters,

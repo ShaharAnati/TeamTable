@@ -1,7 +1,7 @@
 import _ from "lodash";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {useQuery} from "react-query";
+import { useQuery } from "react-query";
 
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
@@ -23,7 +23,7 @@ export const AllRestaurants = (props): JSX.Element => {
     data: restaurants,
   } = useQuery("repoData", () =>
     axios
-      .get("http://localhost:3000/restaurants")
+      .get(filters.tags ? `http://localhost:3000/restaurants/${filters.tags.join(",")}` : 'http://localhost:3000/restaurants')
       .then((res) => {
         return res.data;
       })
@@ -39,10 +39,10 @@ export const AllRestaurants = (props): JSX.Element => {
   );
 
   useEffect(() => {
-    const filterByTags = (restaurant) =>
-      !filters.tags ||
-      filters.tags?.length === 0 ||
-      _.intersection(filters.tags, restaurant.tags).length > 0;
+    // const filterByTags = (restaurant) =>
+    //   !filters.tags ||
+    //   filters.tags?.length === 0 ||
+    //   _.intersection(filters.tags, restaurant.tags).length > 0;
 
     const filterByDay = (restaurant) =>
       !filters.day || restaurant.openingTimes[filters.day] != null;
@@ -68,7 +68,6 @@ export const AllRestaurants = (props): JSX.Element => {
     setFilteredRestaurants(
       restaurants
         ? restaurants
-            .filter(filterByTags)
             .filter(filterByDay)
             .filter(filterByHour)
         : []
