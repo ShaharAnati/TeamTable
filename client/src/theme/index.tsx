@@ -6,7 +6,7 @@ export default createTheme({
         black: 'white'
     },
     primary: {
-      main: "#38a3a5",
+      main: "#59d8c9",
     },
   },
   components: {
