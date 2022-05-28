@@ -4,7 +4,8 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import AppLayout from "./AppLayout/AppLayout";
 import RequireAuth from "../auth/RequireAuth";
 
-import HomeScreen from "./screens/home/Home";
+import HomeScreen from "./screens/AlternativeHome/AltHome";
+// import HomeScreen from "./screens/home/Home";
 import LogInScreen from "./screens/login/LoginScreen";
 import Register from "./screens/register/RegisterScreen";
 import { CreateRestaurant } from "./screens/createRestaurant/CreateRestaurant";
