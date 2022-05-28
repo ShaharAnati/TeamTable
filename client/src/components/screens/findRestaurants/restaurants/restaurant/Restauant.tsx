@@ -71,7 +71,7 @@ export const RestaurantComponent = (props: Props): JSX.Element => {
         image={imgUrl}
         alt="green iguana"
       />
-      <CardContent style={{ padding: "3%" }}>
+      <CardContent style={{ padding: "1% 3%" }}>
         <div style={styles.header}>
           <div style={styles.title}>{name}</div>
           <IconButton
