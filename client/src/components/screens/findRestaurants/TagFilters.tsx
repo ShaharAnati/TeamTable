@@ -1,19 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import _ from "lodash";
 import Chip from "@mui/material/Chip";
 import { Filters } from "../../../types/Group";
-
-const tags = [
-  "meat",
-  "vegan",
-  "gluten-free",
-  "dairy",
-  "light",
-  "fish",
-  "soup",
-  "asian",
-  "hummus",
-];
+import axios from "axios";
 
 type Props = {
   selectedTags: any[];
@@ -21,11 +10,17 @@ type Props = {
   filters: Filters;
 };
 
-function TagFilters({
-  selectedTags = [],
-  onFiltersChange,
-  filters,
-}: Props): JSX.Element {
+const TagFilters: React.FC<Props> = (props: Props): JSX.Element => {
+  const { selectedTags = [], onFiltersChange, filters } = props;
+
+  const [ tags, setTags ] = useState<string[]>([]);
+
+  useEffect(() => {
+    axios.get("http://localhost:3000/tags").then((tags) => {
+      setTags(tags.data);
+    })
+  }, [])
+
   const handleTagsChange = (value) => {
     onFiltersChange({
       ...filters,
