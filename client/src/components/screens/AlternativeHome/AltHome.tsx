@@ -1,18 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 // @ts-ignore
 import BackgroundImg from "../../../../assets/images/background.jpg";
+import { Restaurant } from "../../../../../server/models/Restaurant";
 import { AllRestaurants } from "../findRestaurants/restaurants/allRestaurants";
 import { Box, Button, Container, Paper, Typography } from "@mui/material";
 import { ArrowForward } from "@mui/icons-material";
 
 import "./AltHome.css";
+import axios from "axios";
 
 type Props = {};
 
 function AltHome({}: Props) {
   const navigate = useNavigate();
+
+  const [restaurantsToShow, setRestaurantsToShow] = useState<Restaurant[]>([])
+
+  useEffect(() => {
+    axios(`http://localhost:3000/restaurants`).then(rests => {
+      setRestaurantsToShow(rests.data);
+    })
+}, [])
 
   return (
     <div>
@@ -43,7 +53,7 @@ function AltHome({}: Props) {
       </div>
 
       <div className="all-restaurant-area">
-        <AllRestaurants filters={{}} />
+        <AllRestaurants filters={{}} restaurants={restaurantsToShow} />
       </div>
     </div>
   );

@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Button, Container, Grid, Typography, } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useParams } from "react-router";
-import { Filters, Group } from "src/types/Group";
+import { Filters } from "src/types/Group";
 import GroupMembersList from "../../GroupMembersList/GroupMembersList";
 import TagFilters from "../findRestaurants/TagFilters";
 import DateTimeFilter from "../findRestaurants/DateTimeFilter";
 import { AllRestaurants } from "../findRestaurants/restaurants/allRestaurants";
 import "./GroupView.css";
-import { ExtendedGroupData } from "../../../../../server/models/Group";
+import { ExtendedGroupData, Group } from "../../../../../server/models/Group";
 import { Restaurant } from "../../../../../server/models/Restaurant";
 import axios from "axios";
 
@@ -46,7 +46,7 @@ const GroupView: React.FC = (): JSX.Element => {
     }
 
     const handleFiltersChange = (newFilters: Filters) => {
-        const updatedGroup = { ...group, filters: newFilters };
+        const updatedGroup = { ...group, filters: newFilters } as Group;
         setGroup(updatedGroup);
         socket.emit("filtersUpdate", updatedGroup);
     };
