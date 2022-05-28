@@ -9,7 +9,7 @@ const buildRouter = (): Router => {
 
     router.get("/", async (req, res) => {
         try {
-            
+            console.log("returning all restaurants");
             const restaurants = await RestaurantsSchema.find();
             
             return res.status(200).json(restaurants);
