@@ -31,14 +31,14 @@ const MenuAppBar = () => {
   }
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" style={{ background: 'white' }}>
+      <AppBar style={{ background: 'white' }}>
         <Toolbar>
           <Box sx={{ flexGrow: 1 }}>       
               <Box
                   component="img"
                   sx={{
                     height: 64,
+                    cursor: 'pointer'
                   }}
                   alt="logo"
                   src={logo}
@@ -99,7 +99,6 @@ const MenuAppBar = () => {
           </div>
         </Toolbar>
       </AppBar>
-    </Box>
   );
 }
 

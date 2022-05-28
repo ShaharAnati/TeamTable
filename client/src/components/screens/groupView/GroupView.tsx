@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Button, Container, Grid, Typography, } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useParams } from "react-router";
-import { Filters, Group } from "src/types/Group";
+import { Filters } from "src/types/Group";
 import GroupMembersList from "../../GroupMembersList/GroupMembersList";
 import TagFilters from "../findRestaurants/TagFilters";
 import DateTimeFilter from "../findRestaurants/DateTimeFilter";
 import { AllRestaurants } from "../findRestaurants/restaurants/allRestaurants";
 import "./GroupView.css";
+import { ExtendedGroupData, Group } from "../../../../../server/models/Group";
+import { Restaurant } from "../../../../../server/models/Restaurant";
+import axios from "axios";
 
 const io = require("socket.io-client");
 let socket;
@@ -17,6 +20,13 @@ const connectionPort = "localhost:3000/";
 const GroupView: React.FC = (): JSX.Element => {
     const { id } = useParams();
     const [group, setGroup] = useState<Group>(null);
+    const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+
+    useEffect(() => {
+        axios(`http://localhost:3000/restaurants`).then(rests => {
+            setRestaurants(rests.data);
+        })
+    }, [])
 
     function initWebsocket() {
         socket = io(connectionPort);
@@ -24,14 +34,19 @@ const GroupView: React.FC = (): JSX.Element => {
         const curUser = sessionStorage.getItem("user_email");
         socket.emit("joinGroup", { user: curUser, groupId: id });
 
-        socket.on("groupData", (data: Group) => {
-            setGroup(data);
-            console.log(data)
+        socket.on("groupDataChanged", (data: ExtendedGroupData) => {
+            console.log('received groupDataChanged')
+            const { restaurants, ...groupData } = data
+            setGroup(groupData);
+
+            if (restaurants) {
+                setRestaurants(restaurants);
+            }
         });
     }
 
     const handleFiltersChange = (newFilters: Filters) => {
-        const updatedGroup = { ...group, filters: newFilters };
+        const updatedGroup = { ...group, filters: newFilters } as Group;
         setGroup(updatedGroup);
         socket.emit("filtersUpdate", updatedGroup);
     };
@@ -85,7 +100,7 @@ const GroupView: React.FC = (): JSX.Element => {
                                     />
                                 </div>
                             </div>
-                            <AllRestaurants filters={group.filters || {}} />
+                            <AllRestaurants restaurants={restaurants} filters={group?.filters} /> 
                         </div>
                     )}
                 </Grid>
