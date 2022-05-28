@@ -26,7 +26,7 @@ function AltHome({}: Props) {
           endIcon={<ArrowForward />}
           component={Link}
           to="/create-group-screen"
-          sx={{ backgroundColor: "#00000080" }}
+          sx={{ backgroundColor: "#00000080", color: "white" }}
         >
           Find us a table
         </Button>
