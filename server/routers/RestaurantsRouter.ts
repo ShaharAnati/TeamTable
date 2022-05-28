@@ -1,6 +1,7 @@
-import { Router } from "express";
+import { Request, Response, Router } from "express";
 import { uuid } from "uuidv4";
 import { Restaurant } from "../../client/src/types/Resturants";
+import { rankByTags } from "../BL/restaurantsBL";
 
 import RestaurantsSchema from "../mongoose/RestaurantsSchema";
 
@@ -56,6 +57,20 @@ const buildRouter = (): Router => {
     } catch (error) {
       return res.status(500);
     }
+  });
+
+  router.get("/:tags", async (req: Request, res: Response) => {
+      try {
+          const { tags } = req.params;
+          const tagsToRankBy: string[] = (tags as string).split(',');
+          console.log(`ranking by received tags: ${tags}`);
+
+          const rankedRestaurants: Restaurant[] = await rankByTags(tagsToRankBy);
+          res.status(200).json(rankedRestaurants);
+      } catch (error) {
+          console.error(error);
+          res.status(500).json(error);
+      }
   });
 
   return router;

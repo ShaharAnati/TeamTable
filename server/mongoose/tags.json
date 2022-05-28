@@ -1,0 +1,126 @@
+[
+    {
+        "tagGroupId": "1",
+        "tagGroupName": "constraining-preferences",
+        "constraintLevel": 3,
+        "tags": [
+            {
+                "tagId": "0",
+                "tagName": "vegan"
+            },
+            {
+                "tagId": "1",
+                "tagName": "vegeterian"
+            },
+            {
+                "tagId": "8",
+                "tagName": "kosher"
+            }
+        ]
+    },
+    {
+        "tagGroupId": "1",
+        "tagGroupName": "allergies",
+        "constraintLevel": 3,
+        "tags": [
+            {
+                "id": "2",
+                "name": "gluten-free"
+            },
+            {
+                "id": "3",
+                "name": "dairy-free"
+            },
+            {
+                "id": "4",
+                "name": "nuts-free"
+            }
+        ]
+    },
+    {
+        "tagGroupId": "2",
+        "tagGroupName": "generic-preferences",
+        "constraintLevel": 2,
+        "tags": [
+            {
+                "id": "5",
+                "name": "meat"
+            },
+            {
+                "id": "6",
+                "name": "vegetables"
+            },
+            {
+                "id": "7",
+                "name": "dairy"
+            },
+            {
+                "id": "20",
+                "name": "light"
+            },
+            {
+                "id": "21",
+                "name": "heavy"
+            },
+            {
+                "id": "22",
+                "name": "chicken"
+            },
+            {
+                "id": "23",
+                "name": "fish"
+            }
+        ]
+    },   
+    {
+        "tagGroupId": "3",
+        "tagGroupName": "specific-food-type",
+        "constraintLevel": 1,
+        "tags": [
+            {
+                "id": "9",
+                "name": "hamburger"
+            },
+            {
+                "id": "10",
+                "name": "asian"
+            },
+            {
+                "id": "11",
+                "name": "pasta"
+            },
+            {
+                "id": "12",
+                "name": "sushi"
+            },
+            {
+                "id": "13",
+                "name": "shwarma"
+            },
+            {
+                "id": "14",
+                "name": "indian"
+            },
+            {
+                "id": "15",
+                "name": "thai"
+            },
+            {
+                "id": "16",
+                "name": "soup"
+            },
+            {
+                "id": "17",
+                "name": "sandwich"
+            },
+            {
+                "id": "18",
+                "name": "salad"
+            },
+            {
+                "id": "19",
+                "name": "hummus"
+            }
+        ]
+    }
+]
