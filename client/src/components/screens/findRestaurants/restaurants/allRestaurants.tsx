@@ -60,11 +60,11 @@ export const AllRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.Elemen
       style={{
         display: "flex",
         flexWrap: "wrap",
-        justifyContent: "flex-end",
+        justifyContent: "flex-start",
       }}
     >
       {filteredRestaurants?.map((restaurant, i) => (
-        <div key={i} style={{ margin: "16px" }}>
+        <div key={i} style={{ margin: "auto", padding: "0 16px 50px 16px" }}>
           <Restaurant restaurant={restaurant} chosedTags={filters.tags} />
         </div>
       ))}
