@@ -2,6 +2,9 @@ import "./index.css";
 import React from "react";
 import ReactDOM from "react-dom";
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
+import CssBaseline from "@mui/material/CssBaseline";
+import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
+import theme from './theme'
 
 import { AuthProvider } from "./auth/AuthProvider";
 import reportWebVitals from "../reportWebVitals";
@@ -12,9 +15,14 @@ const queryClient = new QueryClient();
 
 ReactDOM.render(
   <React.StrictMode>
+    <CssBaseline />
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <App />
+        <StyledEngineProvider injectFirst>
+          <ThemeProvider theme={theme}>
+            <App />
+          </ThemeProvider>
+        </StyledEngineProvider>
       </AuthProvider>
     </QueryClientProvider>
   </React.StrictMode>,
