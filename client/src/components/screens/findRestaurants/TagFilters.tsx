@@ -16,7 +16,7 @@ const TagFilters: React.FC<Props> = (props: Props): JSX.Element => {
   const [ tags, setTags ] = useState<string[]>([]);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/tags").then((tags) => {
+    axios.get("/tags").then((tags) => {
       setTags(tags.data);
     })
   }, [])

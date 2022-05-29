@@ -11,6 +11,7 @@ import LoginRouter from "./routers/LoginRouter";
 import GroupsRouter from "./routers/GroupsRouter";
 import RestaurantsRouter from "./routers/RestaurantsRouter";
 import TagsRouter from "./routers/TagsRouter";
+import AuthRouter from './routers/AuthenticationRouter';
 import { updateGroup } from "./BL/groupsService";
 import { rankByTags } from "./BL/restaurantsBL";
 import { Restaurant } from "./models/Restaurant";
@@ -109,15 +110,16 @@ const init = async (): Promise<void> => {
   app.use("/restaurants", RestaurantsRouter());
   app.use("/tags", TagsRouter());
 
-  // app.use(withAuth);
+  app.use("/auth", withAuth, AuthRouter());
 
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-  app.post("/welcome", withAuth, (req, res) => {
+  app.post("/welcome", (req, res) => {
     res.status(200).send("Welcome 🙌 ");
   });
 
   app.use(BuildResourceRouter());
+
 };
 
 init();

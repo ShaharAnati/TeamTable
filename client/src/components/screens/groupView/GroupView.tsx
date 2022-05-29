@@ -23,7 +23,7 @@ const GroupView: React.FC = (): JSX.Element => {
     const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
 
     useEffect(() => {
-        axios(`http://localhost:3000/restaurants`).then(rests => {
+        axios(`/restaurants`).then(rests => {
             setRestaurants(rests.data);
         })
     }, [])
