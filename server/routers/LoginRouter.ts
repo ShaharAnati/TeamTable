@@ -119,7 +119,7 @@ const buildRouter = (): Router => {
 
                 const refreshToken = jwt.sign(
                     { user_id: user._id, email },
-                    process.env.TOKEN_KEY || "",
+                    process.env.REFRESH_KEY || "",
                     {
                         expiresIn: "24h",
                     }
@@ -143,52 +143,63 @@ const buildRouter = (): Router => {
 
 
     router.post("/refresh", async (req, res) => {
-        let authHeaders = req.headers['authorization']
-        const token = authHeaders && authHeaders.split(' ')[1];
+        let receivedRefreshToken = req.headers['authorization']
+        // const token = authHeaders && authHeaders.split(' ')[1];
 
-        if (!token) {
+        if (!receivedRefreshToken) {
             return res.status(401).json("Invalid token,try login again");
         }
-        jwt.verify(token, process.env.REFRESH_KEY || ""),
-            async (err: any, userInfo: any) => {
+        try {
+            jwt.verify(receivedRefreshToken, process.env.REFRESH_KEY || "", async (err: any, userInfo: any) => {
                 if (err) {
                     // Wrong Refesh Token
-                    return res.status(406).json({ message: 'Unauthorized' });
+                    return res.status(401).json({ message: 'Unauthorized' });
                 }
                 try {
-                    const userId = userInfo._id;
+                    const userId = userInfo.user_id;
+
                     let user = await UserSchema.findById(userId)
                     if (!user) {
                         return res.status(403).send('Invalid request');
                     }
-                    if (!user.tokens.includes(token)) {
+                    if (!user.tokens.includes(receivedRefreshToken)) {
                         user.tokens = []
                         await user.save();
                         return res.status(403).send('Invalid request');
                     }
                     // Correct token we send a new access token
                     const accessToken = jwt.sign(
-                        { user_id: user._id },
+                        { user_id: user._id, email: user.email },
                         process.env.TOKEN_KEY || "",
                         {
                             expiresIn: "1m",
                         }
                     );
-
+        
                     // Correct token we send a new access token
                     const refreshToken = jwt.sign(
-                        { user_id: user._id },
-                        process.env.TOKEN_KEY || ""
+                        { user_id: user._id, email: user.email },
+                        process.env.REFRESH_KEY || "",
+                        {
+                            expiresIn: "24h"
+                        }
                     );
-
-                    user.tokens[user.tokens.indexOf(token)] = refreshToken;
+        
+                    user.tokens[user.tokens.indexOf(receivedRefreshToken)] = refreshToken;
                     await user.save();
                     return res.status(200).send({ user, token: accessToken, expiresIn: TOKEN_EXPIRY_TIME, refreshToken });
                 } catch (e) {
                     res.status(403).send(err.message);
                 }
-            }
+            })
+        } catch(error) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
     });
+
+
+        
+        
 
     return router;
 

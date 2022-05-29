@@ -19,7 +19,7 @@ function AltHome({}: Props) {
   const [restaurantsToShow, setRestaurantsToShow] = useState<Restaurant[]>([])
 
   useEffect(() => {
-    axios(`http://localhost:3000/restaurants`).then(rests => {
+    axios(`/restaurants`).then(rests => {
       setRestaurantsToShow(rests.data);
     })
 }, [])
