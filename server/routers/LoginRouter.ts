@@ -7,6 +7,7 @@ import UserSchema from '../mongoose/UserSchema';
 
 const buildRouter = (): Router => {
     const router: Router = Router();
+    const TOKEN_EXPIRY_TIME = 60000;
 
     // Register
     router.post("/register", async (req, res) => {
@@ -52,7 +53,7 @@ const buildRouter = (): Router => {
                 { user_id: user._id, email },
                 process.env.TOKEN_KEY || "",
                 {
-                    expiresIn: "2m",
+                    expiresIn: "1m",
                 }
             );
 
@@ -73,7 +74,7 @@ const buildRouter = (): Router => {
             await user.save();
 
             // return new user
-            res.status(200).json({ user, token, refreshToken });
+            res.status(200).json({ user, token, expiresIn: TOKEN_EXPIRY_TIME, refreshToken });
         } catch (err) {
             console.log(err);
             return res.status(409).send("User Already Exist. Please Login");
@@ -112,7 +113,7 @@ const buildRouter = (): Router => {
                     { user_id: user._id, email },
                     process.env.TOKEN_KEY || "",
                     {
-                        expiresIn: "2m",
+                        expiresIn: "1m",
                     }
                 );
 
@@ -131,7 +132,7 @@ const buildRouter = (): Router => {
                 }
                 await user.save()
 
-                return res.status(200).json({ user, token, refreshToken });
+                return res.status(200).json({ user, token, expiresIn: TOKEN_EXPIRY_TIME, refreshToken });
             }
             return res.status(400).json("Invalid Credentials");
         } catch (err) {
@@ -170,7 +171,7 @@ const buildRouter = (): Router => {
                         { user_id: user._id },
                         process.env.TOKEN_KEY || "",
                         {
-                            expiresIn: "2m",
+                            expiresIn: "1m",
                         }
                     );
 
@@ -182,7 +183,7 @@ const buildRouter = (): Router => {
 
                     user.tokens[user.tokens.indexOf(token)] = refreshToken;
                     await user.save();
-                    return res.status(200).send({ user, accessToken, refreshToken });
+                    return res.status(200).send({ user, token: accessToken, expiresIn: TOKEN_EXPIRY_TIME, refreshToken });
                 } catch (e) {
                     res.status(403).send(err.message);
                 }

@@ -7,7 +7,8 @@ import { useNavigate } from "react-router-dom";
 const CreateGroupContainer: React.FC = (): JSX.Element => {
 
     const [groupName, setGroupName] = useState<string>('');
-    const { loggedInUser: { email: creator } } = useAuth();
+    const { loggedInUser } = useAuth();
+    const creator = loggedInUser?.email;
     const navigate = useNavigate();
     const creatorEmail = sessionStorage.getItem('user_email')
     const onSubmitGroupCreationForm = async (): Promise<void> => {

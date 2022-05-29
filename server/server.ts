@@ -11,6 +11,7 @@ import LoginRouter from "./routers/LoginRouter";
 import GroupsRouter from "./routers/GroupsRouter";
 import RestaurantsRouter from "./routers/RestaurantsRouter";
 import TagsRouter from "./routers/TagsRouter";
+import AuthRouter from './routers/AuthenticationRouter';
 import { updateGroup } from "./BL/groupsService";
 import { rankByTags } from "./BL/restaurantsBL";
 import { Restaurant } from "./models/Restaurant";
@@ -105,16 +106,11 @@ const init = async (): Promise<void> => {
   app.use(bodyParser.json());
 
   app.use(LoginRouter());
-<<<<<<< HEAD
-  app.use("/groups",withAuth, GroupsRouter());
-  app.use("/restaurants",withAuth, RestaurantsRouter());
-=======
   app.use("/groups", GroupsRouter());
   app.use("/restaurants", RestaurantsRouter());
   app.use("/tags", TagsRouter());
->>>>>>> e29b3178b15a9b3d0a61bb683ed3d3d063917925
 
-  // app.use(withAuth);
+  app.use("/auth", withAuth, AuthRouter());
 
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
