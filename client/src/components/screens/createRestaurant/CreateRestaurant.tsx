@@ -100,7 +100,7 @@ export const CreateRestaurant = (): JSX.Element => {
       email: Yup.string().email("Invalid email"),
       phoneNumber: Yup.string().matches(/\d{10}/, "must be 10 digits"),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       const res: Restaurant = {
         name: formik.values.name,
         description: formik.values.description,
@@ -121,7 +121,7 @@ export const CreateRestaurant = (): JSX.Element => {
         location: location
       };
 
-      axios.post("http://localhost:3000/restaurants", res).catch((err) => {
+      await axios.post("http://localhost:3000/restaurants", res).catch((err) => {
         if (axios.isAxiosError(err)) {
           console.log("failed to create restaurant", err.message);
 

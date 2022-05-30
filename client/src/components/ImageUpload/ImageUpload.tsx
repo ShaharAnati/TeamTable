@@ -10,6 +10,8 @@ import "./ImageUpload.css";
 import { storage } from "../../firebase/firebase";
 
 const STORAGE_DIR = "images";
+const PLACEHOLDER_IMAGE_URL =
+  "https://firebasestorage.googleapis.com/v0/b/team-table-6eccc.appspot.com/o/images%2FimagePlaceHolder.png?alt=media&token=63217773-b569-4803-b287-cd7b7e48111c";
 
 export const deleteUnusedImages = (imagesNames: string[]) => {
   // Create a reference to the file to delete
@@ -35,7 +37,7 @@ const Input = styled("input")({
 
 export const ImageUpload = (props: { setImageAsUrl; imageAsUrl }) => {
   const { setImageAsUrl, imageAsUrl } = props;
-  const [previousUrls, setPreviousUrls] = React.useState([]);
+  //   const [previousUrls, setPreviousUrls] = React.useState([]);
 
   const handleFireBaseUpload = (e) => {
     const imageFile = e.target.files[0];
@@ -81,19 +83,24 @@ export const ImageUpload = (props: { setImageAsUrl; imageAsUrl }) => {
 
   return (
     <>
-      <label htmlFor="contained-button-file">
-        <Input
-          id="contained-button-file"
-          type="file"
-          onChange={handleFireBaseUpload}
-        />
-        <Button variant="contained" component="span" endIcon={<UploadIcon />}>
-          Upload
-        </Button>
-      </label>
-
-      <div>
-        {imageAsUrl.imgUrl && <img src={imageAsUrl.imgUrl} alt="image tag" />}
+      <div
+        className="uploaderContainer"
+        style={{
+          backgroundImage: `url(${
+            imageAsUrl.imgUrl ? imageAsUrl.imgUrl : PLACEHOLDER_IMAGE_URL
+          })`,
+        }}
+      >
+        <label htmlFor="contained-button-file">
+          <Input
+            id="contained-button-file"
+            type="file"
+            onChange={handleFireBaseUpload}
+          />
+          <Button variant="contained" component="span">
+            <UploadIcon />
+          </Button>
+        </label>
       </div>
     </>
   );
