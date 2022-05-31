@@ -67,16 +67,20 @@ export const ResMap = (props) => {
     // const [marker, setMarker] = React.useState(null);
     const geocoderContainerRef = React.useRef();
     return (
-        <div ref={geocoderContainerRef} style={{ height: 500, width: 1000, margin: '10px 0' }} >
+        <div ref={geocoderContainerRef} >
             <ReactMap
+                style={{position:'absolute', height: '100%', width: '100%'}} 
                 ref={mapRef}
                 mapLib={maplibregl}
-                mapStyle="https://api.maptiler.com/maps/streets/style.json?key=ytGeppRI3n5wUxjfP8oH"
+                mapStyle="https://api.maptiler.com/maps/positron/style.json?key=ytGeppRI3n5wUxjfP8oH"
                 initialViewState={{
                     longitude: 34.77876808975043,
                     latitude: 32.071869249621386,
                     zoom: 14,
+                    
                 }}
+
+            
             >
                 {/* {props.marker && (
                     <Marker
