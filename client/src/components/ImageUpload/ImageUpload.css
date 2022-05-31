@@ -1,7 +1,14 @@
 .ImageUpload {
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.uploaderContainer {
+  height: 250px;
+  width: 250px;
+  background-size: auto 250px;
+  background-position: center;
 }
