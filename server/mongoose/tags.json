@@ -5,16 +5,16 @@
         "constraintLevel": 3,
         "tags": [
             {
-                "tagId": "0",
-                "tagName": "vegan"
+                "id": "0",
+                "name": "vegan"
             },
             {
-                "tagId": "1",
-                "tagName": "vegeterian"
+                "id": "1",
+                "name": "vegeterian"
             },
             {
-                "tagId": "8",
-                "tagName": "kosher"
+                "id": "8",
+                "name": "kosher"
             }
         ]
     },

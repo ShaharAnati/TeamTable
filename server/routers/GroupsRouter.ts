@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { uuid } from 'uuidv4';
+import { withAuth } from '../middlewares/auth';
 
 import GroupSchema from '../mongoose/GroupSchema';
 
@@ -14,7 +15,7 @@ const buildRouter = (): Router => {
         });
     })
 
-    router.post('/', async (req, res) => {
+    router.post('/', withAuth, async (req, res) => {
         try {
             const { creator, name, members, filters } = req.body;
 

@@ -116,7 +116,7 @@ export const CreateRestaurant = (): JSX.Element => {
         location: location
       };
 
-      axios.post("http://localhost:3000/restaurants", res).catch((err) => {
+      axios.post("/restaurants", res).catch((err) => {
         if (axios.isAxiosError(err)) {
           console.log("failed to create restaurant", err.message);
 
