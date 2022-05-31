@@ -77,7 +77,7 @@ export const CreateRestaurant = (): JSX.Element => {
 
     [1, 2, 3, 4, 5, 6, 7].forEach((day) => {
       newOpeningTimes[day] = openingTimes[day].map((time) =>
-        dayjs(time).format("HH:mm")
+        time ? dayjs(time).format("HH:mm") : time
       );
     });
 

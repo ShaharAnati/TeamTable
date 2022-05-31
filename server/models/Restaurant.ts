@@ -8,11 +8,17 @@ export interface Restaurant {
         [day: string]: string[];
 
     },
-    location:  string;
+    location?: {
+        lat: number;
+        lng: number;
+      };
+    address?: any;
     contactIndo: {
       phoneNumber:  string;
       email: string;
     }  
+    url?: string;
+    isVerified?: boolean;
 }
 
 export interface TagGroup {
