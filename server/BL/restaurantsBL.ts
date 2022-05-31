@@ -5,17 +5,22 @@ import { getAllTagGroups } from '../mongoose/TagsSchema';
 
 export const rankByTags = async (tagNames: string[]): Promise<Restaurant[]> => {
     const restaurants: Restaurant[] = await getAllRestaurants();
-    const rankedTags: RankedTag[] = await getTagsConstraints(tagNames);
-    const singleConstraintValue: number = 1/rankedTags.reduce((sum, currTag) => sum + currTag.constraintLevel, 0);
 
-    const rankedRestaurants = restaurants.map(restaurant => {
-        return ({
-            rank: getSingleRestaurantRankByTags(restaurant, rankedTags, singleConstraintValue),
-            ...restaurant
+    if (tagNames.length > 0) {
+        const rankedTags: RankedTag[] = await getTagsConstraints(tagNames);
+        const singleConstraintValue: number = 1/rankedTags.reduce((sum, currTag) => sum + currTag.constraintLevel, 0);
+    
+        const rankedRestaurants = restaurants.map(restaurant => {
+            return ({
+                rank: getSingleRestaurantRankByTags(restaurant, rankedTags, singleConstraintValue),
+                ...restaurant
+            })
         })
-    })
+    
+        return rankedRestaurants.sort((a, b) => b.rank - a.rank);
+    }
 
-    return rankedRestaurants.sort((a, b) => b.rank - a.rank);
+    return restaurants;
 }
 
 const getSingleRestaurantRankByTags = (restaurant: Restaurant, tags: RankedTag[], singleConstraintValue: number): number => {

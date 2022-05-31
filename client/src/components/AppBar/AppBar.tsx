@@ -5,7 +5,7 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import Menu from '@mui/material/Menu';
-import { useAuth } from '../../auth/AuthProvider';
+import { TokenState, useAuth } from '../../auth/AuthProvider';
 import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
 // @ts-ignore
@@ -26,19 +26,18 @@ const MenuAppBar = () => {
   };
 
   const navigateHome = () => {
-    console.log('nop');
     navigate("/", { replace: true });
   }
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" style={{ background: 'white' }}>
+      <AppBar style={{ background: 'white' }}>
         <Toolbar>
           <Box sx={{ flexGrow: 1 }}>       
               <Box
                   component="img"
                   sx={{
                     height: 64,
+                    cursor: 'pointer'
                   }}
                   alt="logo"
                   src={logo}
@@ -69,7 +68,7 @@ const MenuAppBar = () => {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              {auth?.loggedInUser ?
+              {auth.isTokenValid() === TokenState.VALID ?
                 <MenuItem  component={Link}
                            to="/"
                            onClick={
@@ -99,7 +98,6 @@ const MenuAppBar = () => {
           </div>
         </Toolbar>
       </AppBar>
-    </Box>
   );
 }
 

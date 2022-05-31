@@ -1,49 +1,30 @@
 import _ from "lodash";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {useQuery} from "react-query";
+import { useQuery } from "react-query";
 
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import "./restaurant.css";
 import Restaurant from "./restaurant/Restauant";
+import { Filters } from "src/types/Group";
+import { Restaurant as TypedRestaurant } from "../../../../../../server/models/Restaurant";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
-export const AllRestaurants = (props): JSX.Element => {
-  const { filters } = props;
+interface AllRestaurantsProps {
+  filters: Filters;
+  restaurants: TypedRestaurant[];
+}
+
+export const AllRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.Element => {
+  const { filters, restaurants } = props;
 
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
 
-  const {
-    isLoading,
-    error,
-    data: restaurants,
-  } = useQuery("repoData", () =>
-    axios
-      .get("http://localhost:3000/restaurants")
-      .then((res) => {
-        return res.data;
-      })
-      .catch((err) => {
-        if (axios.isAxiosError(error)) {
-          console.log("failed to fetch restaurants", error.message);
-
-          if ((error.toJSON() as any).status === 400) throw error;
-        } else {
-          console.log("failed to fetch restaurants");
-        }
-      })
-  );
-
   useEffect(() => {
-    const filterByTags = (restaurant) =>
-      !filters.tags ||
-      filters.tags?.length === 0 ||
-      _.intersection(filters.tags, restaurant.tags).length > 0;
-
     const filterByDay = (restaurant) =>
       !filters.day || restaurant.openingTimes[filters.day] != null;
 
@@ -68,7 +49,6 @@ export const AllRestaurants = (props): JSX.Element => {
     setFilteredRestaurants(
       restaurants
         ? restaurants
-            .filter(filterByTags)
             .filter(filterByDay)
             .filter(filterByHour)
         : []
@@ -80,11 +60,11 @@ export const AllRestaurants = (props): JSX.Element => {
       style={{
         display: "flex",
         flexWrap: "wrap",
-        justifyContent: "flex-end",
+        justifyContent: "flex-start",
       }}
     >
       {filteredRestaurants?.map((restaurant, i) => (
-        <div key={i} style={{ margin: "16px" }}>
+        <div key={i} style={{ margin: "auto", padding: "0 16px 50px 16px" }}>
           <Restaurant restaurant={restaurant} chosedTags={filters.tags} />
         </div>
       ))}

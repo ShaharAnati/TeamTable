@@ -19,33 +19,33 @@ import {
   dayMapping,
   RESTAURANT_TAGS,
   Restaurant,
-  Address
+  Address,
 } from "../../../types/Resturants";
 import axios from "axios";
 
 import "./add-res.css";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-import { ImageUpload } from "src/components/ImageUpload/ImageUpload";
 import { ResMap } from "src/components/Map/Map";
 import { Paper } from "@mui/material";
+import {
+  ImageUpload,
+  deleteUnusedImages,
+} from "src/components/ImageUpload/ImageUpload";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
+const allInputs = { imgUrl: "" };
 
 export const CreateRestaurant = (): JSX.Element => {
-
-  const formikRef = useRef();
-
-  const [address, setAddress] = useState<Address>(null)
-  const [location, setLocation] = useState<any>(null)
-
   // simple address
   const [simpleAddress, setSimpleAddress] = useState<string>();
+  const [address, setAddress] = useState<Address>(null);
+  const [location, setLocation] = useState<any>(null);
+  const [imageAsUrl, setImageAsUrl] = React.useState(allInputs);
+  const [datesError, setDatesError] = useState<string>("");
+  const [previousUrls, setPreviousUrls] = React.useState([]);
 
-
-  const [datesError, setDatesError] = useState<string>("")
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const INITIAL_VALUES = {
     name: "",
@@ -70,9 +70,9 @@ export const CreateRestaurant = (): JSX.Element => {
       Date.parse(values.openingTimes[day][0]) >=
       Date.parse(values.openingTimes[day][1])
     ) {
-      setDatesError("opening time must be before closing " + day)
+      setDatesError("opening time must be before closing " + day);
     } else {
-      setDatesError("")
+      setDatesError("");
     }
   };
 
@@ -80,14 +80,15 @@ export const CreateRestaurant = (): JSX.Element => {
     const newOpeningTimes = {};
 
     [1, 2, 3, 4, 5, 6, 7].forEach((day) => {
-      newOpeningTimes[day] = openingTimes[day].map(time => dayjs(time).format("HH:mm"));
+      newOpeningTimes[day] = openingTimes[day].map((time) =>
+        time ? dayjs(time).format("HH:mm") : time
+      );
     });
 
     return newOpeningTimes;
-  }
+  };
 
   const formik = useFormik({
-    innerRef: formikRef,
     initialValues: {
       ...INITIAL_VALUES,
     },
@@ -103,7 +104,7 @@ export const CreateRestaurant = (): JSX.Element => {
       email: Yup.string().email("Invalid email"),
       phoneNumber: Yup.string().matches(/\d{10}/, "must be 10 digits"),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       const res: Restaurant = {
         name: formik.values.name,
         description: formik.values.description,
@@ -118,13 +119,14 @@ export const CreateRestaurant = (): JSX.Element => {
           country: address.country,
           city: address.city || address.town,
           street: address.street || address.road,
-          house_number: address.house_number
+          house_number: address.house_number,
         },
+        imgUrl: imageAsUrl.imgUrl,
         location: location,
         simpleAddress: formik.values.simpleAddress
       };
 
-      axios.post("http://localhost:3000/restaurants", res).catch((err) => {
+      await axios.post("/restaurants", res).catch((err) => {
         if (axios.isAxiosError(err)) {
           console.log("failed to create restaurant", err.message);
 
@@ -137,49 +139,54 @@ export const CreateRestaurant = (): JSX.Element => {
       console.log(JSON.stringify(res, null, 2));
       formik.resetForm();
       formik.setFieldValue("tags", []);
-      navigate('/')
+
+      navigate("/");
     },
   });
 
   return (
     <div className={"form-class"}>
+      <h1
+        style={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        Add Restaurant
+      </h1>
+
       <div>
-        <Paper style={{ margin: 'auto', width: 1000, padding: 30, marginTop: 50 }} >
-          <div >
-            <h1 style={
-              {
-                display: 'flex',
-                justifyContent: 'center'
-              }
-            }>Add Restaurant</h1>
-            <h4> Restaurant Details: </h4>
-            <Grid container spacing={4} >
-              <Grid item xs={8}>
-                <TextField
-                  sx={{ marginBottom: "10px" }}
-                  classes={{ root: "form-input" }}
-                  id="name"
-                  name="name"
-                  label="Name"
-                  fullWidth
-                  value={formik.values.name}
-                  onChange={(formik.handleChange)}
-                  error={formik.touched.name && Boolean(formik.errors.name)}
-                  helperText={formik.touched.name && formik.errors.name}
-                />
-                <TextField
-                  sx={{ marginBottom: "10px" }}
-                  classes={{ root: "form-input" }}
-                  id="description"
-                  name="description"
-                  label="Description"
-                  fullWidth
-                  value={formik.values.description}
-                  onChange={formik.handleChange}
-                  error={formik.touched.name && Boolean(formik.errors.description)}
-                  helperText={formik.touched.name && formik.errors.description}
-                />
-                <TextField
+        <div style={{ margin: "auto", width: 1000, marginTop: 50 }}>
+          <h4> Restaurant Details: </h4>
+          <Grid container spacing={4}>
+            <Grid item xs={8}>
+              <TextField
+                sx={{ marginBottom: "10px" }}
+                classes={{ root: "form-input" }}
+                id="name"
+                name="name"
+                label="Name"
+                fullWidth
+                value={formik.values.name}
+                onChange={formik.handleChange}
+                error={formik.touched.name && Boolean(formik.errors.name)}
+                helperText={formik.touched.name && formik.errors.name}
+              />
+              <TextField
+                sx={{ marginBottom: "10px" }}
+                classes={{ root: "form-input" }}
+                id="description"
+                name="description"
+                label="Description"
+                fullWidth
+                value={formik.values.description}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.name && Boolean(formik.errors.description)
+                }
+                helperText={formik.touched.name && formik.errors.description}
+              />
+               <TextField
                   sx={{ marginBottom: "10px" }}
                   classes={{ root: "form-input" }}
                   id="simpleAddress"
@@ -190,50 +197,54 @@ export const CreateRestaurant = (): JSX.Element => {
                   error={formik.touched.name && Boolean(formik.errors.simpleAddress)}
                   helperText={formik.touched.name && formik.errors.simpleAddress}
                 />
-              </Grid>
-              <Grid item xs={4}>
-                <ImageUpload />
-              </Grid>
+            </Grid>
+            <Grid item xs={4}>
+              <ImageUpload
+                setImageAsUrl={setImageAsUrl}
+                imageAsUrl={imageAsUrl}
+              />
+            </Grid>
 
-              <Grid item xs={6}>
-                <h4> Opening Times: </h4>
-                {[1, 2, 3, 4, 5, 6, 7].map((day) => (
-                  <div style={{ display: 'flex', alignItems: 'center', marginBottom: "4px" }}>
-                    <span style={{ width: 120 }}> {dayMapping[day]}</span>
-                    <LocalizationProvider
-                      dateAdapter={AdapterDayjs}
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
+            <Grid item xs={6}>
+              <h4> Opening Times: </h4>
+              {[1, 2, 3, 4, 5, 6, 7].map((day) => (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginBottom: "4px",
+                  }}
+                >
+                  <span style={{ width: 120 }}> {dayMapping[day]}</span>
+                  <LocalizationProvider
+                    dateAdapter={AdapterDayjs}
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                    }}
+                  >
+                    <TimePicker
+                      value={formik.values.openingTimes[day][0]}
+                      onChange={(value) => {
+                        // validateDates(formik.values, formik.errors);
+                        formik.setFieldValue(`openingTimes[${day}][0]`, value);
+                        validateTimes(formik.values, day);
                       }}
-                    >
-                      <TimePicker
-                        value={formik.values.openingTimes[day][0]}
-                        onChange={(value) => {
-                          // validateDates(formik.values, formik.errors);
-                          formik.setFieldValue(`openingTimes[${day}][0]`, value);
-                          validateTimes(formik.values, day)
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-
-                            {...params}
-                          />
-                        )}
-                      />
-                      {" - "}
-                      <TimePicker
-                        value={formik.values.openingTimes[day][1]}
-                        onChange={(value) => {
-                          formik.setFieldValue(`openingTimes[${day}][1]`, value);
-                          validateTimes(formik.values, day)
-                        }}
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-                    </LocalizationProvider>
-                  </div>
-                ))}
-              </Grid>
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                    {" - "}
+                    <TimePicker
+                      value={formik.values.openingTimes[day][1]}
+                      onChange={(value) => {
+                        formik.setFieldValue(`openingTimes[${day}][1]`, value);
+                        validateTimes(formik.values, day);
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  </LocalizationProvider>
+                </div>
+              ))}
+            </Grid>
 
               <Grid item xs={6}>
                 <h4> Tags: </h4>
@@ -271,33 +282,38 @@ export const CreateRestaurant = (): JSX.Element => {
                   helperText={formik.touched.email && formik.errors.email}
                 />
 
-                <TextField
-                  sx={{ marginBottom: "10px" }}
-                  className={"form-input"}
-                  id="phoneNumber"
-                  name="phoneNumber"
-                  label="Phone Number"
-                  fullWidth
-                  value={formik.values.phoneNumber}
-                  onChange={formik.handleChange}
-                  error={
-                    formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)
-                  }
-                  helperText={
-                    formik.touched.phoneNumber && formik.errors.phoneNumber
-                  }
-                />
-              </Grid>
+              <TextField
+                sx={{ marginBottom: "10px" }}
+                className={"form-input"}
+                id="phoneNumber"
+                name="phoneNumber"
+                label="Phone Number"
+                fullWidth
+                value={formik.values.phoneNumber}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.phoneNumber &&
+                  Boolean(formik.errors.phoneNumber)
+                }
+                helperText={
+                  formik.touched.phoneNumber && formik.errors.phoneNumber
+                }
+              />
             </Grid>
-            <ResMap setAddress={setAddress} setMarker={setLocation} marker={location} address={formik.values.simpleAddress} />
-            <Button color="primary" variant="contained"
-              // disabled={datesError != ""} 
-              onClick={() => { formik.handleSubmit() }}>
-              ADD
-            </Button>
-          </div>
-        </Paper>
-      </div >
-    </div >
+          </Grid>
+          <ResMap setAddress={setAddress} setMarker={setLocation} marker={location} address={formik.values.simpleAddress} />
+          <Button
+            color="primary"
+            variant="contained"
+            // disabled={datesError != ""}
+            onClick={() => {
+              formik.handleSubmit();
+            }}
+          >
+            ADD
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 };
