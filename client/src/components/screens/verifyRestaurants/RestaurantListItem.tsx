@@ -18,7 +18,7 @@ import {
   Phone as PhoneIcon,
   Public as PublicIcon,
 } from "@mui/icons-material";
-import { Restaurant } from "src/types/Resturants";
+import { Restaurant, PLACEHOLDER_IMAGE_URL } from "src/types/Resturants";
 
 type Props = {
   restaurant: Restaurant;
@@ -58,7 +58,7 @@ function RestaurantListItem({
       <CardMedia
         component="img"
         sx={{ height: 200, width: "100%" }}
-        image={restaurant.imgUrl}
+        image={restaurant.imgUrl ? restaurant.imgUrl : PLACEHOLDER_IMAGE_URL}
       />
       <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
         <CardContent

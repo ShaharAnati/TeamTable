@@ -4,14 +4,12 @@ import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import UploadIcon from "@mui/icons-material/Upload";
 import { v4 as uuidv4 } from "uuid";
-
+import { PLACEHOLDER_IMAGE_URL } from "../../types/Resturants";
 import "./ImageUpload.css";
 
 import { storage } from "../../firebase/firebase";
 
 const STORAGE_DIR = "images";
-const PLACEHOLDER_IMAGE_URL =
-  "https://firebasestorage.googleapis.com/v0/b/team-table-6eccc.appspot.com/o/images%2FimagePlaceHolder.png?alt=media&token=63217773-b569-4803-b287-cd7b7e48111c";
 
 export const deleteUnusedImages = (imagesNames: string[]) => {
   // Create a reference to the file to delete
