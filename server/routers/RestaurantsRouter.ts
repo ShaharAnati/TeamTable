@@ -10,12 +10,12 @@ const buildRouter = (): Router => {
 
   router.get("/", async (req, res) => {
     try {
-        const unverified: boolean = ((req.query.unverified + '').toLowerCase() === 'true')
+      const status = req.query.status || 'all';
 
       const restaurants: Restaurant[] = await RestaurantsSchema.find();
 
-      if (unverified) {
-            return res.status(200).json(restaurants.filter(res => res.isVerified === false));
+      if (status !== 'all') {
+            return res.status(200).json(restaurants.filter(res => res.isVerified === (status === 'verified')));
       }
 
       return res.status(200).json(restaurants);
