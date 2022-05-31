@@ -58,7 +58,7 @@ function RestaurantListItem({
       <CardMedia
         component="img"
         sx={{ height: 200, width: "100%" }}
-        image="https://prod-wolt-venue-images-cdn.wolt.com/5c92064e38bff3000b58f5ca/afc4f4f4-6b80-11eb-ada1-b63bba9fa55e_yaelitz__1__min.jpg"
+        image={restaurant.imgUrl}
       />
       <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
         <CardContent
