@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import _ from "lodash";
@@ -19,7 +19,7 @@ import {
   dayMapping,
   RESTAURANT_TAGS,
   Restaurant,
-  Address
+  Address,
 } from "../../../types/Resturants";
 import axios from "axios";
 
@@ -27,7 +27,7 @@ import "./add-res.css";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import {
   ImageUpload,
-  deleteUnusedImages
+  deleteUnusedImages,
 } from "src/components/ImageUpload/ImageUpload";
 import { Map } from "src/components/Map/Map";
 
@@ -76,7 +76,7 @@ export const CreateRestaurant = (): JSX.Element => {
     const newOpeningTimes = {};
 
     [1, 2, 3, 4, 5, 6, 7].forEach((day) => {
-      newOpeningTimes[day] = openingTimes[day].map(time =>
+      newOpeningTimes[day] = openingTimes[day].map((time) =>
         dayjs(time).format("HH:mm")
       );
     });
@@ -115,13 +115,13 @@ export const CreateRestaurant = (): JSX.Element => {
           country: address.country,
           city: address.city || address.town,
           street: address.street || address.road,
-          house_number: address.house_number
+          house_number: address.house_number,
         },
         imgUrl: imageAsUrl.imgUrl,
-        location: location
+        location: location,
       };
 
-      await axios.post("http://localhost:3000/restaurants", res).catch((err) => {
+      await axios.post("/restaurants", res).catch((err) => {
         if (axios.isAxiosError(err)) {
           console.log("failed to create restaurant", err.message);
 
@@ -135,7 +135,7 @@ export const CreateRestaurant = (): JSX.Element => {
       formik.resetForm();
       formik.setFieldValue("tags", []);
 
-      navigate('/');
+      navigate("/");
     },
   });
 
@@ -143,15 +143,15 @@ export const CreateRestaurant = (): JSX.Element => {
     <div className={"form-class"}>
       <h1
         style={{
-          display: 'flex',
-          justifyContent: 'center'
+          display: "flex",
+          justifyContent: "center",
         }}
       >
         Add Restaurant
       </h1>
 
       <div>
-        <div style={{ margin: 'auto', width: 1000, marginTop: 50 }}>
+        <div style={{ margin: "auto", width: 1000, marginTop: 50 }}>
           <h4> Restaurant Details: </h4>
           <Grid container spacing={4}>
             <Grid item xs={8}>
@@ -194,9 +194,9 @@ export const CreateRestaurant = (): JSX.Element => {
               {[1, 2, 3, 4, 5, 6, 7].map((day) => (
                 <div
                   style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    marginBottom: '4px'
+                    display: "flex",
+                    alignItems: "center",
+                    marginBottom: "4px",
                   }}
                 >
                   <span style={{ width: 120 }}> {dayMapping[day]}</span>

@@ -1,3 +1,5 @@
+import { Restaurant } from "./Restaurant";
+
 type Filters = {
     day?: string;
     hour?: string;
@@ -8,4 +10,8 @@ export interface Group {
     creator?: string;
     members?: string[];
     filters?: Filters;
+}
+
+export interface ExtendedGroupData extends Group{
+    restaurants: Restaurant[];
 }
