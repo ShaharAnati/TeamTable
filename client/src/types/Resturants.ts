@@ -18,6 +18,7 @@ export interface Restaurant {
   };
   url?: string;
   isVerified?: boolean;
+  simpleAddress?: string;
 }
 
 export const dayMapping = {
