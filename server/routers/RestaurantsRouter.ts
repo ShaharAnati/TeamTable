@@ -10,7 +10,7 @@ const buildRouter = (): Router => {
 
   router.get("/", async (req, res) => {
     try {
-      const status = req.query.status || 'all';
+      const status = req.query.status || 'verified';
 
       const restaurants: Restaurant[] = await RestaurantsSchema.find();
 
