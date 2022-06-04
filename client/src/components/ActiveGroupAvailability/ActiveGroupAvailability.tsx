@@ -1,18 +1,21 @@
-import React, { useState } from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
 import { useAuth } from "src/auth/AuthProvider";
 import useUserGroups from "../../hooks/useUserGroups";
 import { useNavigate } from "react-router-dom";
 
-type Props = {
-  children?: any;
-};
-
-function ActiveGroupAvailability({ children }: Props) {
+function ActiveGroupAvailability() {
   const { loggedInUser } = useAuth();
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
-  const query = useUserGroups(loggedInUser.email);
+  const query = useUserGroups(loggedInUser?.email);
 
   if (query.isLoading || !query.data?.length) {
     return null;
@@ -25,11 +28,9 @@ function ActiveGroupAvailability({ children }: Props) {
   };
 
   const handleAccept = () => {
-
-    navigate(`group-page/${group.id}`, { replace: true })
+    navigate(`group-page/${group.id}`, { replace: true });
     setOpen(false);
   };
-
 
   return (
     <Dialog
@@ -43,15 +44,14 @@ function ActiveGroupAvailability({ children }: Props) {
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          It's a group named <b>{group.name}</b><br/>
+          It's a group named <b>{group.name}</b>
+          <br />
           Would you like to move in and collaborate with your friends?
         </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Not now</Button>
-        <Button onClick={handleAccept} autoFocus>
-        Let's go
-        </Button>
+        <Button onClick={handleAccept}>Let's go</Button>
       </DialogActions>
     </Dialog>
   );

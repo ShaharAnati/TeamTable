@@ -13,7 +13,7 @@ const CreateGroupContainer: React.FC = (): JSX.Element => {
     const creatorEmail = sessionStorage.getItem('user_email')
     const onSubmitGroupCreationForm = async (): Promise<void> => {
         const sessionStorageUser = sessionStorage.getItem('user_token');
-        const body = {name: groupName, creator, members: [creatorEmail] };
+        const body = {name: groupName, creator, members: [{ username: creatorEmail }] };
         const newGroup = await axios.post('/groups', body, {
             headers: {
                 'x-access-token': sessionStorageUser,

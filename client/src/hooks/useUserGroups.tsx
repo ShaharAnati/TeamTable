@@ -9,6 +9,7 @@ function fetchUserGroups(username) {
 function useUserGroups(username) {
   return useQuery("userGroups", () => fetchUserGroups(username), {
     enabled: !!username,
+    staleTime: Infinity
   });
 }
 
