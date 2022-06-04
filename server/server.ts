@@ -11,6 +11,7 @@ import LoginRouter from "./routers/LoginRouter";
 import GroupsRouter from "./routers/GroupsRouter";
 import RestaurantsRouter from "./routers/RestaurantsRouter";
 import TagsRouter from "./routers/TagsRouter";
+import UsersRouter from "./routers/UsersRouter";
 import AuthRouter from './routers/AuthenticationRouter';
 import { updateGroup } from "./BL/groupsService";
 import { rankByTags } from "./BL/restaurantsBL";
@@ -109,7 +110,7 @@ const init = async (): Promise<void> => {
   app.use("/groups", GroupsRouter());
   app.use("/restaurants", RestaurantsRouter());
   app.use("/tags", TagsRouter());
-
+  app.use("/users", UsersRouter());
   app.use("/auth", withAuth, AuthRouter());
 
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
