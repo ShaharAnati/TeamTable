@@ -3,14 +3,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 5vh 4vw;
-    height: 20vh;
+    height: 170px;
 }
 
 .form-container {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    width: 35vw;
+    justify-content: space-evenly;
+    width: 500px;
     height: -webkit-fill-available;
 }

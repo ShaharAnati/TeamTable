@@ -21,36 +21,28 @@ interface LoggedInUser {
 
 interface AuthContextInterface {
   loggedInUser: LoggedInUser;
-  likedRestaurants: string[];
+  // likedRestaurants: string[];
   signin: (email: string, password: string) => Promise<any>;
   signout: () => void;
   register: (email: string, password: string, phoneNumber: string, fullName: string) => Promise<void>;
   isTokenValid: () => TokenState;
   refreshToken: () => Promise<void>;
-  removeRestaurantFromLiked: (restaurantId: string) => void;
-  addRestaurantToLiked: (restaurantId: string) => void
+  // removeRestaurantFromLiked: (restaurantId: string) => void;
+  // addRestaurantToLiked: (restaurantId: string) => void
 }
 
 export const AuthContext = createContext<AuthContextInterface>(null!);
 
 const sessionStorageUser = {
-  token: sessionStorage.getItem('user_token')
-}
+  token: sessionStorage.getItem("user_token"),
+  email: sessionStorage.getItem("user_email"),
+};
 
 export const isUserLoggedIn = (): boolean =>
   !!sessionStorage.getItem('user_token')
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loggedInUser, setLoggedInUser] = useState<LoggedInUser>(sessionStorageUser);
-  const [likedRestaurants, setLikedRestaurants] = useState<string[]>([]);
-
-  useEffect(() => {
-    const likedRests = sessionStorage.getItem('liked_restaurants')
-      ? JSON.parse(sessionStorage.getItem('liked_restaurants'))
-      : [];
-
-    setLikedRestaurants(likedRests);
-  }, [loggedInUser]);
 
   const signin = async (email: string, password: string): Promise<void> => {
     try {
@@ -60,13 +52,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
 
       setLoggedInUser({ email, token: res.data.token });
-      setLikedRestaurants(res.data.user.likedRestaurants)
 
       sessionStorage.setItem('user_token', res.data.token);
       sessionStorage.setItem('token_expiry_time', Date.now() + res.data.expiresIn);
       sessionStorage.setItem('user_email', email);
       sessionStorage.setItem('refresh_token', res.data.refreshToken);
-      sessionStorage.setItem("liked_restaurants", JSON.stringify(res.data.user.likedRestaurants));
 
       console.log("Succesfully logged in");
     }
@@ -85,7 +75,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     sessionStorage.removeItem('user_token');
     sessionStorage.removeItem('user_email');
     sessionStorage.removeItem('token_expiry_time');
-    sessionStorage.removeItem("liked_restaurants");
 
     setLoggedInUser(null);
     return;
@@ -142,21 +131,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch (error) { }
   };
 
-  const removeRestaurantFromLiked = (restaurantId: string) => {
-    const newLiked = likedRestaurants.filter(currId => currId !== restaurantId);
-
-    setLikedRestaurants(newLiked);
-    sessionStorage.setItem("liked_restaurants", JSON.stringify(newLiked));
-  }
-
-  const addRestaurantToLiked = (restaurantId: string) => {
-    const newLiked = [...likedRestaurants, restaurantId];
-
-    setLikedRestaurants([...new Set(newLiked)]);
-    sessionStorage.setItem("liked_restaurants", JSON.stringify(newLiked));
-
-  }
-
   const isTokenValid = (): TokenState => {
     return (
       Date.now() < +sessionStorage.getItem('token_expiry_time')
@@ -166,9 +140,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           : TokenState.NON_EXISTENT
     )
   }
-
+  
   const value = {
-    loggedInUser, likedRestaurants, signin, signout, register, isTokenValid, refreshToken, removeRestaurantFromLiked, addRestaurantToLiked
+    loggedInUser, signin, signout, register, isTokenValid, refreshToken
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

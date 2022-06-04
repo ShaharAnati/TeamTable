@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import AppLayout from "./AppLayout/AppLayout";
 import RequireAuth from "../auth/RequireAuth";
+import ActiveGroupAvailability from "./ActiveGroupAvailability/ActiveGroupAvailability";
 
 import HomeScreen from "./screens/AlternativeHome/AltHome";
 // import HomeScreen from "./screens/home/Home";
@@ -19,30 +20,32 @@ const App: React.FC = (props): JSX.Element => {
   return (
     <Router>
       <Routes>
+        {/* Unauthorized Routes */}
         <Route path="/" element={<AppLayout />}>
           <Route path="" element={<HomeScreen />} />
           <Route path="login-screen" element={<LogInScreen />} />
           <Route path="register-screen" element={<Register />} />
+        </Route>
+
+        {/* Authorized Routes */}
+        <Route
+          path="/"
+          element={
+            <RequireAuth>
+              <AppLayout />
+            </RequireAuth>
+          }
+        >
           <Route
             path="create-group-screen"
-            element={
-              <RequireAuth>
-                <CreateGroupContainer />
-              </RequireAuth>
-            }
+            element={<CreateGroupContainer />}
           />
-          <Route
-            path="group-page/:id"
-            element={
-              <RequireAuth>
-                <GroupView />
-              </RequireAuth>
-            }
-          />
+          <Route path="group-page/:id" element={<GroupView />} />
           <Route path="create-restaurant" element={<CreateRestaurant />} />
           <Route path="verify-restaurant" element={<VerifyRestaurants />} />
         </Route>
       </Routes>
+      <ActiveGroupAvailability />
     </Router>
   );
 };

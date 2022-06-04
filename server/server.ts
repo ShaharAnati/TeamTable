@@ -31,7 +31,7 @@ const httpServer = app.listen(process.env.PORT || 3000, () => {
 
 const io = new Server(httpServer);
 
-const groupsDataCache = new Map();
+const groupsDataCache = new Map<string, Group>();
 
 const groupsUserSocketId = new Map();
 
@@ -42,15 +42,22 @@ io.on("connection", (socket: any) => {
     const { user, groupId } = data;
     socket.join(groupId);
 
-    let group;
+    let group: Group;
 
     if (groupsDataCache.has(groupId)) {
-      group = groupsDataCache.get(groupId);
-      group.members = [...group.members, user];
+      group = groupsDataCache.get(groupId)!;
+
+      const existingUser = group.members.find(memberObj => memberObj.username === user);
+      if (existingUser) {
+        existingUser.active = true;
+      } else {
+        group.members = [...group.members, { username: user, active: true }];
+      }
+
     } else {
       group = {
         id: groupId,
-        members: [user],
+        members: [{ username: user, active: true }],
         creator: user,
         filters: {},
       };
@@ -83,8 +90,14 @@ io.on("connection", (socket: any) => {
     if (groupsUserSocketId.has(socket.id)) {
       const { user, groupId } = groupsUserSocketId.get(socket.id);
 
-      const group = groupsDataCache.get(groupId);
-      group.members.splice(group.members.indexOf(user), 1);
+      const group = groupsDataCache.get(groupId)!;
+
+      const existingUser = group.members.find(memberObj => memberObj.username === user);
+      if (existingUser) {
+        existingUser.active = false;
+      }
+
+      // group.members.splice(group.members.indexOf(user), 1);
 
       groupsUserSocketId.delete(socket.id);
       socket.to(groupId).emit("groupDataChanged", group);
