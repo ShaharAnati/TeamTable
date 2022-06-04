@@ -1,5 +1,5 @@
 import React from "react";
-import {Avatar, List, ListItem, ListItemAvatar, ListItemText} from "@mui/material";
+import {Avatar, Badge, List, ListItem, ListItemAvatar, ListItemText} from "@mui/material";
 import ImageIcon from "@mui/icons-material/Image";
 import {Group} from "../../../../server/models/Group";
 
@@ -19,7 +19,7 @@ const GroupMembersList: React.FC<GroupMembersListProps> = (props): JSX.Element =
             ? group.members.map((member) => {
                 return (
                     <List
-                        key={member}
+                        key={member.username}
                         sx={{
                             width: "-webkit-fill-available",
                             maxWidth: 360,
@@ -30,11 +30,18 @@ const GroupMembersList: React.FC<GroupMembersListProps> = (props): JSX.Element =
                     >
                         <ListItem>
                             <ListItemAvatar>
+                            <Badge
+                                color={member.active? 'success' : 'error'}
+                                overlap="circular"
+                                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                variant="dot"
+                            >
                                 <Avatar>
                                     <ImageIcon />
                                 </Avatar>
+                            </Badge>
                             </ListItemAvatar>
-                            <ListItemText primary={member} />
+                            <ListItemText primary={member.username} />
                         </ListItem>
                     </List>
                 );

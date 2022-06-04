@@ -4,7 +4,7 @@ const groupSchema = new mongoose.Schema({
     id: { type: String },
     creator: { type: String },
     name: { type: String },
-    members: { type: [String] },
+    members: [{ username: { type: String }, active: { type: Boolean } }],
     filters: {
         tags: { type: [String] },
         hour: { type: String },
