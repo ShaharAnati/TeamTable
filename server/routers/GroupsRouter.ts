@@ -7,6 +7,16 @@ import GroupSchema from '../mongoose/GroupSchema';
 const buildRouter = (): Router => {
     const router: Router = Router();
 
+    router.get('/', async (req, res) => {
+        const username = req.query.username;
+        if (!username) {
+            return res.status(400).send();
+        }
+
+        const groups = await GroupSchema.find({ "members.username" : username}).lean();
+        return res.send(groups);
+    })
+
     router.get('/get/:id', async (req, res) => {
 
         const id = req.params.id;
