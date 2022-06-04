@@ -38,6 +38,7 @@ function GroupsList({}: Props) {
               <Paper
                 variant="outlined"
                 sx={{
+                  height: "100%",
                   boxSizing: "border-box",
                   padding: "16px 20px",
                   borderRadius: "18px",

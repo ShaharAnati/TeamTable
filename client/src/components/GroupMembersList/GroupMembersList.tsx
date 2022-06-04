@@ -31,10 +31,20 @@ const GroupMembersList: React.FC<GroupMembersListProps> = (props): JSX.Element =
                         <ListItem>
                             <ListItemAvatar>
                             <Badge
-                                color={member.active? 'success' : 'error'}
                                 overlap="circular"
                                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                                 variant="dot"
+                                sx={{
+                                    "& .MuiBadge-badge": {
+                                      border: "2px solid white",
+                                      width: "14px",
+                                      height: "14px",
+                                      borderRadius: "50%",
+                                      backgroundColor: member.active
+                                        ? "#44b700"
+                                        : "#e86f6f",
+                                    }
+                                  }}
                             >
                                 <Avatar>
                                     <ImageIcon />
