@@ -10,6 +10,8 @@ const groupSchema = new mongoose.Schema({
         hour: { type: String },
         day: { type: String }
     }
+}, {
+    timestamps: true
 });
 
 const schema: any = mongoose.model("groups", groupSchema);
