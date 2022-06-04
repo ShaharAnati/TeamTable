@@ -69,7 +69,7 @@ export const ResMap = (props) => {
     return (
         <div ref={geocoderContainerRef} >
             <ReactMap
-                style={{position:'absolute', height: '100%', width: '100%'}} 
+                style={{height: '400px', width: '100%'}} 
                 ref={mapRef}
                 mapLib={maplibregl}
                 mapStyle="https://api.maptiler.com/maps/positron/style.json?key=ytGeppRI3n5wUxjfP8oH"

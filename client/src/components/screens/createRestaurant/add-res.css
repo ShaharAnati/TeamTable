@@ -4,5 +4,5 @@
 
 .form-class {
     padding: 15px;
-    background: linear-gradient( rgba(0, 0, 0, 0.1) 100%, rgba(0, 0, 0, 0.5)100%),url('../../../../assets/images/background.webp');
+    /* background: linear-gradient( rgba(0, 0, 0, 0.1) 100%, rgba(0, 0, 0, 0.5)100%),url('../../../../assets/images/background.webp'); */
 }
