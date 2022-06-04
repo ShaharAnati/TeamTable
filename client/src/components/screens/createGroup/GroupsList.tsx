@@ -24,7 +24,7 @@ function GroupsList({}: Props) {
   }
 
   return (
-    <Container sx={{ marginTop: "32px" }}>
+    <Container sx={{ padding: "32px 0" }}>
       <Box sx={{ height: 70 }}>
         <Typography variant="h4">Your Recent Groups</Typography>
         <Divider />
