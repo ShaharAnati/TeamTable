@@ -13,8 +13,23 @@ const buildRouter = (): Router => {
             return res.status(400).send();
         }
 
-        const groups = await GroupSchema.find({ "members.username" : username}).lean();
+        const groups = await GroupSchema.find({ "members.username": username }).lean();
         return res.send(groups);
+    })
+
+    router.get('/recent', async (req, res) => {
+        const username = req.query.username;
+        if (!username) {
+            return res.status(400).send();
+        }
+
+        const groups = await GroupSchema.find({ "members.username": username }).lean();
+
+        const membersHasActivity = (members: any[]) => members.filter((member) => member.username !== username && member.active).length > 0;
+
+        const groupsWithActivity = groups.filter((group: any) => membersHasActivity(group.members));
+
+        return res.send(groupsWithActivity);
     })
 
     router.get('/get/:id', async (req, res) => {

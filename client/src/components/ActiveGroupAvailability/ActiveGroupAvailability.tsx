@@ -9,15 +9,21 @@ import {
 } from "@mui/material";
 import { useAuth } from "src/auth/AuthProvider";
 import useUserGroups from "../../hooks/useUserGroups";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function ActiveGroupAvailability() {
   const { loggedInUser } = useAuth();
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const query = useUserGroups(loggedInUser?.email);
+  const location = useLocation();
 
-  if (query.isLoading || !query.data?.length) {
+  const shouldShowModal = !location.pathname.startsWith("/group-page");
+
+  const query = useUserGroups(loggedInUser?.email, () => {
+    if (shouldShowModal) setOpen(true);
+  });
+
+  if (!shouldShowModal || query.isLoading || !query.data?.length) {
     return null;
   }
 
