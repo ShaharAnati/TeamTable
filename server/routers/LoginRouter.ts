@@ -53,7 +53,7 @@ const buildRouter = (): Router => {
                 { user_id: user._id, email },
                 process.env.TOKEN_KEY || "",
                 {
-                    expiresIn: "1m",
+                    expiresIn: "15m",
                 }
             );
 
@@ -113,7 +113,7 @@ const buildRouter = (): Router => {
                     { user_id: user._id, email },
                     process.env.TOKEN_KEY || "",
                     {
-                        expiresIn: "1m",
+                        expiresIn: "15m",
                     }
                 );
 
@@ -172,7 +172,7 @@ const buildRouter = (): Router => {
                         { user_id: user._id, email: user.email },
                         process.env.TOKEN_KEY || "",
                         {
-                            expiresIn: "1m",
+                            expiresIn: "15m",
                         }
                     );
         
