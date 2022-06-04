@@ -108,3 +108,5 @@ build/
 *.idea
 *.iml
 *.hot-update.[js|json]
+.unotes
+dev-mongo-data
