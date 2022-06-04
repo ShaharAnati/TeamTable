@@ -15,7 +15,6 @@ import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 
-import { useAuth } from 'src/auth/AuthProvider';
 import { dayMapping, Restaurant } from "../../../../../types/Resturants";
 import "../restaurant.css";
 
@@ -38,6 +37,7 @@ type Props = {
   restaurant: Restaurant;
   onFavoriteClick?: Function;
   chosedTags: string[];
+  likedRestaurants: string[];
 };
 
 const OpeningHours = ({ openingTimes }): JSX.Element => {
@@ -62,18 +62,15 @@ const OpeningHours = ({ openingTimes }): JSX.Element => {
 
 // TODO: opening hours
 export const RestaurantComponent = (props: Props): JSX.Element => {
-  const { restaurant, chosedTags = [] } = props;
+  const { restaurant, chosedTags = [], likedRestaurants = [] } = props;
   const { id, name, description, tags, imgUrl, openingTimes } = restaurant;
-
-  const { loggedInUser, likedRestaurants, removeRestaurantFromLiked, addRestaurantToLiked } = useAuth();
 
   const [isLiked, setIsLiked] = useState<boolean>(false)
 
   useEffect(() => {
-    if (loggedInUser) {
+    if (likedRestaurants.length > 0) {
       setIsLiked(!!likedRestaurants.find(currId => currId == id))
     }
-
   }, [likedRestaurants])
 
   const handleLikeClicked = async (): Promise<void> => {
@@ -83,7 +80,7 @@ export const RestaurantComponent = (props: Props): JSX.Element => {
         restaurantId: id
       });
 
-      addRestaurantToLiked(id);
+      setIsLiked(true)
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("failed to like restaurant", error.message);
@@ -102,7 +99,7 @@ export const RestaurantComponent = (props: Props): JSX.Element => {
         restaurantId: id
       });
 
-      removeRestaurantFromLiked(id);
+      setIsLiked(false)
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("failed to like restaurant", error.message);
@@ -125,7 +122,7 @@ export const RestaurantComponent = (props: Props): JSX.Element => {
       <CardContent style={{ padding: "1% 3%" }}>
         <div style={styles.header}>
           <div style={styles.title}>{name}</div>
-          {loggedInUser && <IconButton
+          {likedRestaurants.length > 0 && <IconButton
             style={{
               padding: 0,
               height: "inherit",

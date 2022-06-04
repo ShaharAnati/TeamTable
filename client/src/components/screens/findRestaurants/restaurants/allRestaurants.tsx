@@ -2,13 +2,15 @@ import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useQuery } from "react-query";
-
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+
 import "./restaurant.css";
 import Restaurant from "./restaurant/Restauant";
 import { Filters } from "src/types/Group";
+import useUserLikedRestaurants from "src/hooks/useUserLikedRestaurants";
+import { useAuth } from "src/auth/AuthProvider";
 import { Restaurant as TypedRestaurant } from "../../../../../../server/models/Restaurant";
 
 dayjs.extend(isSameOrAfter);
@@ -22,7 +24,12 @@ interface AllRestaurantsProps {
 export const AllRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.Element => {
   const { filters, restaurants } = props;
 
+  const { loggedInUser } = useAuth();
+  const userLikedRestaurantsQuery = loggedInUser.email ? useUserLikedRestaurants(loggedInUser.email) : null;
+
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
+
+
 
   useEffect(() => {
     const filterByDay = (restaurant) =>
@@ -65,11 +72,9 @@ export const AllRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.Elemen
     >
       {filteredRestaurants?.map((restaurant, i) => (
         <div key={i} style={{ margin: "auto", padding: "0 16px 50px 16px" }}>
-          <Restaurant restaurant={restaurant} chosedTags={filters.tags} />
+          <Restaurant restaurant={restaurant} chosedTags={filters.tags} likedRestaurants={userLikedRestaurantsQuery ? userLikedRestaurantsQuery.data : []}/>
         </div>
       ))}
     </div>
   );
-
-  return null;
 };

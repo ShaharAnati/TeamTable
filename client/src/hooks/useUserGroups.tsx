@@ -3,7 +3,7 @@ import axios from "axios";
 import { useQuery } from "react-query";
 
 function fetchUserGroups(username) {
-  return axios.get("groups", { params: { username } }).then((res) => res.data);
+  return axios.get("/groups", { params: { username } }).then((res) => res.data);
 }
 
 function useUserGroups(username) {
