@@ -3,15 +3,19 @@ import { Restaurant } from "./Restaurant";
 type Filters = {
     day?: string;
     hour?: string;
-    tags: string[]
+    tags?: string[]
 }
+
 export interface Group {
     id: any;
     creator?: string;
-    members?: string[];
+    members: {
+        username: string;
+        active: boolean;
+    }[];
     filters?: Filters;
 }
 
-export interface ExtendedGroupData extends Group{
+export interface ExtendedGroupData extends Group {
     restaurants: Restaurant[];
 }
