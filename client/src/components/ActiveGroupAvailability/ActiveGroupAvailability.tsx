@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from "@mui/material";
 import { useAuth } from "src/auth/AuthProvider";
-import useUserGroups from "../../hooks/useUserGroups";
+import useUserRecentGroup from "../../hooks/useUserRecentGroup";
 import { useNavigate, useLocation } from "react-router-dom";
 
 function ActiveGroupAvailability() {
@@ -19,7 +19,7 @@ function ActiveGroupAvailability() {
 
   const shouldShowModal = !location.pathname.startsWith("/group-page");
 
-  const query = useUserGroups(loggedInUser?.email, () => {
+  const query = useUserRecentGroup(loggedInUser?.email, () => {
     if (shouldShowModal) setOpen(true);
   });
 
