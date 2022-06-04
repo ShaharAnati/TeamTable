@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios, { AxiosResponse } from "axios";
 import {
   Card,
   CardContent,
@@ -8,15 +9,15 @@ import {
   Typography,
 } from "@mui/material";
 import Chip from "@mui/material/Chip";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 
+import { useAuth } from 'src/auth/AuthProvider';
 import { dayMapping, Restaurant } from "../../../../../types/Resturants";
 import "../restaurant.css";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import axios, { AxiosResponse } from "axios";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -64,17 +65,25 @@ export const RestaurantComponent = (props: Props): JSX.Element => {
   const { restaurant, chosedTags = [] } = props;
   const { id, name, description, tags, imgUrl, openingTimes } = restaurant;
 
+  const { loggedInUser, likedRestaurants, removeRestaurantFromLiked, addRestaurantToLiked } = useAuth();
+
   const [isLiked, setIsLiked] = useState<boolean>(false)
 
+  useEffect(() => {
+    if (loggedInUser) {
+      setIsLiked(!!likedRestaurants.find(currId => currId == id))
+    }
+
+  }, [likedRestaurants])
 
   const handleLikeClicked = async (): Promise<void> => {
     try {
       const res: AxiosResponse<any> = await axios.patch("/users/like-restaurant", {
-        email: "moran",
+        email: sessionStorage.getItem("user_email"),
         restaurantId: id
       });
 
-      setIsLiked(true);
+      addRestaurantToLiked(id);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("failed to like restaurant", error.message);
@@ -89,11 +98,11 @@ export const RestaurantComponent = (props: Props): JSX.Element => {
   const handleUnLikeClicked = async (): Promise<void> => {
     try {
       const res: AxiosResponse<any> = await axios.patch("/users/unlike-restaurant", {
-        email: "moran",
+        email: sessionStorage.getItem("user_email"),
         restaurantId: id
       });
 
-      setIsLiked(false);
+      removeRestaurantFromLiked(id);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("failed to like restaurant", error.message);
@@ -116,7 +125,7 @@ export const RestaurantComponent = (props: Props): JSX.Element => {
       <CardContent style={{ padding: "1% 3%" }}>
         <div style={styles.header}>
           <div style={styles.title}>{name}</div>
-          <IconButton
+          {loggedInUser && <IconButton
             style={{
               padding: 0,
               height: "inherit",
@@ -125,7 +134,7 @@ export const RestaurantComponent = (props: Props): JSX.Element => {
             onClick={isLiked ? handleUnLikeClicked : handleLikeClicked}
           >
             <FavoriteIcon />
-          </IconButton>
+          </IconButton>}
         </div>
         <div>
           <Typography variant="body2" color="text.secondary">
