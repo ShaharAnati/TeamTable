@@ -31,7 +31,7 @@ const buildRouter = (): Router => {
 
       const user = await UserSchema.findOne({ email });
       const newlikedRestaurants = user.likedRestaurants.filter(
-        (r: string) => r === restaurant_id
+        (r: string) => r !== restaurant_id
       );
       await UserSchema.findOneAndUpdate(
         { email },
