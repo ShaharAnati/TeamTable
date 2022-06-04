@@ -30,7 +30,10 @@ interface AuthContextInterface {
 
 export const AuthContext = createContext<AuthContextInterface>(null!);
 
-const sessionStorageUser = sessionStorage.getItem('user_token');
+const sessionStorageUser = {
+  token: sessionStorage.getItem("user_token"),
+  email: sessionStorage.getItem("user_email"),
+};
 
 export const isUserLoggedIn = (): boolean => 
     !!sessionStorage.getItem('user_token')
