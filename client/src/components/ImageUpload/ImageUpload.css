@@ -7,8 +7,26 @@
 }
 
 .uploaderContainer {
-  height: 250px;
-  width: 250px;
-  background-size: auto 250px;
+  height: 200px;
+  width: 100%;
   background-position: center;
+  border: 2px dashed #aebfbe;
+  border-radius: 8px;
+}
+
+.uploaderContainer:hover {
+  cursor: pointer;
+  border-color: #82ada9;
+}
+
+.img-overlay { 
+  position: "absolute";
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0.0;
+}
+
+.img-overlay:hover {
+  opacity: 0.05;
 }
