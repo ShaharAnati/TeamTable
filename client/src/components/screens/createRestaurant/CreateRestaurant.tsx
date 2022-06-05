@@ -39,8 +39,15 @@ export const CreateRestaurant = (): JSX.Element => {
   const [address, setAddress] = useState<Address>(null);
   const [location, setLocation] = useState<any>(null);
   const [imageAsUrl, setImageAsUrl] = React.useState(allInputs);
+  const [tagOptions, setTagOptions] = React.useState<string[]>([]);
   const [datesError, setDatesError] = useState<string>("");
   const [previousUrls, setPreviousUrls] = React.useState([]);
+
+  React.useEffect(() => {
+    axios.get("/tags").then((tagsResponse) => {
+      setTagOptions(tagsResponse.data);
+    });
+  }, [])
 
   const navigate = useNavigate();
 
@@ -236,7 +243,7 @@ export const CreateRestaurant = (): JSX.Element => {
                 multiple
                 id="restaurant-tags"
                 value={formik.values.tags}
-                options={RESTAURANT_TAGS}
+                options={tagOptions}
                 getOptionLabel={(option) => option}
                 defaultValue={formik.values.tags}
                 onChange={(event, value) => formik.setFieldValue("tags", value)}

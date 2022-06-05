@@ -4,7 +4,7 @@ import { getAllTagGroups } from '../mongoose/TagsSchema';
 
 
 export const rankByTags = async (tagNames: string[]): Promise<Restaurant[]> => {
-    const restaurants: Restaurant[] = await getAllRestaurants();
+    const restaurants: Restaurant[] = (await getAllRestaurants()).filter(res => res.isVerified);
 
     if (tagNames.length > 0) {
         const rankedTags: RankedTag[] = await getTagsConstraints(tagNames);

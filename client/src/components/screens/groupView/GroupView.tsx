@@ -43,6 +43,8 @@ const GroupView: React.FC = (): JSX.Element => {
                 setRestaurants(restaurants);
             }
         });
+
+        return socket;
     }
 
     const handleFiltersChange = (newFilters: Filters) => {
@@ -52,7 +54,8 @@ const GroupView: React.FC = (): JSX.Element => {
     };
 
     useEffect(() => {
-        initWebsocket();
+        const socket = initWebsocket();
+        return () => socket.disconnect();
     }, [connectionPort]);
 
     return (
