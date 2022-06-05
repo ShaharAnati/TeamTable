@@ -3,7 +3,7 @@ import axios from "axios";
 import { useQuery } from "react-query";
 
 function fetchUserRecentGroup(username) {
-  return axios.get("groups/recent", { params: { username } }).then((res) => res.data);
+  return axios.get("/groups/recent", { params: { username } }).then((res) => res.data);
 }
 
 function useUserRecentGroup(username, onSuccess) {
