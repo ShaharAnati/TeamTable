@@ -30,6 +30,12 @@ const styles = {
     fontSize: "1.3vw",
     fontWeight: "bold",
   },
+  content: {
+    padding: "1% 3%",
+    maxHeight : "110px",
+    'overflow-y': "auto"
+  }
+
 };
 
 type Props = {
@@ -71,7 +77,7 @@ export const RestaurantComponent = (props: Props): JSX.Element => {
         image={imgUrl}
         alt="green iguana"
       />
-      <CardContent style={{ padding: "1% 3%" }}>
+      <CardContent style={ styles.content }>
         <div style={styles.header}>
           <div style={styles.title}>{name}</div>
           <IconButton
