@@ -200,6 +200,7 @@ export const CreateRestaurant = (): JSX.Element => {
               <h4> Opening Times: </h4>
               {[1, 2, 3, 4, 5, 6, 7].map((day) => (
                 <div
+                  key={day}
                   style={{
                     display: "flex",
                     alignItems: "center",
