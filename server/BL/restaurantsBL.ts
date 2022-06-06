@@ -7,9 +7,9 @@ import { getGroupLikedRestaurants } from './groupsService';
 
 
 export const rankByTags = async (tagNames: string[], groupUsers?: GroupUser[]): Promise<Restaurant[]> => {
+    const restaurants: Restaurant[] = (await getAllRestaurants()).filter(res => res.isVerified);
+    
     if (tagNames.length > 0) {
-        const restaurants: Restaurant[] = (await getAllRestaurants()).filter(res => res.isVerified);
-
         const rankedTags: RankedTag[] = await getTagsConstraints(tagNames);
         const singleConstraintValue: number = 1/rankedTags.reduce((sum, currTag) => sum + currTag.constraintLevel, 0);
         
@@ -40,7 +40,7 @@ export const rankByTags = async (tagNames: string[], groupUsers?: GroupUser[]): 
          });
     }
 
-    return [];
+    return restaurants;
 }
 
 const getSingleRestaurantRankByTags = (restaurant: Restaurant, tags: RankedTag[], singleConstraintValue: number): number => {
