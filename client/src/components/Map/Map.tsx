@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Map as ReactMap, Marker, useControl } from "react-map-gl";
+import ReactMap, {  Marker } from "react-map-gl";
 import maplibregl from "maplibre-gl";
 import Geocoder from 'react-map-gl-geocoder'
 

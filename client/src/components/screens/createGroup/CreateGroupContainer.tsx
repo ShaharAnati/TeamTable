@@ -4,6 +4,7 @@ import { useAuth } from 'src/auth/AuthProvider';
 import CreateGroup from './CreateGroup';
 import { useNavigate } from "react-router-dom";
 import GroupsList from './GroupsList';
+import ChooseRadiusMap from '../groupView/ChooseRadiusMap';
 
 const CreateGroupContainer: React.FC = (): JSX.Element => {
     const [groupName, setGroupName] = useState<string>('');
@@ -24,6 +25,9 @@ const CreateGroupContainer: React.FC = (): JSX.Element => {
         }); // TODO: remove localhost
         navigate('/group-page/' + newGroup.data.id)
     }
+    
+    return (<ChooseRadiusMap />)
+
 
     return (
         <>
