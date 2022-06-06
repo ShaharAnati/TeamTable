@@ -46,21 +46,14 @@ io.on("connection", (socket: any) => {
 
     if (groupsDataCache.has(groupId)) {
       const group: Group = groupsDataCache.get(groupId)!;
-      let isAlreadyActive: boolean = false;
 
       const existingUser = group.members.find(memberObj => memberObj.username === user);
       if (existingUser) {
-        if(existingUser.active === false)
           existingUser.active = true;
-        else 
-          isAlreadyActive = true;
       } else {
         group.members = [...group.members, { username: user, active: true }];
       }
 
-      // if(isAlreadyActive) {
-      //   io.to(groupId).emit("groupDataChanged", group);
-      // }
       extendedGroup = {
         ...group,
         restaurants: await rankByTags(data?.filters?.tags || [], data.members)
@@ -84,7 +77,9 @@ io.on("connection", (socket: any) => {
     io.to(groupId).emit("groupDataChanged", extendedGroup);
 
     console.log("joined group: " + groupId);
-    updateGroup(groupId, extendedGroup as Group);
+
+    const { restaurants, ...groupToSave} = extendedGroup;
+    updateGroup(groupId, groupToSave);
   });
 
   socket.on("filtersUpdate", async (data: Group) => {
@@ -116,10 +111,9 @@ io.on("connection", (socket: any) => {
         extendedGroup.restaurants =  await rankByTags(group?.filters?.tags || [], group.members);
       }
 
-      // group.members.splice(group.members.indexOf(user), 1);
-
       groupsUserSocketId.delete(socket.id);
       socket.to(groupId).emit("groupDataChanged", extendedGroup);
+
       updateGroup(groupId, group);
     }
 
