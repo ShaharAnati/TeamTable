@@ -37,6 +37,21 @@ const buildRouter = (): Router => {
     }
   });
 
+  router.patch("/:id", async (req, res) => {
+    try {
+      const id = req.params.id;
+      const restaurant: Restaurant = req.body;
+
+      await RestaurantsSchema.findOneAndUpdate({ id: id }, restaurant);
+
+      return res.status(200);
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500);
+    }
+  });
+
   router.patch("/:id/approve", async (req, res) => {
     try {
       const id = req.params.id;

@@ -48,9 +48,13 @@ const allInputs = { imgUrl: "" };
 
 type Props = {
   restaurant?: Restaurant;
+  isEditMode?: boolean;
 };
 
-export const CreateRestaurant = ({ restaurant }: Props): JSX.Element => {
+export const CreateRestaurant = ({
+  restaurant,
+  isEditMode,
+}: Props): JSX.Element => {
   const [imageAsUrl, setImageAsUrl] = React.useState(allInputs);
   const [datesError, setDatesError] = useState<string>("");
   const [previousUrls, setPreviousUrls] = React.useState([]);
@@ -134,15 +138,29 @@ export const CreateRestaurant = ({ restaurant }: Props): JSX.Element => {
         location: formik.values.location,
       };
 
-      await axios.post("/restaurants", res).catch((err) => {
-        if (axios.isAxiosError(err)) {
-          console.log("failed to create restaurant", err.message);
+      if (isEditMode) {
+        await axios
+          .patch(`/restaurants/${restaurant.id}`, res)
+          .catch((err) => {
+            if (axios.isAxiosError(err)) {
+              console.log("failed to update restaurant", err.message);
 
-          if ((err.toJSON() as any).status === 400) throw err;
-        } else {
-          console.log("failed to create restaurant");
-        }
-      });
+              if ((err.toJSON() as any).status === 400) throw err;
+            } else {
+              console.log("failed to update restaurant");
+            }
+          });
+      } else {
+        await axios.post("/restaurants", res).catch((err) => {
+          if (axios.isAxiosError(err)) {
+            console.log("failed to create restaurant", err.message);
+
+            if ((err.toJSON() as any).status === 400) throw err;
+          } else {
+            console.log("failed to create restaurant");
+          }
+        });
+      }
 
       console.log(JSON.stringify(res, null, 2));
       formik.resetForm();
