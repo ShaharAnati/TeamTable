@@ -51,7 +51,7 @@ const buildRouter = (): Router => {
 
             // Create token
             const token = jwt.sign(
-                { user_id: user._id, email },
+                { user_id: user._id, email, isAdmin: false },
                 process.env.TOKEN_KEY || "",
                 {
                     expiresIn: `${TOKEN_EXPIRY_IN_MIN}m`,
@@ -59,7 +59,7 @@ const buildRouter = (): Router => {
             );
 
             const refreshToken = jwt.sign(
-                { user_id: user._id, email },
+                { user_id: user._id, email, isAdmin: false },
                 process.env.REFRESH_KEY || "",
                 {
                     expiresIn: "24h",

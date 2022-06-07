@@ -34,6 +34,8 @@ export const AuthContext = createContext<AuthContextInterface>(null!);
 const sessionStorageUser = {
   token: sessionStorage.getItem("user_token"),
   email: sessionStorage.getItem("user_email"),
+  //TODO: VERY NOT SAFE. NEED TO FIX
+  isAdmin: sessionStorage.getItem("user_isAdmin"),
 };
 
 export const isUserLoggedIn = (): boolean => 
@@ -49,10 +51,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         password
       });
 
+      debugger;
       setLoggedInUser({ email, token: res.data.token, isAdmin: res.data.user?.isAdmin });
       sessionStorage.setItem('user_token', res.data.token);
       sessionStorage.setItem('token_expiry_time', Date.now() + res.data.expiresIn);
       sessionStorage.setItem('user_email', email);
+      sessionStorage.setItem('user_isAdmin', res.data.user?.isAdmin);
       sessionStorage.setItem('refresh_token', res.data.refreshToken);
 
       console.log("Succesfully logged in");
@@ -71,6 +75,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signout = async () => {
     sessionStorage.removeItem('user_token');
     sessionStorage.removeItem('user_email');
+    sessionStorage.removeItem('user_isAdmin');
     sessionStorage.removeItem('token_expiry_time');
     setLoggedInUser(null);
     return;
@@ -88,6 +93,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setLoggedInUser(res.data.token);
       sessionStorage.setItem('user_token', res.data.token);
       sessionStorage.setItem('user_email', email);
+      sessionStorage.setItem('user_isAdmin', res.data.user?.isAdmin);
       sessionStorage.setItem('token_expiry_time', Date.now() + res.data.expiresIn);
       sessionStorage.setItem('refresh_token', res.data.refreshToken);
 
@@ -120,6 +126,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         sessionStorage.setItem('user_token', res.data.token);
         sessionStorage.setItem('token_expiry_time', Date.now() + res.data.expiresIn);
         sessionStorage.setItem('user_email', res.data.user?.email);
+        sessionStorage.setItem('user_isAdmin', res.data.user?.isAdmin);
         sessionStorage.setItem('refresh_token', res.data.refreshToken);
         setLoggedInUser({email: res.data.user?.email, token: res.data.token, isAdmin: res.data.user?.isAdmin})
       }
