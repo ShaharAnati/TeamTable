@@ -46,7 +46,11 @@ dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 const allInputs = { imgUrl: "" };
 
-export const CreateRestaurant = (): JSX.Element => {
+type Props = {
+  restaurant?: Restaurant;
+};
+
+export const CreateRestaurant = ({ restaurant }: Props): JSX.Element => {
   const [imageAsUrl, setImageAsUrl] = React.useState(allInputs);
   const [datesError, setDatesError] = useState<string>("");
   const [previousUrls, setPreviousUrls] = React.useState([]);
@@ -54,12 +58,12 @@ export const CreateRestaurant = (): JSX.Element => {
   const navigate = useNavigate();
 
   const INITIAL_VALUES = {
-    name: "",
-    description: "",
-    tags: [],
-    phoneNumber: "",
-    email: "",
-    openingTimes: {
+    name: restaurant?.name || "",
+    description: restaurant?.description || "",
+    tags: restaurant?.tags || [],
+    phoneNumber: restaurant?.contactInfo?.phoneNumber || "",
+    email: restaurant?.contactInfo?.email || "",
+    openingTimes: restaurant?.openingTimes || {
       "1": [null, null],
       "2": [null, null],
       "3": [null, null],
@@ -68,9 +72,10 @@ export const CreateRestaurant = (): JSX.Element => {
       "6": [null, null],
       "7": [null, null],
     },
-    address: "",
-    location: null,
-    url: "",
+    address: restaurant?.address || "",
+    location: restaurant?.location || null,
+    url: restaurant?.url || "",
+    imgUrl: restaurant?.imgUrl || null,
   };
 
   const validateTimes = (values, day: number): void => {
@@ -148,216 +153,208 @@ export const CreateRestaurant = (): JSX.Element => {
   });
 
   return (
-    <div className={"form-class"}>
-      <div>
-        <Container>
-          <h1>Add Restaurant</h1>
-          <Card
-            variant="outlined"
-            sx={{ backgroundColor: "#f9f9f9", borderRadius: "8px" }}
+    <div>
+      <Card
+        variant="outlined"
+        sx={{ backgroundColor: "#f9f9f9", borderRadius: "8px" }}
+      >
+        <CardHeader
+          title="Name & Contact Info"
+          titleTypographyProps={{ variant: "h6" }}
+          sx={{
+            backgroundColor: "white",
+            borderBottom: "1px solid",
+            borderColor: "#d2d2d2",
+          }}
+        />
+
+        <Grid container spacing={6} sx={{ padding: "24px 32px" }}>
+          <Grid
+            item
+            xs={4}
+            display="flex"
+            flexDirection="column"
+            justifyContent="space-between"
           >
-            <CardHeader
-              title="Name & Contact Info"
-              titleTypographyProps={{ variant: "h6" }}
-              sx={{
-                backgroundColor: "white",
-                borderBottom: "1px solid",
-                borderColor: "#d2d2d2",
-              }}
+            <TextField
+              className="form-input"
+              id="name"
+              name="name"
+              label="Name"
+              fullWidth
+              size="small"
+              variant="outlined"
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              error={formik.touched.name && Boolean(formik.errors.name)}
+              helperText={formik.touched.name && formik.errors.name}
+            />
+            <TextField
+              className="form-input"
+              id="description"
+              name="description"
+              label="Description"
+              fullWidth
+              size="small"
+              variant="outlined"
+              multiline
+              rows={4}
+              value={formik.values.description}
+              onChange={formik.handleChange}
+              error={formik.touched.name && Boolean(formik.errors.description)}
+              helperText={formik.touched.name && formik.errors.description}
+            />
+          </Grid>
+          <Grid
+            item
+            xs={4}
+            display="flex"
+            flexDirection="column"
+            justifyContent="space-between"
+          >
+            <TextField
+              className="form-input"
+              id="email"
+              name="email"
+              label="Email"
+              size="small"
+              fullWidth
+              variant="outlined"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              helperText={formik.touched.email && formik.errors.email}
             />
 
-            <Grid container spacing={6} sx={{ padding: "24px 32px" }}>
-              <Grid
-                item
-                xs={4}
-                display="flex"
-                flexDirection="column"
-                justifyContent="space-between"
-              >
-                <TextField
-                  className="form-input"
-                  id="name"
-                  name="name"
-                  label="Name"
-                  fullWidth
-                  size="small"
-                  variant="outlined"
-                  value={formik.values.name}
-                  onChange={formik.handleChange}
-                  error={formik.touched.name && Boolean(formik.errors.name)}
-                  helperText={formik.touched.name && formik.errors.name}
-                />
-                <TextField
-                  className="form-input"
-                  id="description"
-                  name="description"
-                  label="Description"
-                  fullWidth
-                  size="small"
-                  variant="outlined"
-                  multiline
-                  rows={4}
-                  value={formik.values.description}
-                  onChange={formik.handleChange}
-                  error={
-                    formik.touched.name && Boolean(formik.errors.description)
-                  }
-                  helperText={formik.touched.name && formik.errors.description}
-                />
-              </Grid>
-              <Grid
-                item
-                xs={4}
-                display="flex"
-                flexDirection="column"
-                justifyContent="space-between"
-              >
-                <TextField
-                  className="form-input"
-                  id="email"
-                  name="email"
-                  label="Email"
-                  size="small"
-                  fullWidth
-                  variant="outlined"
-                  value={formik.values.email}
-                  onChange={formik.handleChange}
-                  error={formik.touched.email && Boolean(formik.errors.email)}
-                  helperText={formik.touched.email && formik.errors.email}
-                />
+            <TextField
+              className="form-input"
+              id="phoneNumber"
+              name="phoneNumber"
+              label="Phone Number"
+              size="small"
+              fullWidth
+              variant="outlined"
+              value={formik.values.phoneNumber}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)
+              }
+              helperText={
+                formik.touched.phoneNumber && formik.errors.phoneNumber
+              }
+            />
 
-                <TextField
-                  className="form-input"
-                  id="phoneNumber"
-                  name="phoneNumber"
-                  label="Phone Number"
-                  size="small"
-                  fullWidth
-                  variant="outlined"
-                  value={formik.values.phoneNumber}
-                  onChange={formik.handleChange}
-                  error={
-                    formik.touched.phoneNumber &&
-                    Boolean(formik.errors.phoneNumber)
-                  }
-                  helperText={
-                    formik.touched.phoneNumber && formik.errors.phoneNumber
-                  }
-                />
+            <TextField
+              className="form-input"
+              id="url"
+              name="url"
+              label="Website"
+              size="small"
+              fullWidth
+              variant="outlined"
+              value={formik.values.url}
+              onChange={formik.handleChange}
+              error={formik.touched.url && Boolean(formik.errors.url)}
+              helperText={formik.touched.url && formik.errors.url}
+            />
+          </Grid>
 
-                <TextField
-                  className="form-input"
-                  id="url"
-                  name="url"
-                  label="Website"
-                  size="small"
-                  fullWidth
-                  variant="outlined"
-                  value={formik.values.url}
-                  onChange={formik.handleChange}
-                  error={formik.touched.url && Boolean(formik.errors.url)}
-                  helperText={formik.touched.url && formik.errors.url}
-                />
-              </Grid>
+          <Grid item xs={4}>
+            <ImageUpload
+              setImageAsUrl={setImageAsUrl}
+              imageAsUrl={imageAsUrl}
+            />
+          </Grid>
+        </Grid>
+        <Box sx={{ margin: "0 32px", marginBottom: 4 }}>
+          <Autocomplete
+            multiple
+            id="restaurant-tags"
+            value={formik.values.tags}
+            options={RESTAURANT_TAGS}
+            getOptionLabel={(option) => option}
+            defaultValue={formik.values.tags}
+            onChange={(event, value) => formik.setFieldValue("tags", value)}
+            size="small"
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                className="form-input"
+                variant="outlined"
+                label="Tags"
+                placeholder="Choose your tags"
+                error={formik.touched.tags && Boolean(formik.errors.tags)}
+                helperText={formik.touched.tags && formik.errors.tags}
+              />
+            )}
+          />
+        </Box>
 
-              <Grid item xs={4}>
-                <ImageUpload
-                  setImageAsUrl={setImageAsUrl}
-                  imageAsUrl={imageAsUrl}
-                />
-              </Grid>
-            </Grid>
-            <Box sx={{ margin: "0 32px", marginBottom: 4 }}>
-              <Autocomplete
-                multiple
-                id="restaurant-tags"
-                value={formik.values.tags}
-                options={RESTAURANT_TAGS}
-                getOptionLabel={(option) => option}
-                defaultValue={formik.values.tags}
-                onChange={(event, value) => formik.setFieldValue("tags", value)}
-                size="small"
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    className="form-input"
-                    variant="outlined"
-                    label="Tags"
-                    placeholder="Choose your tags"
-                    error={formik.touched.tags && Boolean(formik.errors.tags)}
-                    helperText={formik.touched.tags && formik.errors.tags}
-                  />
-                )}
+        <CardHeader
+          title="Location"
+          titleTypographyProps={{ variant: "h6" }}
+          sx={{
+            backgroundColor: "white",
+            borderTop: "1px solid",
+            borderBottom: "1px solid",
+            borderColor: "#d2d2d2",
+          }}
+        />
+        <ResMap
+          setAddress={(value) => formik.setFieldValue("address", value)}
+          setLocation={(value) => formik.setFieldValue("location", value)}
+          address={formik.values.address}
+          location={formik.values.location}
+        />
+
+        <CardHeader
+          title="Operating Hours"
+          titleTypographyProps={{ variant: "h6" }}
+          sx={{
+            backgroundColor: "white",
+            borderTop: "1px solid",
+            borderBottom: "1px solid",
+            borderColor: "#d2d2d2",
+          }}
+        />
+        <Box sx={{ padding: "24px 60px" }}>
+          {[1, 2, 3, 4, 5, 6, 7].map((day) => (
+            <Box
+              key={day}
+              sx={{ display: "flex", padding: "4px 0", height: 50 }}
+            >
+              <OperatingHoursForm
+                dayLabel={dayMapping[day]}
+                value={formik.values.openingTimes[day]}
+                onChange={(value) => {
+                  formik.setFieldValue(`openingTimes[${day}]`, value);
+                  validateTimes(formik.values, day);
+                }}
               />
             </Box>
+          ))}
+        </Box>
 
-            <CardHeader
-              title="Location"
-              titleTypographyProps={{ variant: "h6" }}
-              sx={{
-                backgroundColor: "white",
-                borderTop: "1px solid",
-                borderBottom: "1px solid",
-                borderColor: "#d2d2d2",
-              }}
-            />
-            <ResMap
-              setAddress={(value) => formik.setFieldValue("address", value)}
-              setLocation={(value) => formik.setFieldValue("location", value)}
-              address={formik.values.address}
-              location={formik.values.location}
-            />
-
-            <CardHeader
-              title="Operating Hours"
-              titleTypographyProps={{ variant: "h6" }}
-              sx={{
-                backgroundColor: "white",
-                borderTop: "1px solid",
-                borderBottom: "1px solid",
-                borderColor: "#d2d2d2",
-              }}
-            />
-            <Box sx={{ padding: "24px 60px" }}>
-              {[1, 2, 3, 4, 5, 6, 7].map((day) => (
-                <Box
-                  key={day}
-                  sx={{ display: "flex", padding: "4px 0", height: 50 }}
-                >
-                  <OperatingHoursForm
-                    dayLabel={dayMapping[day]}
-                    value={formik.values.openingTimes[day]}
-                    onChange={(value) => {
-                      formik.setFieldValue(`openingTimes[${day}]`, value);
-                      validateTimes(formik.values, day);
-                    }}
-                  />
-                </Box>
-              ))}
-            </Box>
-
-            <CardActions
-              sx={{
-                backgroundColor: "#eaeaea",
-                padding: "16px 32px",
-                justifyContent: "flex-end",
-              }}
-            >
-              <Button
-                color="info"
-                variant="contained"
-                sx={{ borderRadius: 20, width: "100px" }}
-                // disabled={datesError != ""}
-                onClick={() => {
-                  formik.handleSubmit();
-                }}
-              >
-                Submit
-              </Button>
-            </CardActions>
-          </Card>
-        </Container>
-      </div>
+        <CardActions
+          sx={{
+            backgroundColor: "#eaeaea",
+            padding: "16px 32px",
+            justifyContent: "flex-end",
+          }}
+        >
+          <Button
+            color="info"
+            variant="contained"
+            sx={{ borderRadius: 20, width: "100px" }}
+            // disabled={datesError != ""}
+            onClick={() => {
+              formik.handleSubmit();
+            }}
+          >
+            Submit
+          </Button>
+        </CardActions>
+      </Card>
     </div>
   );
 };

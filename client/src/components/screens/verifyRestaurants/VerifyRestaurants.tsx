@@ -4,6 +4,7 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import RestaurantComponent from "../findRestaurants/restaurants/restaurant/Restauant";
 import Button from "@mui/material/Button";
+import CloseIcon from "@mui/icons-material/Close";
 import { Restaurant } from "src/types/Resturants";
 import {
   Container,
@@ -17,12 +18,15 @@ import {
   Card,
   Dialog,
   Grid,
+  DialogTitle,
+  IconButton,
 } from "@mui/material";
 import RestaurantListItem from "./RestaurantListItem";
 import { CreateRestaurant } from "../createRestaurant/CreateRestaurant";
 
 export const VerifyRestaurants = (props): JSX.Element => {
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
+  const [editOpen, setEditOpen] = useState(false);
   const [status, setStatus] = useState<"verified" | "unverified" | "all">(
     "unverified"
   );
@@ -73,6 +77,11 @@ export const VerifyRestaurants = (props): JSX.Element => {
     }
   };
 
+  const handleClickOnEdit = (restaurant: Restaurant) => {
+    setSelectedRestaurant(restaurant);
+    setEditOpen(true);
+  };
+
   return (
     <Box sx={{ padding: "32px 48px" }}>
       <Box
@@ -111,11 +120,33 @@ export const VerifyRestaurants = (props): JSX.Element => {
               restaurant={restaurant}
               onApprove={approveRestaurant}
               onDecline={declineRestaurant}
-              onEdit={() => {}}
+              onEdit={handleClickOnEdit}
             />
           </Grid>
         ))}
       </Grid>
+      <Dialog
+        onClose={() => setEditOpen(false)}
+        open={editOpen}
+        fullWidth
+        maxWidth="lg"
+        scroll="body"
+      >
+        <DialogTitle
+          sx={{
+            backgroundColor: "primary.main",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Box>Edit Restaurant</Box>
+          <IconButton onClick={() => setEditOpen(false)}>
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <CreateRestaurant restaurant={selectedRestaurant} />
+      </Dialog>
     </Box>
   );
 };

@@ -187,7 +187,7 @@ function RestaurantListItem({
               color="info"
               disableElevation
               sx={{ marginRight: "auto", borderRadius: 4 }}
-              onClick={() => onEdit && onEdit(restaurant.id)}
+              onClick={() => onEdit && onEdit(restaurant)}
             >
               Edit
             </Button>
