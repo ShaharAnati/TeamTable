@@ -6,7 +6,8 @@ const userSchema = new mongoose.Schema({
   password: { type: String },
   phoneNumber: {type: String },
   fullName: {type: String},
-  tokens: {type:[String]}
+  tokens: {type:[String]},
+  isAdmin: {type: Boolean, default: false}
 });
 
 const schema = mongoose.model("users", userSchema);

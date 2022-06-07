@@ -42,6 +42,17 @@ const App: React.FC = (props): JSX.Element => {
           />
           <Route path="group-page/:id" element={<GroupView />} />
           <Route path="create-restaurant" element={<CreateRestaurantWrapper />} />
+        </Route>
+
+        {/* Admin Routes */}
+        <Route
+          path="/"
+          element={
+            <RequireAuth adminAuth={true}>
+              <AppLayout />
+            </RequireAuth>
+          }
+        >
           <Route path="verify-restaurant" element={<VerifyRestaurants />} />
         </Route>
       </Routes>

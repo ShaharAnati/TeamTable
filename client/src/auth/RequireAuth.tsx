@@ -7,10 +7,14 @@ import { Navigate, useLocation } from "react-router-dom";
 import { TokenState, useAuth } from './AuthProvider';
 import { Button } from '@mui/material';
 
-const RequireAuth = ({ children }: { children: JSX.Element }) => {
+const RequireAuth = ({ adminAuth = false, children }: { adminAuth?: boolean, children: JSX.Element }) => {
     let location = useLocation();
-    const { isTokenValid, refreshToken } = useAuth();
+    const { loggedInUser, isTokenValid, refreshToken } = useAuth();
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(true);
+
+    if (adminAuth && !loggedInUser.isAdmin) {
+        return <Navigate to="/" replace />
+    }
 
     const onDialogClose = () => {
         setIsDialogOpen(false);

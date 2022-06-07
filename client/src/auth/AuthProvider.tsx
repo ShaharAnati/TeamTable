@@ -17,6 +17,7 @@ export enum TokenState {
 interface LoggedInUser {
   email: string;
   token: string;
+  isAdmin?: boolean
 }
 
 interface AuthContextInterface {
@@ -48,7 +49,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         password
       });
 
-      setLoggedInUser({ email, token: res.data.token });
+      setLoggedInUser({ email, token: res.data.token, isAdmin: res.data.user?.isAdmin });
       sessionStorage.setItem('user_token', res.data.token);
       sessionStorage.setItem('token_expiry_time', Date.now() + res.data.expiresIn);
       sessionStorage.setItem('user_email', email);
@@ -120,7 +121,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         sessionStorage.setItem('token_expiry_time', Date.now() + res.data.expiresIn);
         sessionStorage.setItem('user_email', res.data.user?.email);
         sessionStorage.setItem('refresh_token', res.data.refreshToken);
-        setLoggedInUser({email: res.data.user?.email, token: res.data.token})
+        setLoggedInUser({email: res.data.user?.email, token: res.data.token, isAdmin: res.data.user?.isAdmin})
       }
   
     } catch (error) {}

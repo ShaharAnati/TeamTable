@@ -111,7 +111,7 @@ const buildRouter = (): Router => {
             if (user && (await bcrypt.compare(password, user.password))) {
                 // Create token
                 const token = jwt.sign(
-                    { user_id: user._id, email },
+                    { user_id: user._id, email, isAsmin: !!user.isAsmin },
                     process.env.TOKEN_KEY || "",
                     {
                         expiresIn: `${TOKEN_EXPIRY_IN_MIN}m`,
@@ -119,7 +119,7 @@ const buildRouter = (): Router => {
                 );
 
                 const refreshToken = jwt.sign(
-                    { user_id: user._id, email },
+                    { user_id: user._id, email, isAsmin: !!user.isAsmin },
                     process.env.REFRESH_KEY || "",
                     {
                         expiresIn: "24h",
