@@ -7,7 +7,8 @@ import UserSchema from '../mongoose/UserSchema';
 
 const buildRouter = (): Router => {
     const router: Router = Router();
-    const TOKEN_EXPIRY_TIME = 60000;
+    const TOKEN_EXPIRY_IN_MIN = 15;
+    const TOKEN_EXPIRY_TIME_IN_MS = TOKEN_EXPIRY_IN_MIN * 60 * 1000;
 
     // Register
     router.post("/register", async (req, res) => {
@@ -53,7 +54,7 @@ const buildRouter = (): Router => {
                 { user_id: user._id, email },
                 process.env.TOKEN_KEY || "",
                 {
-                    expiresIn: "15m",
+                    expiresIn: `${TOKEN_EXPIRY_IN_MIN}m`,
                 }
             );
 
@@ -74,7 +75,7 @@ const buildRouter = (): Router => {
             await user.save();
 
             // return new user
-            res.status(200).json({ user, token, expiresIn: TOKEN_EXPIRY_TIME, refreshToken });
+            res.status(200).json({ user, token, expiresIn: TOKEN_EXPIRY_TIME_IN_MS, refreshToken });
         } catch (err) {
             console.log(err);
             return res.status(409).send("User Already Exist. Please Login");
@@ -113,7 +114,7 @@ const buildRouter = (): Router => {
                     { user_id: user._id, email },
                     process.env.TOKEN_KEY || "",
                     {
-                        expiresIn: "15m",
+                        expiresIn: `${TOKEN_EXPIRY_IN_MIN}m`,
                     }
                 );
 
@@ -132,7 +133,7 @@ const buildRouter = (): Router => {
                 }
                 await user.save()
 
-                return res.status(200).json({ user, token, expiresIn: TOKEN_EXPIRY_TIME, refreshToken });
+                return res.status(200).json({ user, token, expiresIn: TOKEN_EXPIRY_TIME_IN_MS, refreshToken });
             }
             return res.status(400).json("Invalid Credentials");
         } catch (err) {
@@ -172,7 +173,7 @@ const buildRouter = (): Router => {
                         { user_id: user._id, email: user.email },
                         process.env.TOKEN_KEY || "",
                         {
-                            expiresIn: "15m",
+                            expiresIn: `${TOKEN_EXPIRY_IN_MIN}m`,
                         }
                     );
         
@@ -187,7 +188,7 @@ const buildRouter = (): Router => {
         
                     user.tokens[user.tokens.indexOf(receivedRefreshToken)] = refreshToken;
                     await user.save();
-                    return res.status(200).send({ user, token: accessToken, expiresIn: TOKEN_EXPIRY_TIME, refreshToken });
+                    return res.status(200).send({ user, token: accessToken, expiresIn: TOKEN_EXPIRY_TIME_IN_MS, refreshToken });
                 } catch (e) {
                     res.status(403).send(err.message);
                 }

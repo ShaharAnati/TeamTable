@@ -69,6 +69,34 @@
             {
                 "id": "23",
                 "name": "fish"
+            },
+            {
+                "id": "24",
+                "name": "mediterranean"
+            },
+            {
+                "id": "25",
+                "name": "home-cooked"
+            },
+            {
+                "id": "26",
+                "name": "healthy"
+            },
+            {
+                "id": "27",
+                "name": "street-food"
+            },
+            {
+                "id": "32",
+                "name": "sweet"
+            },
+            {
+                "id": "33",
+                "name": "dessert"
+            },
+            {
+                "id": "37",
+                "name": "kids"
             }
         ]
     },   
@@ -120,6 +148,34 @@
             {
                 "id": "19",
                 "name": "hummus"
+            },
+            {
+                "id": "29",
+                "name": "mexican"
+            },
+            {
+                "id": "30",
+                "name": "wraps"
+            },
+            {
+                "id": "31",
+                "name": "italian"
+            },
+            {
+                "id": "34",
+                "name": "pizza"
+            },
+            {
+                "id": "35",
+                "name": "american"
+            },
+            {
+                "id": "36",
+                "name": "hot-dog"
+            },
+            {
+                "id": "38",
+                "name": "cafe"
             }
         ]
     }

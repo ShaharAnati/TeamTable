@@ -60,8 +60,15 @@ export const CreateRestaurant = ({
   const [imageAsUrl, setImageAsUrl] = useState({
     imgUrl: restaurant?.imgUrl || "",
   });
+  const [tagOptions, setTagOptions] = React.useState<string[]>([]);
   const [datesError, setDatesError] = useState<string>("");
   const [previousUrls, setPreviousUrls] = React.useState([]);
+
+  React.useEffect(() => {
+    axios.get("/tags").then((tagsResponse) => {
+      setTagOptions(tagsResponse.data);
+    });
+  }, [])
 
   const navigate = useNavigate();
 
@@ -292,7 +299,7 @@ export const CreateRestaurant = ({
             multiple
             id="restaurant-tags"
             value={formik.values.tags}
-            options={RESTAURANT_TAGS}
+            options={tagOptions}
             getOptionLabel={(option) => option}
             defaultValue={formik.values.tags}
             onChange={(event, value) => formik.setFieldValue("tags", value)}
