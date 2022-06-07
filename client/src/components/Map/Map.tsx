@@ -21,15 +21,17 @@ export const ResMap = (props) => {
         mapLib={maplibregl}
         mapStyle="https://api.maptiler.com/maps/positron/style.json?key=ytGeppRI3n5wUxjfP8oH"
         initialViewState={{
-          longitude: 34.77876808975043,
-          latitude: 32.071869249621386,
+          longitude: location?.lng || 34.77876808975043,
+          latitude: location?.lat || 32.071869249621386,
           zoom: 14,
         }}
       >
+
         <GeocoderControl
           position="top-left"
           setCurrentMarker={setLocation}
           setAddress={setAddress}
+          address={address}
         />
 
         {location && (

@@ -1,11 +1,15 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { useControl } from 'react-map-gl';
+import { useControl ,MapRef } from 'react-map-gl';
 
 import { Address } from '../../types/Resturants';
 
 import maplibregl from "maplibre-gl";
 import MaplibreGeocoder from '@maplibre/maplibre-gl-geocoder'
+import Geocoder from "react-map-gl-geocoder";
+
+import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
+
 import '@maplibre/maplibre-gl-geocoder/dist/maplibre-gl-geocoder.css'
 
 
@@ -38,12 +42,12 @@ export const reverseGeocode = async (location: { lat: number, lng: number }): Pr
 
 export default function GeocoderControl(props) {
 
-
+    const { address } = props;
 
     const [marker, setMarker] = useState(null);
 
     useControl<MaplibreGeocoder>(
-        () => {
+        function onCreate({ map } : { map: MapRef }) {
             const geocorder_api = {
                 forwardGeocode: async (config) => {
                     const features = [];
@@ -86,7 +90,14 @@ export default function GeocoderControl(props) {
                 }
             }
 
-            const ctrl = new MaplibreGeocoder(geocorder_api, { maplibregl, marker: false, debounceSearch: 700, showResultsWhileTyping: true });
+            const ctrl = new MaplibreGeocoder(geocorder_api, { maplibregl, marker: false });
+
+            // hack
+            if (address)
+                setTimeout(() => {
+                    ctrl.setInput(address);
+                }, 400);
+
             ctrl.on('loading', props.onLoading);
             ctrl.on('results', props.onResults);
             ctrl.on('result', evt => {
@@ -99,7 +110,7 @@ export default function GeocoderControl(props) {
                 if (location) {
                     console.log(result)
                     // debugger;
-                    props.setAddress(result.properties.address);
+                    props.setAddress(result.text);
                     props.setCurrentMarker({ lng: location[0], lat: location[1] });
                 } else {
                     setMarker(null);

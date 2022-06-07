@@ -101,12 +101,14 @@ function RestaurantListItem({
           <Grid container sx={{ minHeight: 180, padding: "0 16px" }}>
             <Grid item xs={6}>
               <Box>
-                <Box sx={{ display: "flex", paddingBottom: 2 }}>
-                  <BusinessIcon fontSize="small" />
-                  <Typography variant="body2" sx={{ paddingLeft: 1 }}>
-                    YL Perets 6, Tel Aviv
-                  </Typography>
-                </Box>
+                {typeof restaurant.address === 'string' && (
+                  <Box sx={{ display: "flex", paddingBottom: 2 }}>
+                    <BusinessIcon fontSize="small" />
+                    <Typography variant="body2" sx={{ paddingLeft: 1 }}>
+                      {restaurant.address}
+                    </Typography>
+                  </Box>
+                )}
                 {restaurant.contactInfo?.phoneNumber && (
                   <Box sx={{ display: "flex", paddingBottom: 2 }}>
                     <PhoneIcon fontSize="small" />
