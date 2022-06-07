@@ -41,17 +41,12 @@ import {
   deleteUnusedImages,
 } from "src/components/ImageUpload/ImageUpload";
 import { borderColor } from "@mui/system";
-import FormSection from "./FormSection";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 const allInputs = { imgUrl: "" };
 
 export const CreateRestaurant = (): JSX.Element => {
-  // simple address
-  const [simpleAddress, setSimpleAddress] = useState<string>();
-  const [address, setAddress] = useState<Address>(null);
-  const [location, setLocation] = useState<any>(null);
   const [imageAsUrl, setImageAsUrl] = React.useState(allInputs);
   const [datesError, setDatesError] = useState<string>("");
   const [previousUrls, setPreviousUrls] = React.useState([]);
@@ -73,7 +68,9 @@ export const CreateRestaurant = (): JSX.Element => {
       "6": [null, null],
       "7": [null, null],
     },
-    simpleAddress: "",
+    address: "",
+    location: null,
+    url: "",
   };
 
   const validateTimes = (values, day: number): void => {
@@ -124,17 +121,12 @@ export const CreateRestaurant = (): JSX.Element => {
           phoneNumber: formik.values.phoneNumber,
           email: formik.values.email,
         },
+        url: formik.values.url,
         isVerified: false,
         openingTimes: formatOpeningTimes(formik.values.openingTimes),
-        address: {
-          country: address.country,
-          city: address.city || address.town,
-          street: address.street || address.road,
-          house_number: address.house_number,
-        },
+        address: formik.values.address,
         imgUrl: imageAsUrl.imgUrl,
-        location: location,
-        simpleAddress: formik.values.simpleAddress,
+        location: formik.values.location,
       };
 
       await axios.post("/restaurants", res).catch((err) => {
@@ -157,56 +149,6 @@ export const CreateRestaurant = (): JSX.Element => {
 
   return (
     <div className={"form-class"}>
-      {/* <Container>
-        <Stack direction="row" spacing={4}>
-          <FormSection title="Naming">
-            <TextField
-              sx={{ marginBottom: "10px", "&MuiInputBase-input": "whitesmoke" }}
-              classes={{ root: "form-input" }}
-              id="name"
-              name="name"
-              label="Name"
-              fullWidth
-              size="small"
-              variant="outlined"
-              value={formik.values.name}
-              onChange={formik.handleChange}
-              error={formik.touched.name && Boolean(formik.errors.name)}
-              helperText={formik.touched.name && formik.errors.name}
-            />
-            <TextField
-              sx={{ marginBottom: "10px" }}
-              classes={{ root: "form-input" }}
-              id="description"
-              name="description"
-              label="Description"
-              fullWidth
-              size="small"
-              variant="standard"
-              value={formik.values.description}
-              onChange={formik.handleChange}
-              error={formik.touched.name && Boolean(formik.errors.description)}
-              helperText={formik.touched.name && formik.errors.description}
-            />
-            <TextField
-              sx={{ marginBottom: "10px" }}
-              classes={{ root: "form-input" }}
-              id="simpleAddress"
-              name="simpleAddress"
-              label="Address"
-              size="small"
-              variant="standard"
-              onBlur={formik.handleChange}
-              error={
-                formik.touched.name && Boolean(formik.errors.simpleAddress)
-              }
-              helperText={formik.touched.name && formik.errors.simpleAddress}
-            />
-          </FormSection>
-          <FormSection title="Details"></FormSection>
-        </Stack>
-      </Container> */}
-
       <div>
         <Container>
           <h1>Add Restaurant</h1>
@@ -224,37 +166,37 @@ export const CreateRestaurant = (): JSX.Element => {
               }}
             />
 
-            <Grid container spacing={4} sx={{ padding: "24px 32px" }}>
-              {/* <Stack
-              direction="row"
-              justifyContent="space-between"
-              spacing={2}
-              sx={{ padding: "24px 32px" }}
-            > */}
-              <Grid item xs={4}>
+            <Grid container spacing={6} sx={{ padding: "24px 32px" }}>
+              <Grid
+                item
+                xs={4}
+                display="flex"
+                flexDirection="column"
+                justifyContent="space-between"
+              >
                 <TextField
-                  sx={{ marginBottom: "10px" }}
-                  classes={{ root: "form-input" }}
+                  className="form-input"
                   id="name"
                   name="name"
                   label="Name"
                   fullWidth
                   size="small"
-                  variant="filled"
+                  variant="outlined"
                   value={formik.values.name}
                   onChange={formik.handleChange}
                   error={formik.touched.name && Boolean(formik.errors.name)}
                   helperText={formik.touched.name && formik.errors.name}
                 />
                 <TextField
-                  sx={{ marginBottom: "10px" }}
-                  classes={{ root: "form-input" }}
+                  className="form-input"
                   id="description"
                   name="description"
                   label="Description"
                   fullWidth
                   size="small"
-                  variant="standard"
+                  variant="outlined"
+                  multiline
+                  rows={4}
                   value={formik.values.description}
                   onChange={formik.handleChange}
                   error={
@@ -262,55 +204,22 @@ export const CreateRestaurant = (): JSX.Element => {
                   }
                   helperText={formik.touched.name && formik.errors.description}
                 />
-                <Autocomplete
-                  multiple
-                  id="restaurant-tags"
-                  value={formik.values.tags}
-                  options={RESTAURANT_TAGS}
-                  getOptionLabel={(option) => option}
-                  defaultValue={formik.values.tags}
-                  onChange={(event, value) =>
-                    formik.setFieldValue("tags", value)
-                  }
-                  renderInput={(params) => (
-                    <TextField
-                      sx={{ marginBottom: "10px" }}
-                      classes={{ root: "form-input" }}
-                      {...params}
-                      variant="standard"
-                      placeholder="Choose your tags"
-                      size="small"
-                      error={formik.touched.tags && Boolean(formik.errors.tags)}
-                      helperText={formik.touched.tags && formik.errors.tags}
-                    />
-                  )}
-                />
-                {/* <TextField
-                  sx={{ marginBottom: "10px" }}
-                  classes={{ root: "form-input" }}
-                  id="simpleAddress"
-                  name="simpleAddress"
-                  label="Address"
-                  size="small"
-                  variant="standard"
-                  onBlur={formik.handleChange}
-                  error={
-                    formik.touched.name && Boolean(formik.errors.simpleAddress)
-                  }
-                  helperText={
-                    formik.touched.name && formik.errors.simpleAddress
-                  }
-                /> */}
               </Grid>
-              <Grid item xs={4}>
+              <Grid
+                item
+                xs={4}
+                display="flex"
+                flexDirection="column"
+                justifyContent="space-between"
+              >
                 <TextField
-                  sx={{ marginBottom: "10px" }}
-                  className={"form-input"}
+                  className="form-input"
                   id="email"
                   name="email"
                   label="Email"
                   size="small"
                   fullWidth
+                  variant="outlined"
                   value={formik.values.email}
                   onChange={formik.handleChange}
                   error={formik.touched.email && Boolean(formik.errors.email)}
@@ -318,13 +227,13 @@ export const CreateRestaurant = (): JSX.Element => {
                 />
 
                 <TextField
-                  sx={{ marginBottom: "10px" }}
-                  className={"form-input"}
+                  className="form-input"
                   id="phoneNumber"
                   name="phoneNumber"
                   label="Phone Number"
                   size="small"
                   fullWidth
+                  variant="outlined"
                   value={formik.values.phoneNumber}
                   onChange={formik.handleChange}
                   error={
@@ -335,6 +244,20 @@ export const CreateRestaurant = (): JSX.Element => {
                     formik.touched.phoneNumber && formik.errors.phoneNumber
                   }
                 />
+
+                <TextField
+                  className="form-input"
+                  id="url"
+                  name="url"
+                  label="Website"
+                  size="small"
+                  fullWidth
+                  variant="outlined"
+                  value={formik.values.url}
+                  onChange={formik.handleChange}
+                  error={formik.touched.url && Boolean(formik.errors.url)}
+                  helperText={formik.touched.url && formik.errors.url}
+                />
               </Grid>
 
               <Grid item xs={4}>
@@ -343,8 +266,30 @@ export const CreateRestaurant = (): JSX.Element => {
                   imageAsUrl={imageAsUrl}
                 />
               </Grid>
-              {/* </Stack> */}
             </Grid>
+            <Box sx={{ margin: "0 32px", marginBottom: 4 }}>
+              <Autocomplete
+                multiple
+                id="restaurant-tags"
+                value={formik.values.tags}
+                options={RESTAURANT_TAGS}
+                getOptionLabel={(option) => option}
+                defaultValue={formik.values.tags}
+                onChange={(event, value) => formik.setFieldValue("tags", value)}
+                size="small"
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    className="form-input"
+                    variant="outlined"
+                    label="Tags"
+                    placeholder="Choose your tags"
+                    error={formik.touched.tags && Boolean(formik.errors.tags)}
+                    helperText={formik.touched.tags && formik.errors.tags}
+                  />
+                )}
+              />
+            </Box>
 
             <CardHeader
               title="Location"
@@ -357,10 +302,10 @@ export const CreateRestaurant = (): JSX.Element => {
               }}
             />
             <ResMap
-              setAddress={setAddress}
-              setMarker={setLocation}
-              marker={location}
-              address={formik.values.simpleAddress}
+              setAddress={(value) => formik.setFieldValue("address", value)}
+              setLocation={(value) => formik.setFieldValue("location", value)}
+              address={formik.values.address}
+              location={formik.values.location}
             />
 
             <CardHeader
@@ -383,7 +328,6 @@ export const CreateRestaurant = (): JSX.Element => {
                     dayLabel={dayMapping[day]}
                     value={formik.values.openingTimes[day]}
                     onChange={(value) => {
-                      // validateDates(formik.values, formik.errors);
                       formik.setFieldValue(`openingTimes[${day}]`, value);
                       validateTimes(formik.values, day);
                     }}
@@ -392,16 +336,23 @@ export const CreateRestaurant = (): JSX.Element => {
               ))}
             </Box>
 
-            <CardActions sx={{ backgroundColor: "#eaeaea" }}>
+            <CardActions
+              sx={{
+                backgroundColor: "#eaeaea",
+                padding: "16px 32px",
+                justifyContent: "flex-end",
+              }}
+            >
               <Button
-                color="primary"
+                color="info"
                 variant="contained"
+                sx={{ borderRadius: 20, width: "100px" }}
                 // disabled={datesError != ""}
                 onClick={() => {
                   formik.handleSubmit();
                 }}
               >
-                ADD
+                Submit
               </Button>
             </CardActions>
           </Card>

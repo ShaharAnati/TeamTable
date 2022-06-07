@@ -7,9 +7,11 @@
 }
 
 .uploaderContainer {
-  height: 200px;
+  height: 180px;
   width: 100%;
   background-position: center;
+  background-size: 100% auto;
+  background-repeat: no-repeat;
   border: 2px dashed #aebfbe;
   border-radius: 8px;
 }

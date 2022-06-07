@@ -6,6 +6,7 @@ import { Address } from '../../types/Resturants';
 
 import maplibregl from "maplibre-gl";
 import MaplibreGeocoder from '@maplibre/maplibre-gl-geocoder'
+import '@maplibre/maplibre-gl-geocoder/dist/maplibre-gl-geocoder.css'
 
 
 // type GeocoderControlProps = Omit<GeocoderOptions, 'accessToken' | 'mapboxgl' | 'marker'> & {
@@ -36,9 +37,12 @@ export const reverseGeocode = async (location: { lat: number, lng: number }): Pr
 
 
 export default function GeocoderControl(props) {
+
+
+
     const [marker, setMarker] = useState(null);
 
-    const geocoder = useControl<MaplibreGeocoder>(
+    useControl<MaplibreGeocoder>(
         () => {
             const geocorder_api = {
                 forwardGeocode: async (config) => {
@@ -47,7 +51,7 @@ export default function GeocoderControl(props) {
                         let request =
                             'https://nominatim.openstreetmap.org/search?q=' +
                             config.query +
-                            '&format=geojson&polygon_geojson=1&addressdetails=1';
+                            '&format=geojson&polygon_geojson=1&addressdetails=0&countrycodes=il';
                         const response = await fetch(request);
                         const geojson = await response.json();
                         for (let feature of geojson.features) {
@@ -82,7 +86,7 @@ export default function GeocoderControl(props) {
                 }
             }
 
-            const ctrl = new MaplibreGeocoder(geocorder_api, { maplibregl, marker: false });
+            const ctrl = new MaplibreGeocoder(geocorder_api, { maplibregl, marker: false, debounceSearch: 700, showResultsWhileTyping: true });
             ctrl.on('loading', props.onLoading);
             ctrl.on('results', props.onResults);
             ctrl.on('result', evt => {
@@ -92,10 +96,11 @@ export default function GeocoderControl(props) {
                 const location =
                     result &&
                     (result.center || (result.geometry?.type === 'Point' && result.geometry.coordinates));
-                if (location && props.marker) {
+                if (location) {
                     console.log(result)
+                    // debugger;
                     props.setAddress(result.properties.address);
-                    props.SetCurrentMarker({ lng: location[0], lat: location[1] });
+                    props.setCurrentMarker({ lng: location[0], lat: location[1] });
                 } else {
                     setMarker(null);
                 }
@@ -104,7 +109,8 @@ export default function GeocoderControl(props) {
             return ctrl;
         },
         {
-            position: props.position
+            position: props.position,
+
         }
     );
 
