@@ -23,6 +23,7 @@ import {
 } from "@mui/material";
 import RestaurantListItem from "./RestaurantListItem";
 import { CreateRestaurant } from "../createRestaurant/CreateRestaurant";
+import { transformRestaurant } from "src/helpers/transform-restaurant";
 
 export const VerifyRestaurants = (props): JSX.Element => {
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
@@ -145,7 +146,14 @@ export const VerifyRestaurants = (props): JSX.Element => {
             <CloseIcon />
           </IconButton>
         </DialogTitle>
-        <CreateRestaurant restaurant={selectedRestaurant} />
+        <CreateRestaurant
+          isEditMode={true}
+          onEditCallback={() => {
+            setEditOpen(false);
+            refetch();
+          }}
+          restaurant={transformRestaurant(selectedRestaurant)}
+        />
       </Dialog>
     </Box>
   );

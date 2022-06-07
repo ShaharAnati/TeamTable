@@ -49,11 +49,13 @@ const allInputs = { imgUrl: "" };
 type Props = {
   restaurant?: Restaurant;
   isEditMode?: boolean;
+  onEditCallback?: Function;
 };
 
 export const CreateRestaurant = ({
   restaurant,
   isEditMode,
+  onEditCallback,
 }: Props): JSX.Element => {
   const [imageAsUrl, setImageAsUrl] = useState({
     imgUrl: restaurant?.imgUrl || "",
@@ -150,6 +152,8 @@ export const CreateRestaurant = ({
             console.log("failed to update restaurant");
           }
         });
+
+        onEditCallback && onEditCallback();
       } else {
         await axios.post("/restaurants", res).catch((err) => {
           if (axios.isAxiosError(err)) {
@@ -160,13 +164,12 @@ export const CreateRestaurant = ({
             console.log("failed to create restaurant");
           }
         });
-      }
+        console.log(JSON.stringify(res, null, 2));
 
-      console.log(JSON.stringify(res, null, 2));
+        navigate("/");
+      }
       formik.resetForm();
       formik.setFieldValue("tags", []);
-
-      navigate("/");
     },
   });
 

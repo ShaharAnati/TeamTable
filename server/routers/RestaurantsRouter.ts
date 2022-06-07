@@ -44,11 +44,11 @@ const buildRouter = (): Router => {
 
       await RestaurantsSchema.findOneAndUpdate({ id: id }, restaurant);
 
-      return res.status(200);
+      return res.status(200).send();
 
     } catch (error) {
         console.log(error)
-        return res.status(500);
+        return res.status(500).send();;
     }
   });
 
