@@ -34,8 +34,8 @@ export const AuthContext = createContext<AuthContextInterface>(null!);
 const sessionStorageUser = {
   token: sessionStorage.getItem("user_token"),
   email: sessionStorage.getItem("user_email"),
-  //TODO: VERY NOT SAFE. NEED TO FIX
-  isAdmin: sessionStorage.getItem("user_isAdmin"),
+  //TODO: VERY UNSAFE. NEED TO FIX
+  isAdmin: sessionStorage.getItem('user_isAdmin') ? JSON.parse(sessionStorage.getItem("user_isAdmin")) : false,
 };
 
 export const isUserLoggedIn = (): boolean => 
@@ -43,7 +43,6 @@ export const isUserLoggedIn = (): boolean =>
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loggedInUser, setLoggedInUser] = useState<any>(sessionStorageUser);
-
   const signin = async (email: string, password: string): Promise<void> => {
     try {
       const res: AxiosResponse<any> = await axios.post("/login", {
@@ -51,7 +50,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         password
       });
 
-      debugger;
       setLoggedInUser({ email, token: res.data.token, isAdmin: res.data.user?.isAdmin });
       sessionStorage.setItem('user_token', res.data.token);
       sessionStorage.setItem('token_expiry_time', Date.now() + res.data.expiresIn);

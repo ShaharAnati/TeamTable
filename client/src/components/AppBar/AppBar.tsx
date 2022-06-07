@@ -10,6 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
 // @ts-ignore
 import logo from '@assets/images/TeamTableLogo.png'
+import { Button } from '@mui/material';
 
 const MenuAppBar = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -45,6 +46,7 @@ const MenuAppBar = () => {
                 />
               </Box>
           <div>
+            {auth?.loggedInUser?.isAdmin && <Button component={Link} to="/verify-restaurant" sx={{ color:'#266d70', fontWeight: 600 }} >Admin Manage</Button>}
             <IconButton
               size="large"
               aria-label="account of current user"
