@@ -6,9 +6,6 @@ import { Address } from '../../types/Resturants';
 
 import maplibregl from "maplibre-gl";
 import MaplibreGeocoder from '@maplibre/maplibre-gl-geocoder'
-import Geocoder from "react-map-gl-geocoder";
-
-import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
 
 import '@maplibre/maplibre-gl-geocoder/dist/maplibre-gl-geocoder.css'
 
@@ -24,6 +21,11 @@ import '@maplibre/maplibre-gl-geocoder/dist/maplibre-gl-geocoder.css'
 //     onResult?: (e: object) => void;
 //     onError?: (e: object) => void;
 // };
+
+const getItemValue = (item) => {
+    const { address: { house_number, house_name, road, city, town, village, municipality } } = item.properties;
+    return `${road} ${house_number || house_name}, ${city || town || village || municipality}`;
+}
 
 /* eslint-disable complexity,max-statements */
 export const reverseGeocode = async (location: { lat: number, lng: number }): Promise<Address> => {
@@ -55,7 +57,7 @@ export default function GeocoderControl(props) {
                         let request =
                             'https://nominatim.openstreetmap.org/search?q=' +
                             config.query +
-                            '&format=geojson&polygon_geojson=1&addressdetails=0&countrycodes=il';
+                            '&format=geojson&polygon_geojson=1&addressdetails=1&countrycodes=il&accept-language=he';
                         const response = await fetch(request);
                         const geojson = await response.json();
                         for (let feature of geojson.features) {
@@ -90,7 +92,7 @@ export default function GeocoderControl(props) {
                 }
             }
 
-            const ctrl = new MaplibreGeocoder(geocorder_api, { maplibregl, marker: false });
+            const ctrl = new MaplibreGeocoder(geocorder_api, { maplibregl, marker: false , getItemValue });
 
             // hack
             if (address)
@@ -109,8 +111,7 @@ export default function GeocoderControl(props) {
                     (result.center || (result.geometry?.type === 'Point' && result.geometry.coordinates));
                 if (location) {
                     console.log(result)
-                    // debugger;
-                    props.setAddress(result.text);
+                    props.setAddress(getItemValue(result));
                     props.setCurrentMarker({ lng: location[0], lat: location[1] });
                 } else {
                     setMarker(null);

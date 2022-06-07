@@ -16,4 +16,10 @@
 
 .maplibregl-ctrl-geocoder {
   min-width: 400px !important;
+  direction: rtl;
+  text-align: right;
+}
+
+.maplibre-ctrl-geocoder--result-icon {
+  display: none !important;
 }

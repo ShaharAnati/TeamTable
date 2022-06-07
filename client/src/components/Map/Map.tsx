@@ -1,10 +1,8 @@
 import * as React from "react";
 import { Map as ReactMap, MapRef, Marker, useControl } from "react-map-gl";
 import maplibregl from "maplibre-gl";
-import Geocoder from "react-map-gl-geocoder";
 
 import "maplibre-gl/dist/maplibre-gl.css";
-import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import GeocoderControl from "./GeocoderControl";
 
 export const ResMap = (props) => {
