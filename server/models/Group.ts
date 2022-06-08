@@ -9,11 +9,17 @@ type Filters = {
 export interface Group {
     id: any;
     creator?: string;
-    members: {
-        username: string;
-        active: boolean;
-    }[];
+    members: GroupUser[];
     filters?: Filters;
+}
+
+export interface GroupLikedRestaurants {
+    [resId:string]: number;   
+}
+
+export interface GroupUser {
+    username: string;
+    active: boolean;
 }
 
 export interface ExtendedGroupData extends Group {

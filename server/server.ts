@@ -11,6 +11,7 @@ import LoginRouter from "./routers/LoginRouter";
 import GroupsRouter from "./routers/GroupsRouter";
 import RestaurantsRouter from "./routers/RestaurantsRouter";
 import TagsRouter from "./routers/TagsRouter";
+import UsersRouter from "./routers/UsersRouter";
 import AuthRouter from './routers/AuthenticationRouter';
 import { updateGroup } from "./BL/groupsService";
 import { rankByTags } from "./BL/restaurantsBL";
@@ -37,24 +38,29 @@ const groupsUserSocketId = new Map();
 io.on("connection", (socket: any) => {
   console.log(socket.id);
 
-  socket.on("joinGroup", (data: any) => {
+  socket.on("joinGroup", async (data: any) => {
     const { user, groupId } = data;
     socket.join(groupId);
 
-    let group: Group;
+    let extendedGroup: ExtendedGroupData;
 
     if (groupsDataCache.has(groupId)) {
-      group = groupsDataCache.get(groupId)!;
+      const group: Group = groupsDataCache.get(groupId)!;
 
       const existingUser = group.members.find(memberObj => memberObj.username === user);
       if (existingUser) {
-        existingUser.active = true;
+          existingUser.active = true;
       } else {
         group.members = [...group.members, { username: user, active: true }];
       }
 
+      extendedGroup = {
+        ...group,
+        restaurants: await rankByTags(data?.filters?.tags || [], data.members)
+      };
+      
     } else {
-      group = {
+      const group: Group = {
         id: groupId,
         members: [{ username: user, active: true }],
         creator: user,
@@ -62,21 +68,25 @@ io.on("connection", (socket: any) => {
       };
 
       groupsDataCache.set(groupId, group);
-    }
+
+      extendedGroup = {...group,  restaurants: []}
+    }    
 
     groupsUserSocketId.set(socket.id, { user, groupId });
 
-    io.to(groupId).emit("groupDataChanged", group);
+    io.to(groupId).emit("groupDataChanged", extendedGroup);
 
     console.log("joined group: " + groupId);
-    updateGroup(groupId, group);
+
+    const { restaurants, ...groupToSave} = extendedGroup;
+    updateGroup(groupId, groupToSave);
   });
 
   socket.on("filtersUpdate", async (data: Group) => {
     const { id: groupId } = data;
     groupsDataCache.set(groupId, data);
 
-    const rankedRestaurants: Restaurant[] = await rankByTags(data?.filters?.tags || []);
+    const rankedRestaurants: Restaurant[] = await rankByTags(data?.filters?.tags || [], data.members);
     const dataToReturn: ExtendedGroupData = {
       restaurants: rankedRestaurants,
       ...data
@@ -85,7 +95,7 @@ io.on("connection", (socket: any) => {
     io.to(groupId).emit("groupDataChanged", dataToReturn);
   });
 
-  socket.on("disconnect", () => {
+  socket.on("disconnect", async () => {
     if (groupsUserSocketId.has(socket.id)) {
       const { user, groupId } = groupsUserSocketId.get(socket.id);
 
@@ -95,16 +105,17 @@ io.on("connection", (socket: any) => {
       if (existingUser) {
         existingUser.active = false;
       }
-
-      // group.members.splice(group.members.indexOf(user), 1);
+      
+      const extendedGroup: ExtendedGroupData = {...group, restaurants: []};
+      if(group.members.some( u => u.active)) {
+        extendedGroup.restaurants =  await rankByTags(group?.filters?.tags || [], group.members);
+      }
 
       groupsUserSocketId.delete(socket.id);
-      socket.to(groupId).emit("groupDataChanged", group);
+      socket.to(groupId).emit("groupDataChanged", extendedGroup);
+
       updateGroup(groupId, group);
     }
-
-    // TODO
-    // maybe at this point do saving of group to DB
 
     console.log("disconnected");
   });
@@ -122,7 +133,7 @@ const init = async (): Promise<void> => {
   app.use("/groups", GroupsRouter());
   app.use("/restaurants", RestaurantsRouter());
   app.use("/tags", TagsRouter());
-
+  app.use("/users", UsersRouter());
   app.use("/auth", withAuth, AuthRouter());
 
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));

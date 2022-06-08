@@ -22,11 +22,6 @@ const GroupView: React.FC = (): JSX.Element => {
     const [group, setGroup] = useState<Group>(null);
     const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
 
-    useEffect(() => {
-        axios(`/restaurants`).then(rests => {
-            setRestaurants(rests.data);
-        })
-    }, [])
 
     function initWebsocket() {
         socket = io(connectionPort);
