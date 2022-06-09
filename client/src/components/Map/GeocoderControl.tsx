@@ -1,11 +1,13 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { useControl } from 'react-map-gl';
+import { useControl ,MapRef } from 'react-map-gl';
 
 import { Address } from '../../types/Resturants';
 
 import maplibregl from "maplibre-gl";
 import MaplibreGeocoder from '@maplibre/maplibre-gl-geocoder'
+
+import '@maplibre/maplibre-gl-geocoder/dist/maplibre-gl-geocoder.css'
 
 
 // type GeocoderControlProps = Omit<GeocoderOptions, 'accessToken' | 'mapboxgl' | 'marker'> & {
@@ -19,6 +21,11 @@ import MaplibreGeocoder from '@maplibre/maplibre-gl-geocoder'
 //     onResult?: (e: object) => void;
 //     onError?: (e: object) => void;
 // };
+
+const getItemValue = (item) => {
+    const { address: { house_number, house_name, road, city, town, village, municipality } } = item.properties;
+    return `${road} ${house_number || house_name}, ${city || town || village || municipality}`;
+}
 
 /* eslint-disable complexity,max-statements */
 export const reverseGeocode = async (location: { lat: number, lng: number }): Promise<Address> => {
@@ -36,10 +43,13 @@ export const reverseGeocode = async (location: { lat: number, lng: number }): Pr
 
 
 export default function GeocoderControl(props) {
+
+    const { address } = props;
+
     const [marker, setMarker] = useState(null);
 
-    const geocoder = useControl<MaplibreGeocoder>(
-        () => {
+    useControl<MaplibreGeocoder>(
+        function onCreate({ map } : { map: MapRef }) {
             const geocorder_api = {
                 forwardGeocode: async (config) => {
                     const features = [];
@@ -47,7 +57,7 @@ export default function GeocoderControl(props) {
                         let request =
                             'https://nominatim.openstreetmap.org/search?q=' +
                             config.query +
-                            '&format=geojson&polygon_geojson=1&addressdetails=1';
+                            '&format=geojson&polygon_geojson=1&addressdetails=1&countrycodes=il&accept-language=he';
                         const response = await fetch(request);
                         const geojson = await response.json();
                         for (let feature of geojson.features) {
@@ -82,7 +92,14 @@ export default function GeocoderControl(props) {
                 }
             }
 
-            const ctrl = new MaplibreGeocoder(geocorder_api, { maplibregl, marker: false });
+            const ctrl = new MaplibreGeocoder(geocorder_api, { maplibregl, marker: false , getItemValue });
+
+            // hack
+            if (address)
+                setTimeout(() => {
+                    ctrl.setInput(address);
+                }, 400);
+
             ctrl.on('loading', props.onLoading);
             ctrl.on('results', props.onResults);
             ctrl.on('result', evt => {
@@ -92,10 +109,10 @@ export default function GeocoderControl(props) {
                 const location =
                     result &&
                     (result.center || (result.geometry?.type === 'Point' && result.geometry.coordinates));
-                if (location && props.marker) {
+                if (location) {
                     console.log(result)
-                    props.setAddress(result.properties.address);
-                    props.SetCurrentMarker({ lng: location[0], lat: location[1] });
+                    props.setAddress(getItemValue(result));
+                    props.setCurrentMarker({ lng: location[0], lat: location[1] });
                 } else {
                     setMarker(null);
                 }
@@ -104,7 +121,8 @@ export default function GeocoderControl(props) {
             return ctrl;
         },
         {
-            position: props.position
+            position: props.position,
+
         }
     );
 
