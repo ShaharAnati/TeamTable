@@ -44,21 +44,23 @@ const GroupView: React.FC = (): JSX.Element => {
                 setIsDialogOpen(true);
             }
         })
-        socket.on("groupDataChanged", (data: ExtendedGroupData) => {
+        socket.on("groupDataChanged", (groupData: Group) => {
             console.log('received groupDataChanged')
-            const {restaurants, ...groupData} = data
             setGroup(groupData);
+        });
+
+        socket.on('restaurantsUpdate', (restaurants: Restaurant[]) => {
+            console.log("sdsdasad")
             if (restaurants) {
                 setRestaurants(restaurants);
             }
-        });
+        })
 
         return socket;
     }
 
     const handleFiltersChange = (newFilters: Filters) => {
         const updatedGroup = {...group, filters: newFilters} as Group;
-        setGroup(updatedGroup);
         socket.emit("filtersUpdate", updatedGroup);
     };
 

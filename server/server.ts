@@ -35,17 +35,33 @@ const groupsDataCache = new Map<string, Group>();
 
 const groupsUserSocketId = new Map();
 
+const delayedRestaurantsCalc = new Map<string, ReturnType<typeof setTimeout>>();
+
+function delayRestaurantsCalc(groupId: string, eventEmitCb: (restaurants: Restaurant[]) => void) {
+  const prevDelayedCalculateRestaurants = delayedRestaurantsCalc.get(groupId);
+  clearTimeout(prevDelayedCalculateRestaurants);
+
+  const newDelayedCalculateRestaurants = setTimeout(async () => {
+    const cachedGroup = groupsDataCache.get(groupId);
+    const rankedRestaurants: Restaurant[] = await rankByTags(cachedGroup?.filters?.tags || [], cachedGroup?.members);
+    eventEmitCb(rankedRestaurants);
+  }, 100)
+
+  delayedRestaurantsCalc.set(groupId, newDelayedCalculateRestaurants);
+}
+
+
 function createNewGroup(groupId: any, user: string) {
   const group: Group = {
     id: groupId,
-    members: [{username: user, active: true}],
+    members: [{ username: user, active: true }],
     creator: user,
     filters: {},
   };
 
   groupsDataCache.set(groupId, group);
 
-  return {...group, restaurants: []}
+  return { ...group, restaurants: [] }
 }
 
 io.on("connection", (socket: any) => {
@@ -67,58 +83,54 @@ io.on("connection", (socket: any) => {
 
       console.log("joined group: " + groupId);
 
-      const { restaurants, ...groupToSave} = extendedGroup;
+      const { restaurants, ...groupToSave } = extendedGroup;
       updateGroup(groupId, groupToSave);
     }
   })
 
+  // Somebody entered the group room
   socket.on("joinGroup", async (data: any) => {
     const { user, groupId } = data;
     socket.join(groupId);
 
-    let extendedGroup: ExtendedGroupData;
+    let group: Group;
 
     if (groupsDataCache.has(groupId)) {
-      const group: Group = groupsDataCache.get(groupId)!;
+      group = groupsDataCache.get(groupId)!;
 
       const existingUser = group.members.find(memberObj => memberObj.username === user);
       if (existingUser) {
-          existingUser.active = true;
+        existingUser.active = true;
       } else {
         //group.members = [...group.members, { username: user, active: true }];
         io.to(groupId).emit("newUser", user);
       }
-
-      extendedGroup = {
-        ...group,
-        restaurants: await rankByTags(data?.filters?.tags || [], data.members)
-      };
-      
     } else {
-      extendedGroup = createNewGroup(groupId, user);
-    }    
+      group = createNewGroup(groupId, user);
+    }
 
     groupsUserSocketId.set(socket.id, { user, groupId });
 
-    io.to(groupId).emit("groupDataChanged", extendedGroup);
+    io.to(groupId).emit("groupDataChanged", group);
+
+    delayRestaurantsCalc(groupId, (rankedRestaurants) => {
+      io.in(groupId).emit('restaurantsUpdate', rankedRestaurants)
+    })
 
     console.log("joined group: " + groupId);
 
-    const { restaurants, ...groupToSave} = extendedGroup;
-    updateGroup(groupId, groupToSave);
+    updateGroup(groupId, group);
   });
 
   socket.on("filtersUpdate", async (data: Group) => {
     const { id: groupId } = data;
     groupsDataCache.set(groupId, data);
 
-    const rankedRestaurants: Restaurant[] = await rankByTags(data?.filters?.tags || [], data.members);
-    const dataToReturn: ExtendedGroupData = {
-      restaurants: rankedRestaurants,
-      ...data
-    }
+    io.in(groupId).emit("groupDataChanged", data);
 
-    io.to(groupId).emit("groupDataChanged", dataToReturn);
+    delayRestaurantsCalc(groupId, (rankedRestaurants) => {
+      io.in(groupId).emit('restaurantsUpdate', rankedRestaurants)
+    })
   });
 
   socket.on("disconnect", async () => {
@@ -131,16 +143,15 @@ io.on("connection", (socket: any) => {
       if (existingUser) {
         existingUser.active = false;
       }
-      
-      const extendedGroup: ExtendedGroupData = {...group, restaurants: []};
-      if(group.members.some( u => u.active)) {
-        extendedGroup.restaurants =  await rankByTags(group?.filters?.tags || [], group.members);
-      }
 
       groupsUserSocketId.delete(socket.id);
-      socket.to(groupId).emit("groupDataChanged", extendedGroup);
+      socket.to(groupId).emit("groupDataChanged", group);
 
       updateGroup(groupId, group);
+
+      delayRestaurantsCalc(groupId, (rankedRestaurants) => {
+        io.in(groupId).emit('restaurantsUpdate', rankedRestaurants)
+      })
     }
 
     console.log("disconnected");
