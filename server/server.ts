@@ -35,8 +35,42 @@ const groupsDataCache = new Map<string, Group>();
 
 const groupsUserSocketId = new Map();
 
+function createNewGroup(groupId: any, user: string) {
+  const group: Group = {
+    id: groupId,
+    members: [{username: user, active: true}],
+    creator: user,
+    filters: {},
+  };
+
+  groupsDataCache.set(groupId, group);
+
+  return {...group, restaurants: []}
+}
+
 io.on("connection", (socket: any) => {
   console.log(socket.id);
+
+  socket.on("addNewUser", async (data: any) => {
+    const { user, groupId } = data;
+
+    if (groupsDataCache.has(groupId)) {
+      const group: Group = groupsDataCache.get(groupId)!;
+      group.members = [...group.members, { username: user, active: true }];
+
+      let extendedGroup: ExtendedGroupData = {
+        ...group,
+        restaurants: await rankByTags(data?.filters?.tags || [], data.members)
+      };
+
+      io.to(groupId).emit("groupDataChanged", extendedGroup);
+
+      console.log("joined group: " + groupId);
+
+      const { restaurants, ...groupToSave} = extendedGroup;
+      updateGroup(groupId, groupToSave);
+    }
+  })
 
   socket.on("joinGroup", async (data: any) => {
     const { user, groupId } = data;
@@ -51,7 +85,8 @@ io.on("connection", (socket: any) => {
       if (existingUser) {
           existingUser.active = true;
       } else {
-        group.members = [...group.members, { username: user, active: true }];
+        //group.members = [...group.members, { username: user, active: true }];
+        io.to(groupId).emit("newUser", user);
       }
 
       extendedGroup = {
@@ -60,16 +95,7 @@ io.on("connection", (socket: any) => {
       };
       
     } else {
-      const group: Group = {
-        id: groupId,
-        members: [{ username: user, active: true }],
-        creator: user,
-        filters: {},
-      };
-
-      groupsDataCache.set(groupId, group);
-
-      extendedGroup = {...group,  restaurants: []}
+      extendedGroup = createNewGroup(groupId, user);
     }    
 
     groupsUserSocketId.set(socket.id, { user, groupId });

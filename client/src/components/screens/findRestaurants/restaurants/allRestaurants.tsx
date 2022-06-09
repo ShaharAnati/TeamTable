@@ -1,17 +1,14 @@
-import _ from "lodash";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { useQuery } from "react-query";
+import React, {useEffect, useState} from "react";
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 
 import "./restaurant.css";
 import Restaurant from "./restaurant/Restauant";
-import { Filters } from "src/types/Group";
+import {Filters} from "src/types/Group";
 import useUserLikedRestaurants from "src/hooks/useUserLikedRestaurants";
-import { useAuth } from "src/auth/AuthProvider";
-import { Restaurant as TypedRestaurant } from "../../../../../../server/models/Restaurant";
+import {useAuth} from "src/auth/AuthProvider";
+import {Restaurant as TypedRestaurant} from "../../../../../../server/models/Restaurant";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
