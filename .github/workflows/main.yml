@@ -13,11 +13,11 @@ jobs:
         with:
           target_repo_url:
             git@github.com:illi99/TeamTable.git
-          ssh_private_key:
+          ssh_private_key: |-
             -----BEGIN OPENSSH PRIVATE KEY-----
-b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
-QyNTUxOQAAACB50YceIptXFJv9Almhy5DjC38L+1Yg2fIQtaBvvXfTMwAAAJgGw7EPBsOx
-DwAAAAtzc2gtZWQyNTUxOQAAACB50YceIptXFJv9Almhy5DjC38L+1Yg2fIQtaBvvXfTMw
-AAAECqYXwT23hduWS/Mswep2RRnkr9cK7ZVQRDQAQjy8MHZ3nRhx4im1cUm/0CWaHLkOML
-fwv7ViDZ8hC1oG+9d9MzAAAAE3Nvb2tpMDk3NEBnbWFpbC5jb20BAg==
------END OPENSSH PRIVATE KEY-----
+            b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+            QyNTUxOQAAACB50YceIptXFJv9Almhy5DjC38L+1Yg2fIQtaBvvXfTMwAAAJgGw7EPBsOx
+            DwAAAAtzc2gtZWQyNTUxOQAAACB50YceIptXFJv9Almhy5DjC38L+1Yg2fIQtaBvvXfTMw
+            AAAECqYXwT23hduWS/Mswep2RRnkr9cK7ZVQRDQAQjy8MHZ3nRhx4im1cUm/0CWaHLkOML
+            fwv7ViDZ8hC1oG+9d9MzAAAAE3Nvb2tpMDk3NEBnbWFpbC5jb20BAg==
+            -----END OPENSSH PRIVATE KEY-----
