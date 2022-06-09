@@ -9,7 +9,7 @@ import HomeScreen from "./screens/AlternativeHome/AltHome";
 // import HomeScreen from "./screens/home/Home";
 import LogInScreen from "./screens/login/LoginScreen";
 import Register from "./screens/register/RegisterScreen";
-import { CreateRestaurant } from "./screens/createRestaurant/CreateRestaurant";
+import { CreateRestaurantWrapper } from "./screens/createRestaurant/CreateRestaurantWrapper";
 import VerifyRestaurants from "./screens/verifyRestaurants/VerifyRestaurants";
 
 import CreateGroupContainer from "./screens/createGroup/CreateGroupContainer";
@@ -41,7 +41,18 @@ const App: React.FC = (props): JSX.Element => {
             element={<CreateGroupContainer />}
           />
           <Route path="group-page/:id" element={<GroupView />} />
-          <Route path="create-restaurant" element={<CreateRestaurant />} />
+          <Route path="create-restaurant" element={<CreateRestaurantWrapper />} />
+        </Route>
+
+        {/* Admin Routes */}
+        <Route
+          path="/"
+          element={
+            <RequireAuth adminAuth={true}>
+              <AppLayout />
+            </RequireAuth>
+          }
+        >
           <Route path="verify-restaurant" element={<VerifyRestaurants />} />
         </Route>
       </Routes>

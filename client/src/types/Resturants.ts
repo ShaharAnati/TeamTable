@@ -11,13 +11,14 @@ export interface Restaurant {
     lat: number;
     lng: number;
   };
-  address?: Address;
+  address?: string;
   contactInfo?: {
     phoneNumber?: string;
     email?: string;
   };
   url?: string;
   isVerified?: boolean;
+  simpleAddress?: string;
 }
 
 export const dayMapping = {
