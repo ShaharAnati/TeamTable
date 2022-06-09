@@ -81,25 +81,25 @@ export const ImageUpload = (props: { setImageAsUrl; imageAsUrl }) => {
 
   return (
     <>
-      <div
-        className="uploaderContainer"
-        style={{
-          backgroundImage: `url(${
-            imageAsUrl.imgUrl ? imageAsUrl.imgUrl : PLACEHOLDER_IMAGE_URL
-          })`,
-        }}
-      >
-        <label htmlFor="contained-button-file">
+      <label htmlFor="contained-button-file">
+        <div
+          className="uploaderContainer"
+          style={{
+            position: "relative",
+            backgroundImage: `url(${
+              imageAsUrl.imgUrl ? imageAsUrl.imgUrl : PLACEHOLDER_IMAGE_URL
+            })`,
+          }}
+        >
           <Input
             id="contained-button-file"
             type="file"
             onChange={handleFireBaseUpload}
           />
-          <Button variant="contained" component="span">
-            <UploadIcon />
-          </Button>
-        </label>
-      </div>
+
+          <div className="img-overlay" />
+        </div>
+      </label>
     </>
   );
 };

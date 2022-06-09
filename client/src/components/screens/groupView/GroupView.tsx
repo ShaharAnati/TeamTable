@@ -15,8 +15,6 @@ import {useNavigate} from "react-router-dom";
 
 const io = require("socket.io-client");
 let socket;
-//TODO: remove localhost
-const connectionPort = "localhost:3000/";
 
 const GroupView: React.FC = (): JSX.Element => {
     const {id} = useParams();
@@ -37,7 +35,7 @@ const GroupView: React.FC = (): JSX.Element => {
     }
 
     function initWebsocket() {
-        socket = io(connectionPort);
+        socket = io();
 
         const curUser = sessionStorage.getItem("user_email");
         socket.emit("joinGroup", {user: curUser, groupId: id});
@@ -67,7 +65,7 @@ const GroupView: React.FC = (): JSX.Element => {
     useEffect(() => {
         const socket = initWebsocket();
         return () => socket.disconnect();
-    }, [connectionPort]);
+    }, []);
 
     return (
         <div>
