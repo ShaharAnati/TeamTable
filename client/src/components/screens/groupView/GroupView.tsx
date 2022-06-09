@@ -116,7 +116,7 @@ const GroupView: React.FC = (): JSX.Element => {
                                                 style={{fontSize: "2vw"}}>
                                         Best Matches
                                     </Typography>
-                                    <div>
+                                    <div style={{marginBottom: "2%"}}>
                                         <DateTimeFilter filters={group.filters}
                                                         onFiltersChange={handleFiltersChange}
                                         />
