@@ -4,13 +4,18 @@ import * as bodyParser from "body-parser";
 import { initLogger } from "./conf/Logger";
 import { withAuth } from "./middlewares/auth";
 import { connectToDatabase } from "./mongoose/DatabaseEndpoint";
-import { Group } from "./models/Group";
+import { ExtendedGroupData, Group } from "./models/Group";
 
 import BuildResourceRouter from "./routers/ResourcesRouter";
 import LoginRouter from "./routers/LoginRouter";
 import GroupsRouter from "./routers/GroupsRouter";
 import RestaurantsRouter from "./routers/RestaurantsRouter";
+import TagsRouter from "./routers/TagsRouter";
+import UsersRouter from "./routers/UsersRouter";
+import AuthRouter from './routers/AuthenticationRouter';
 import { updateGroup } from "./BL/groupsService";
+import { rankByTags } from "./BL/restaurantsBL";
+import { Restaurant } from "./models/Restaurant";
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("../swagger.json");
@@ -26,61 +31,91 @@ const httpServer = app.listen(process.env.PORT || 3000, () => {
 
 const io = new Server(httpServer);
 
-const groupsDataCache = new Map();
+const groupsDataCache = new Map<string, Group>();
 
 const groupsUserSocketId = new Map();
 
 io.on("connection", (socket: any) => {
   console.log(socket.id);
-  socket.on("joinGroup", (data: any) => {
+
+  socket.on("joinGroup", async (data: any) => {
     const { user, groupId } = data;
     socket.join(groupId);
 
-    let group;
+    let extendedGroup: ExtendedGroupData;
 
     if (groupsDataCache.has(groupId)) {
-      group = groupsDataCache.get(groupId);
-      group.members = [...group.members, user];
+      const group: Group = groupsDataCache.get(groupId)!;
+
+      const existingUser = group.members.find(memberObj => memberObj.username === user);
+      if (existingUser) {
+          existingUser.active = true;
+      } else {
+        group.members = [...group.members, { username: user, active: true }];
+      }
+
+      extendedGroup = {
+        ...group,
+        restaurants: await rankByTags(data?.filters?.tags || [], data.members)
+      };
+      
     } else {
-      group = {
+      const group: Group = {
         id: groupId,
-        members: [user],
+        members: [{ username: user, active: true }],
         creator: user,
         filters: {},
       };
 
       groupsDataCache.set(groupId, group);
-    }
+
+      extendedGroup = {...group,  restaurants: []}
+    }    
 
     groupsUserSocketId.set(socket.id, { user, groupId });
 
-    io.to(groupId).emit("groupData", group);
+    io.to(groupId).emit("groupDataChanged", extendedGroup);
 
     console.log("joined group: " + groupId);
-    updateGroup(groupId, group);
+
+    const { restaurants, ...groupToSave} = extendedGroup;
+    updateGroup(groupId, groupToSave);
   });
 
-  socket.on("filtersUpdate", (data: Group) => {
+  socket.on("filtersUpdate", async (data: Group) => {
     const { id: groupId } = data;
-
     groupsDataCache.set(groupId, data);
-    socket.to(groupId).emit("groupData", data);
+
+    const rankedRestaurants: Restaurant[] = await rankByTags(data?.filters?.tags || [], data.members);
+    const dataToReturn: ExtendedGroupData = {
+      restaurants: rankedRestaurants,
+      ...data
+    }
+
+    io.to(groupId).emit("groupDataChanged", dataToReturn);
   });
 
-  socket.on("disconnect", () => {
+  socket.on("disconnect", async () => {
     if (groupsUserSocketId.has(socket.id)) {
       const { user, groupId } = groupsUserSocketId.get(socket.id);
 
-      const group = groupsDataCache.get(groupId);
-      group.members.splice(group.members.indexOf(user), 1);
+      const group = groupsDataCache.get(groupId)!;
+
+      const existingUser = group.members.find(memberObj => memberObj.username === user);
+      if (existingUser) {
+        existingUser.active = false;
+      }
+      
+      const extendedGroup: ExtendedGroupData = {...group, restaurants: []};
+      if(group.members.some( u => u.active)) {
+        extendedGroup.restaurants =  await rankByTags(group?.filters?.tags || [], group.members);
+      }
 
       groupsUserSocketId.delete(socket.id);
-      socket.to(groupId).emit("groupData", group);
+      socket.to(groupId).emit("groupDataChanged", extendedGroup);
+
       updateGroup(groupId, group);
     }
-
-    // TODO
-    // maybe at this point do saving of group to DB
 
     console.log("disconnected");
   });
@@ -97,16 +132,18 @@ const init = async (): Promise<void> => {
   app.use(LoginRouter());
   app.use("/groups", GroupsRouter());
   app.use("/restaurants", RestaurantsRouter());
-
-  // app.use(withAuth);
+  app.use("/tags", TagsRouter());
+  app.use("/users", UsersRouter());
+  app.use("/auth", withAuth, AuthRouter());
 
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-  app.post("/welcome", withAuth, (req, res) => {
+  app.post("/welcome", (req, res) => {
     res.status(200).send("Welcome 🙌 ");
   });
 
   app.use(BuildResourceRouter());
+
 };
 
 init();

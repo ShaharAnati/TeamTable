@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/ShaharAnati/TeamTable#readme",
   "dependencies": {
+    "@types/validator": "^13.7.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.2",
     "dotenv": "^16.0.0",
@@ -42,6 +43,7 @@
     "@types/express": "^4.17.13",
     "@types/jest": "^27.4.1",
     "@types/jsonwebtoken": "^8.5.8",
+    "@types/mongoose": "^5.11.97",
     "@types/node": "^17.0.20",
     "@types/supertest": "^2.0.12",
     "@types/ws": "^8.5.3",

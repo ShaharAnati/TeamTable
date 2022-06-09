@@ -1,8 +1,7 @@
 import React, {useState} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
-import {Button, Grid, Paper, TextField} from "@mui/material";
+import {Button, Grid, Paper, TextField, Typography} from "@mui/material";
 import {LocationState, useAuth} from '../../../auth/AuthProvider';
-import './Login.css'
 
 interface LoginScreenProps {
     postLoginFunc?: () => void
@@ -64,36 +63,53 @@ const Login: React.FC<LoginScreenProps> = (props): JSX.Element => {
     };
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}>
             <Grid>
-                <Paper elevation={10} className={'paper-style'} style={{ padding: '10px' }}>
+                <Paper elevation={0} classes={{root: 'paper-style'}}>
                     <div style={{ marginBottom: '10px' }}>
                         <Grid textAlign={'center'}>
-                            <h2>Sign In</h2>
+                            <Typography variant='h5' color='primary' sx={{fontWeight: 600, margin: '24px 0'}}>
+                                Hi, Welcome Back
+                            </Typography>
+                            <Typography variant="subtitle1" sx={{color: '#9e9e9e', margin: '24px 0'}}>
+                                Enter your credentials to continue
+                            </Typography>
                         </Grid>
-                        <TextField label='Username'
+                        <TextField label='Username / Email Address'
                             name="username"
-                            placeholder='Enter username'
-                            variant="standard"
+                            variant="outlined"
                             value={username}
                             onChange={usernameChange}
                             error={isUsernameInvalid}
-                            helperText={isUsernameInvalid && "required field"}
+                            helperText={isUsernameInvalid ? "required field" : ' '}
                             fullWidth required />
                         <TextField label='Password'
                             name="password"
-                            placeholder='Enter password'
-                            variant="standard"
+                            variant="outlined"
                             type='password'
                             value={password}
                             onChange={passwordChange}
                             error={isPasswordInvalid}
-                            helperText={isPasswordInvalid && "required field"}
+                            helperText={isPasswordInvalid ? "required field" : ' '}
                             fullWidth required />
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        <Button type='submit' color='primary' variant="contained" className={'button-style'} style={{ width: '50%' }} onClick={validate}>Sign in</Button>
+                        <Button type='submit' color='primary' variant="contained" className={'button-style'} onClick={validate} fullWidth>Sign in</Button>
                     </div>
+
+                    <Typography
+                        variant="subtitle2"
+                        sx={{
+                            width: "fit-content",
+                            color: "#414141",
+                            fontWeight: 600,
+                            margin: "auto",
+                            cursor: "pointer",
+                        }}
+                        onClick={() => navigate("/register-screen", { state: { from: location }, replace: true })}
+                        >
+                        Don't have an account?
+                    </Typography>
                 </Paper>
             </Grid>
         </div>

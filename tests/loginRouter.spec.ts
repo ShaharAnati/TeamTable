@@ -14,7 +14,9 @@ describe('Test login router functionality', () => {
       .post('/register')
       .send({
         email: "illi2@gmail.com",
-        password: "illi"
+        password: "illi",
+        phoneNumber: "0545414902",
+        fullName: "shahar anati"
       });
 
       expect(res.statusCode).toEqual(201);
@@ -25,7 +27,9 @@ describe('Test login router functionality', () => {
       .post('/register')
       .send({
         email: "illi2@gmail.com",
-        password: "illi"
+        password: "illi",
+        phoneNumber: "0545414902",
+        fullName: "shahar anati"
       });
 
       expect(res.statusCode).toEqual(409);

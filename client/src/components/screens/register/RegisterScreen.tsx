@@ -1,6 +1,6 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { Button, Grid, InputAdornment, makeStyles, Paper, TextField, Tooltip, Typography } from "@mui/material";
+import { Button, Grid, InputAdornment, Paper, TextField, Tooltip, Typography } from "@mui/material";
 import { LocationState, useAuth } from '../../../auth/AuthProvider';
 import './Login.css'
 import React from 'react';
@@ -23,7 +23,7 @@ const Register = (): JSX.Element => {
 
     const [areAllFieldsValid, setAreAllFieldsValid] = useState<boolean>(false);
     const REQUIRED_FIELDS = [username, password, fullName, phoneNumber];
-    
+
     const auth = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
@@ -34,10 +34,10 @@ const Register = (): JSX.Element => {
 
     useEffect(() => {
         setAreAllFieldsValid(
-            REQUIRED_FIELDS.every(field => field.length > 0) && 
-            !!!usernameErrorText && 
-            !!!passwordErrorText && 
-            !!!fullnameErrorText && 
+            REQUIRED_FIELDS.every(field => field.length > 0) &&
+            !!!usernameErrorText &&
+            !!!passwordErrorText &&
+            !!!fullnameErrorText &&
             !!!phoneNumberErrorText
         )
     }, [
@@ -56,13 +56,13 @@ const Register = (): JSX.Element => {
             setUsernameErrorText('Username is taken!')
         }
     }, [doesUserAlreadyExist])
-    
+
     const validateUsername = (username: string): void => {
         setDoesUserAlreadyExist(false);
         const regex = /^\S+$/;
         if (!username) {
             setUsernameErrorText('Field is required')
-        } else  {
+        } else {
             setUsernameErrorText(regex.test(username) ? '' : 'Username cannot have spaces in it')
         }
     }
@@ -72,7 +72,7 @@ const Register = (): JSX.Element => {
         if (!fullname) {
             setFullnameErrorText('Field is required')
         } else {
-            setFullnameErrorText(regex.test(fullname) ? '' : 'Full name should contain only first and last names') 
+            setFullnameErrorText(regex.test(fullname) ? '' : 'Full name should contain only first and last names')
         }
 
     }
@@ -88,10 +88,10 @@ const Register = (): JSX.Element => {
     }
 
     const validatePassword = (password: string): void => {
-        if (!password) { 
+        if (!password) {
             setPasswordErrorText('Field is required');
-        } else if (validator.isStrongPassword(password, {
-            minLength: 8, 
+        } else if (!validator.isStrongPassword(password, {
+            minLength: 8,
             minLowercase: 1,
             minUppercase: 1,
             minNumbers: 1,
@@ -116,101 +116,113 @@ const Register = (): JSX.Element => {
                 setDoesUserAlreadyExist(true);
             }
         }
-        
+
     };
 
     return (
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}>
             <Grid>
-                <Paper elevation={10} className={'paper-style'} style={{ padding: '10px' }}>
+                <Paper elevation={0} classes={{ root: 'paper-style' }} >
+                    <Grid textAlign={'center'}>
+                        <Typography variant='h5' color='primary' sx={{fontWeight: 600, margin: '24px 0'}}>
+                            Register
+                        </Typography>
+                    </Grid>
                     <div style={{ marginBottom: '10px', maxWidth:'500px' }}>
-                        <Grid textAlign={'center'}>
-                            <h2>Register</h2>
-                        </Grid>
                         <TextField label='Username'
                             name="username"
-                            placeholder='Enter username'
-                            variant="standard"
+                            variant="outlined"              
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             onBlur={() => validateUsername(username)}
                             error={!!usernameErrorText}
-                            helperText={usernameErrorText}
-                            style={{height:'80px' }}
-                            fullWidth required 
+                            helperText={usernameErrorText || ' '}
+                            fullWidth 
+                            required 
                         />
                         <TextField label='Full Name'
                             name="fullname"
                             placeholder='Enter full name'
-                            variant="standard"
+                            variant="outlined"
                             value={fullName}
                             onChange={(e) => setName(e.target.value)}
                             onBlur={() => validateFullName(fullName)}
                             error={!!fullnameErrorText}
-                            helperText={(fullnameErrorText)}
-                            style={{height:'80px' }}
+                            helperText={fullnameErrorText || ' '}
                             fullWidth required 
                         />
                         <TextField label='Phone Number'
                             name="phone"
                             placeholder='Enter phone number'
-                            variant="standard"
+                            variant="outlined"
                             value={phoneNumber}
                             onChange={(e) => setPhoneNumber(e.target.value)}
                             onBlur={() => validatePhoneNumber(phoneNumber)}
                             error={!!phoneNumberErrorText }
-                            helperText={phoneNumberErrorText}
-                            style={{height:'80px' }}
+                            helperText={phoneNumberErrorText || ' '}
                             fullWidth 
                         />
                         <TextField label='Password'
                             name="password"
                             placeholder='Enter password'
-                            variant="standard"
+                            variant="outlined"
                             type='password'
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             onBlur={() => validatePassword(password)}
                             error={!!passwordErrorText}
-                            helperText={passwordErrorText}
+                            helperText={passwordErrorText || ' '}
                             fullWidth required 
-                            style={{height:'80px' }}
                             InputProps={{
-                                startAdornment: ( 
-                                  <InputAdornment position="start">
-                                    <Tooltip 
-                                    aria-multiline={true} 
-                                    title={
-                                        <>
-                                        <Typography color="inherit">A strong password must contains:</Typography>
-                                        <Typography color="inherit">* At least 8 charcters </Typography>
-                                        <Typography color="inherit">* a minimum of 1 lower case letter [a-z]</Typography>
-                                        <Typography color="inherit">* a minimum of 1 upper case letter [A-Z]</Typography>
-                                        <Typography color="inherit">* a minimum of 1 numeric character [0-9] </Typography>
-                                        <Typography color="inherit">* a minimum of 1 special character </Typography>
-                                        </>
-                                    }>  
-                                        <InfoIcon />
-                                    </Tooltip>
-                                  </InputAdornment>
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <Tooltip
+                                            aria-multiline={true}
+                                            title={
+                                                <>
+                                                    <Typography color="inherit">A strong password must contains:</Typography>
+                                                    <Typography color="inherit">* At least 8 charcters </Typography>
+                                                    <Typography color="inherit">* a minimum of 1 lower case letter [a-z]</Typography>
+                                                    <Typography color="inherit">* a minimum of 1 upper case letter [A-Z]</Typography>
+                                                    <Typography color="inherit">* a minimum of 1 numeric character [0-9] </Typography>
+                                                    <Typography color="inherit">* a minimum of 1 special character </Typography>
+                                                </>
+                                            }>
+                                            <InfoIcon />
+                                        </Tooltip>
+                                    </InputAdornment>
                                 )
-                              }}/>
+                            }} />
                     </ div>
 
 
-                    <div style={{ display: 'flex', justifyContent: 'center'}}>
-                        <Button 
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <Button
                             type='submit'
                             color='primary'
                             variant="contained"
                             className={'button-style'}
-                            style={{ width: '50%' }}
                             disabled={!areAllFieldsValid}
                             onClick={() => handleSubmit()}
+                            fullWidth
                         >
                             Sign up
                         </Button>
                     </div>
+                    
+                    <Typography
+                        variant="subtitle2"
+                        sx={{
+                            width: "fit-content",
+                            color: "#414141",
+                            fontWeight: 600,
+                            margin: "auto",
+                            cursor: "pointer",
+                        }}
+                        onClick={() => navigate("/login-screen", { state: { from: location }, replace: true })}
+                        >
+                        Already have an account?
+                    </Typography>
                 </Paper>
             </Grid>
         </div>

@@ -1,0 +1,182 @@
+[
+    {
+        "tagGroupId": "1",
+        "tagGroupName": "constraining-preferences",
+        "constraintLevel": 3,
+        "tags": [
+            {
+                "id": "0",
+                "name": "vegan"
+            },
+            {
+                "id": "1",
+                "name": "vegeterian"
+            },
+            {
+                "id": "8",
+                "name": "kosher"
+            }
+        ]
+    },
+    {
+        "tagGroupId": "1",
+        "tagGroupName": "allergies",
+        "constraintLevel": 3,
+        "tags": [
+            {
+                "id": "2",
+                "name": "gluten-free"
+            },
+            {
+                "id": "3",
+                "name": "dairy-free"
+            },
+            {
+                "id": "4",
+                "name": "nuts-free"
+            }
+        ]
+    },
+    {
+        "tagGroupId": "2",
+        "tagGroupName": "generic-preferences",
+        "constraintLevel": 2,
+        "tags": [
+            {
+                "id": "5",
+                "name": "meat"
+            },
+            {
+                "id": "6",
+                "name": "vegetables"
+            },
+            {
+                "id": "7",
+                "name": "dairy"
+            },
+            {
+                "id": "20",
+                "name": "light"
+            },
+            {
+                "id": "21",
+                "name": "heavy"
+            },
+            {
+                "id": "22",
+                "name": "chicken"
+            },
+            {
+                "id": "23",
+                "name": "fish"
+            },
+            {
+                "id": "24",
+                "name": "mediterranean"
+            },
+            {
+                "id": "25",
+                "name": "home-cooked"
+            },
+            {
+                "id": "26",
+                "name": "healthy"
+            },
+            {
+                "id": "27",
+                "name": "street-food"
+            },
+            {
+                "id": "32",
+                "name": "sweet"
+            },
+            {
+                "id": "33",
+                "name": "dessert"
+            },
+            {
+                "id": "37",
+                "name": "kids"
+            }
+        ]
+    },   
+    {
+        "tagGroupId": "3",
+        "tagGroupName": "specific-food-type",
+        "constraintLevel": 1,
+        "tags": [
+            {
+                "id": "9",
+                "name": "hamburger"
+            },
+            {
+                "id": "10",
+                "name": "asian"
+            },
+            {
+                "id": "11",
+                "name": "pasta"
+            },
+            {
+                "id": "12",
+                "name": "sushi"
+            },
+            {
+                "id": "13",
+                "name": "shwarma"
+            },
+            {
+                "id": "14",
+                "name": "indian"
+            },
+            {
+                "id": "15",
+                "name": "thai"
+            },
+            {
+                "id": "16",
+                "name": "soup"
+            },
+            {
+                "id": "17",
+                "name": "sandwich"
+            },
+            {
+                "id": "18",
+                "name": "salad"
+            },
+            {
+                "id": "19",
+                "name": "hummus"
+            },
+            {
+                "id": "29",
+                "name": "mexican"
+            },
+            {
+                "id": "30",
+                "name": "wraps"
+            },
+            {
+                "id": "31",
+                "name": "italian"
+            },
+            {
+                "id": "34",
+                "name": "pizza"
+            },
+            {
+                "id": "35",
+                "name": "american"
+            },
+            {
+                "id": "36",
+                "name": "hot-dog"
+            },
+            {
+                "id": "38",
+                "name": "cafe"
+            }
+        ]
+    }
+]

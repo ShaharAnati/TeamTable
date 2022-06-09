@@ -1,5 +1,5 @@
 import React from "react";
-import {Avatar, List, ListItem, ListItemAvatar, ListItemText} from "@mui/material";
+import {Avatar, Badge, List, ListItem, ListItemAvatar, ListItemText} from "@mui/material";
 import ImageIcon from "@mui/icons-material/Image";
 import {Group} from "../../../../server/models/Group";
 
@@ -21,7 +21,7 @@ const GroupMembersList: React.FC<GroupMembersListProps> = (props): JSX.Element =
             ? group.members.map((member) => {
                 return (
                     <List
-                        key={member}
+                        key={member.username}
                         sx={{
                             width: "-webkit-fill-available",
                             maxWidth: 360,
@@ -30,11 +30,28 @@ const GroupMembersList: React.FC<GroupMembersListProps> = (props): JSX.Element =
                     >
                         <ListItem>
                             <ListItemAvatar>
+                            <Badge
+                                overlap="circular"
+                                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                variant="dot"
+                                sx={{
+                                    "& .MuiBadge-badge": {
+                                      border: "2px solid white",
+                                      width: "14px",
+                                      height: "14px",
+                                      borderRadius: "50%",
+                                      backgroundColor: member.active
+                                        ? "#44b700"
+                                        : "#e86f6f",
+                                    }
+                                  }}
+                            >
                                 <Avatar>
                                     <ImageIcon />
                                 </Avatar>
+                            </Badge>
                             </ListItemAvatar>
-                            <ListItemText primary={member} />
+                            <ListItemText primary={member.username} />
                         </ListItem>
                     </List>
                 );

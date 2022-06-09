@@ -7,6 +7,8 @@ import UserSchema from '../mongoose/UserSchema';
 
 const buildRouter = (): Router => {
     const router: Router = Router();
+    const TOKEN_EXPIRY_IN_MIN = 15;
+    const TOKEN_EXPIRY_TIME_IN_MS = TOKEN_EXPIRY_IN_MIN * 60 * 1000;
 
     // Register
     router.post("/register", async (req, res) => {
@@ -52,13 +54,31 @@ const buildRouter = (): Router => {
                 { user_id: user._id, email },
                 process.env.TOKEN_KEY || "",
                 {
-                    expiresIn: "2h",
+                    expiresIn: `${TOKEN_EXPIRY_IN_MIN}m`,
                 }
             );
+
+            const refreshToken = jwt.sign(
+                { user_id: user._id, email },
+                process.env.REFRESH_KEY || "",
+                {
+                    expiresIn: "24h",
+                }
+            );
+
+
+            if (user.tokens == null) {
+                user.tokens = [refreshToken]
+            } else {
+                user.tokens.push(refreshToken);
+            }
+            await user.save();
+
             // return new user
-            res.status(201).json({ user, token });
+            res.status(200).json({ user, token, expiresIn: TOKEN_EXPIRY_TIME_IN_MS, refreshToken });
         } catch (err) {
             console.log(err);
+            return res.status(409).send("User Already Exist. Please Login");
         }
     });
 
@@ -94,19 +114,98 @@ const buildRouter = (): Router => {
                     { user_id: user._id, email },
                     process.env.TOKEN_KEY || "",
                     {
-                        expiresIn: "2h",
+                        expiresIn: `${TOKEN_EXPIRY_IN_MIN}m`,
                     }
                 );
 
-                res.status(200).json({ user, token });
+                const refreshToken = jwt.sign(
+                    { user_id: user._id, email },
+                    process.env.REFRESH_KEY || "",
+                    {
+                        expiresIn: "24h",
+                    }
+                );
+
+                if (user.tokens == null) {
+                    user.tokens = [refreshToken]
+                } else {
+                    user.tokens.push(refreshToken);
+                }
+                await user.save()
+
+                return res.status(200).json({ user, token, expiresIn: TOKEN_EXPIRY_TIME_IN_MS, refreshToken });
             }
-            res.status(400).json("Invalid Credentials");
+            return res.status(400).json("Invalid Credentials");
         } catch (err) {
             console.log(err);
+            return res.status(400).json("Invalid Credentials");
         }
     });
+
+
+    router.post("/refresh", async (req, res) => {
+        let receivedRefreshToken = req.headers['authorization']
+        // const token = authHeaders && authHeaders.split(' ')[1];
+
+        if (!receivedRefreshToken) {
+            return res.status(401).json("Invalid token,try login again");
+        }
+        try {
+            jwt.verify(receivedRefreshToken, process.env.REFRESH_KEY || "", async (err: any, userInfo: any) => {
+                if (err) {
+                    // Wrong Refesh Token
+                    return res.status(401).json({ message: 'Unauthorized' });
+                }
+                try {
+                    const userId = userInfo.user_id;
+
+                    let user = await UserSchema.findById(userId)
+                    if (!user) {
+                        return res.status(403).send('Invalid request');
+                    }
+                    if (!user.tokens.includes(receivedRefreshToken)) {
+                        user.tokens = []
+                        await user.save();
+                        return res.status(403).send('Invalid request');
+                    }
+                    // Correct token we send a new access token
+                    const accessToken = jwt.sign(
+                        { user_id: user._id, email: user.email },
+                        process.env.TOKEN_KEY || "",
+                        {
+                            expiresIn: `${TOKEN_EXPIRY_IN_MIN}m`,
+                        }
+                    );
+        
+                    // Correct token we send a new access token
+                    const refreshToken = jwt.sign(
+                        { user_id: user._id, email: user.email },
+                        process.env.REFRESH_KEY || "",
+                        {
+                            expiresIn: "24h"
+                        }
+                    );
+        
+                    user.tokens[user.tokens.indexOf(receivedRefreshToken)] = refreshToken;
+                    await user.save();
+                    return res.status(200).send({ user, token: accessToken, expiresIn: TOKEN_EXPIRY_TIME_IN_MS, refreshToken });
+                } catch (e) {
+                    res.status(403).send(err.message);
+                }
+            })
+        } catch(error) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+    });
+
+
+        
+        
+
     return router;
+
 }
+
 
 export default buildRouter;
 

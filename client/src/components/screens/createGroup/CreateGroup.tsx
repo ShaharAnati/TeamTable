@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import './CreateGroup.css'
@@ -15,6 +15,15 @@ const CreateGroup: React.FC<CreateGroupProps> = (props): JSX.Element => {
 
     const { onSubmit, groupName, onGroupNameChange } = props;
 
+    const [fieldError, setFieldError] = useState(false);
+    
+    const handleSubmit = () => {
+        if (!groupName) {
+            setFieldError(true);
+        } else {
+            onSubmit();
+        }
+    }
     
     return (
         <div className={'create-group-container'}>
@@ -25,16 +34,18 @@ const CreateGroup: React.FC<CreateGroupProps> = (props): JSX.Element => {
                     placeholder={['Lunch with the office', 'Family dinner', 'Double date brunch'][Math.floor(Math.random()*3)]}
                     variant="standard"
                     value={groupName}
-                    onChange={onGroupNameChange}
-                    error={false}
+                    onChange={(e) => {
+                        setFieldError(false); 
+                        return onGroupNameChange(e);
+                    }}
+                    error={fieldError}
                     fullWidth 
+                    required
                 />
                 <Button 
-                    onClick={() => onSubmit()}
+                    onClick={handleSubmit}
                     variant="contained"
                     sx={{backgroundColor: '#3ED3D6'}}
-                    component={Link}
-                    to="/group-page"
                 >
                     Create Group
                 </Button>
