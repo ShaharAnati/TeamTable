@@ -6,7 +6,8 @@
   "scripts": {
     "start": "ts-node server/server.ts",
     "test": "jest --passWithNoTests",
-    "swagger-autogen": "node ./swagger.js"
+    "swagger-autogen": "node ./swagger.js",
+    "heroku-postbuild": "npm i && cd ./client && npm i && npm run build"
   },
   "repository": {
     "type": "git",

@@ -39,7 +39,7 @@ export const VerifyRestaurants = (props): JSX.Element => {
     data: restaurantsToVerify,
   } = useQuery(["repoData", status], () => {
     return axios
-      .get(`http://localhost:3000/restaurants?status=${status}`)
+      .get(`/restaurants?status=${status}`)
       .then((res) => {
         return res.data;
       })
@@ -57,7 +57,7 @@ export const VerifyRestaurants = (props): JSX.Element => {
   const approveRestaurant = async (restaurantId: string) => {
     try {
       await axios
-        .patch(`http://localhost:3000/restaurants/${restaurantId}/approve`)
+        .patch(`/restaurants/${restaurantId}/approve`)
         .then((res) => {
           refetch();
         });
@@ -69,7 +69,7 @@ export const VerifyRestaurants = (props): JSX.Element => {
   const declineRestaurant = (restaurantId: string) => {
     try {
       axios
-        .delete(`http://localhost:3000/restaurants/${restaurantId}/decline`)
+        .delete(`/restaurants/${restaurantId}/decline`)
         .then((res) => {
           refetch();
         });
