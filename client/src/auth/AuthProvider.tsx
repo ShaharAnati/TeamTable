@@ -15,18 +15,21 @@ export enum TokenState {
 };
 
 interface LoggedInUser {
-  email: string;
+  email?: string;
   token: string;
   isAdmin?: boolean
 }
 
 interface AuthContextInterface {
   loggedInUser: LoggedInUser;
+  // likedRestaurants: string[];
   signin: (email: string, password: string) => Promise<any>;
   signout: () => void;
   register: (email: string, password: string, phoneNumber: string, fullName: string) => Promise<void>;
   isTokenValid: () => TokenState;
   refreshToken: () => Promise<void>;
+  // removeRestaurantFromLiked: (restaurantId: string) => void;
+  // addRestaurantToLiked: (restaurantId: string) => void
 }
 
 export const AuthContext = createContext<AuthContextInterface>(null!);
@@ -38,11 +41,12 @@ const sessionStorageUser = {
   isAdmin: sessionStorage.getItem('user_isAdmin') ? JSON.parse(sessionStorage.getItem("user_isAdmin")) : false,
 };
 
-export const isUserLoggedIn = (): boolean => 
-    !!sessionStorage.getItem('user_token')
+export const isUserLoggedIn = (): boolean =>
+  !!sessionStorage.getItem('user_token')
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [loggedInUser, setLoggedInUser] = useState<any>(sessionStorageUser);
+  const [loggedInUser, setLoggedInUser] = useState<LoggedInUser>(sessionStorageUser);
+
   const signin = async (email: string, password: string): Promise<void> => {
     try {
       const res: AxiosResponse<any> = await axios.post("/login", {
@@ -75,6 +79,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     sessionStorage.removeItem('user_email');
     sessionStorage.removeItem('user_isAdmin');
     sessionStorage.removeItem('token_expiry_time');
+
     setLoggedInUser(null);
     return;
   };
@@ -88,7 +93,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         fullName
       });
 
-      setLoggedInUser(res.data.token);
+      setLoggedInUser({ email, token: res.data.token });
       sessionStorage.setItem('user_token', res.data.token);
       sessionStorage.setItem('user_email', email);
       sessionStorage.setItem('user_isAdmin', res.data.user?.isAdmin);
@@ -110,16 +115,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       throw error;
     }
   }
-  
+
   const refreshToken = async (): Promise<void> => {
     try {
       // const res = await fetch
       const res = await axios.post('/refresh', {}, {
         headers: {
-            'authorization' : sessionStorage.getItem('refresh_token')
+          'authorization': sessionStorage.getItem('refresh_token')
         },
       })
-  
+
       if (res.status === 200) {
         sessionStorage.setItem('user_token', res.data.token);
         sessionStorage.setItem('token_expiry_time', Date.now() + res.data.expiresIn);
@@ -128,8 +133,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         sessionStorage.setItem('refresh_token', res.data.refreshToken);
         setLoggedInUser({email: res.data.user?.email, token: res.data.token, isAdmin: res.data.user?.isAdmin})
       }
-  
-    } catch (error) {}
+
+    } catch (error) { }
   };
 
   const isTokenValid = (): TokenState => {
@@ -137,12 +142,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       Date.now() < +sessionStorage.getItem('token_expiry_time')
         ? TokenState.VALID
         : !!sessionStorage.getItem('token_expiry_time')
-            ? TokenState.EXPIRED
-            : TokenState.NON_EXISTENT
+          ? TokenState.EXPIRED
+          : TokenState.NON_EXISTENT
     )
   }
-
-  const value = { loggedInUser, signin, signout, register, isTokenValid, refreshToken };
+  
+  const value = {
+    loggedInUser, signin, signout, register, isTokenValid, refreshToken
+  };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
