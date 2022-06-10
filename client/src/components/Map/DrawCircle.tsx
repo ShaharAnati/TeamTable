@@ -8,10 +8,11 @@ import {
 } from "mapbox-gl-draw-circle";
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
+import { extendDrawBar } from "src/helpers/extend-draw-bar";
 
 type Props = {};
 
-function CircleDraw({}: Props) {
+function DrawCircle({}: Props) {
   useControl(
     () => {
       const draw = new MapboxDraw({
@@ -30,7 +31,19 @@ function CircleDraw({}: Props) {
         },
       });
 
-      return draw;
+      const drawBar = new extendDrawBar({
+        draw,
+        buttons: [
+          {
+            on: "click",
+            action: () => draw.changeMode('drag_circle'),
+            classes: ["draw-bar-circle"],
+            buttonTitle: 'Select Area'
+          },
+        ],
+      });
+
+      return drawBar;
     },
     {
       position: "top-right",
@@ -40,4 +53,4 @@ function CircleDraw({}: Props) {
   return null;
 }
 
-export default CircleDraw;
+export default DrawCircle;

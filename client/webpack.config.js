@@ -21,7 +21,10 @@ module.exports = (env, argv) => {
         devtool: argv.mode === 'development' ? 'inline-source-map' : false,
         resolve: {
             extensions: [".ts", ".tsx", ".js"],
-            plugins: [new TsconfigPathsPlugin()]
+            plugins: [new TsconfigPathsPlugin()],
+            fallback: {
+                "fs": false
+            }
         },
         module: {
             rules: [

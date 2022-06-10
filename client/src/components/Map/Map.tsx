@@ -4,7 +4,8 @@ import maplibregl from "maplibre-gl";
 
 import "maplibre-gl/dist/maplibre-gl.css";
 import GeocoderControl from "./GeocoderControl";
-import CircleDraw from "./CircleDraw";
+import DrawCircle from "./DrawCircle";
+import './Map.css';
 
 export const ResMap = (props) => {
   const mapRef = React.useRef<MapRef>();
@@ -33,7 +34,7 @@ export const ResMap = (props) => {
           address={address}
         />
 
-        <CircleDraw />
+        <DrawCircle />
 
         {location && (
           <Marker
