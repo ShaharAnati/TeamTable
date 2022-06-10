@@ -17,7 +17,7 @@ setRTLTextPlugin(
 const DEFAULT_VIEWPORT = {
   longitude: 34.77876808975043,
   latitude: 32.071869249621386,
-  zoom: 14,
+  zoom: 13,
 };
 
 export const ResMap = (props) => {
@@ -52,12 +52,11 @@ export const ResMap = (props) => {
   };
 
   return (
-    <div style={{ height: "400px", width: "100%" }} onKeyDown={onKeyDown}>
+    <div style={{ height: "100%", width: "100%" }} onKeyDown={onKeyDown}>
       <MapGL
         {...viewport}
         width="100%"
         height="100%"
-        style={{ height: "400px", width: "100%" }}
         ref={mapRef}
         // @ts-ignore
         mapLib={maplibregl}
