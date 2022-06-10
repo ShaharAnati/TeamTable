@@ -26,7 +26,9 @@ import axios from "axios";
 
 import "./add-res.css";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-import { ResMap } from "src/components/Map/MapWithDraw";
+import { ResMap } from "src/components/Map/Map";
+import { ResMap as MapWithDraw } from "src/components/Map/MapWithDraw";
+
 import {
   Box,
   Card,
@@ -334,6 +336,8 @@ export const CreateRestaurant = ({
           address={formik.values.address}
           location={formik.values.location}
         />
+        <br/>
+        <MapWithDraw />
 
         <CardHeader
           title="Operating Hours"
