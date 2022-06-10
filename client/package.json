@@ -27,6 +27,8 @@
     "google-map-react": "^2.1.10",
     "lodash": "^4.17.21",
     "mapbox-gl": "npm:empty-npm-package@^1.0.0",
+    "@mapbox/mapbox-gl-draw": "1.1.1",
+    "mapbox-gl-draw-circle": "^1.1.2",
     "maplibre-gl": "^1.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
