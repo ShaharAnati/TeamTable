@@ -19,6 +19,7 @@ export interface Restaurant {
   url?: string;
   isVerified?: boolean;
   simpleAddress?: string;
+  pricePoint?: number;
 }
 
 export const dayMapping = {

@@ -90,6 +90,7 @@ export const CreateRestaurant = ({
     name: restaurant?.name || "",
     description: restaurant?.description || "",
     tags: restaurant?.tags || [],
+    pricePoint: restaurant?.pricePoint || 2,
     phoneNumber: restaurant?.contactInfo?.phoneNumber || "",
     email: restaurant?.contactInfo?.email || "",
     openingTimes: restaurant?.openingTimes || {
@@ -105,6 +106,7 @@ export const CreateRestaurant = ({
     location: restaurant?.location || null,
     url: restaurant?.url || "",
     imgUrl: restaurant?.imgUrl || null,
+    isVerified: restaurant?.isVerified || false
   };
 
   const validateTimes = (values, day: number): void => {
@@ -155,8 +157,9 @@ export const CreateRestaurant = ({
           phoneNumber: formik.values.phoneNumber,
           email: formik.values.email,
         },
+        pricePoint: formik.values.pricePoint,
         url: formik.values.url,
-        isVerified: false,
+        isVerified: INITIAL_VALUES.isVerified,
         openingTimes: formatOpeningTimes(formik.values.openingTimes),
         address: formik.values.address,
         imgUrl: imageAsUrl.imgUrl,
@@ -341,10 +344,13 @@ export const CreateRestaurant = ({
             }}
           >
             <PriceRating
-              name="customized-color"
               getLabelText={(value: number) =>
                 `${value} Heart${value !== 1 ? "s" : ""}`
               }
+              id="pricePoint"
+              name="pricePoint"
+              onChange={formik.handleChange}
+              value={formik.values.pricePoint}
               defaultValue={2}
               max={4}
               icon={<MoneyIcon fontSize="inherit" />}
