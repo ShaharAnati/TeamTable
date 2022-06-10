@@ -8,7 +8,7 @@ import Restaurant from "./restaurant/Restauant";
 import {Filters} from "src/types/Group";
 import useUserLikedRestaurants from "src/hooks/useUserLikedRestaurants";
 import {useAuth} from "src/auth/AuthProvider";
-import {Restaurant as TypedRestaurant} from "../../../../../../server/models/Restaurant";
+import {Restaurant as TypedRestaurant} from "src/types/Resturants";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -29,6 +29,9 @@ export const AllRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.Elemen
 
 
   useEffect(() => {
+    const filterByPrice = (restaurant: TypedRestaurant) =>
+    !filters.priceRange || filters.priceRange.length === 0 || filters.priceRange.indexOf(restaurant.pricePoint) > -1;
+
     const filterByDay = (restaurant) =>
       !filters.day || restaurant.openingTimes[filters.day] != null;
 
@@ -55,6 +58,7 @@ export const AllRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.Elemen
         ? restaurants
             .filter(filterByDay)
             .filter(filterByHour)
+            .filter(filterByPrice)
         : []
     );
   }, [restaurants, filters]);

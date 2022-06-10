@@ -2,6 +2,7 @@ export type Filters = {
     day?: string;
     hour?: string;
     tags?: string[]
+    priceRange?: number[]
 }
 
 export interface Group {
