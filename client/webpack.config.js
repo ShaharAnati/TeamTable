@@ -24,6 +24,9 @@ module.exports = (env, argv) => {
             plugins: [new TsconfigPathsPlugin()],
             fallback: {
                 "fs": false
+            },
+            alias: {
+                "mapbox-gl" : "maplibre-gl"
             }
         },
         module: {

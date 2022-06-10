@@ -1,11 +1,9 @@
 import * as React from "react";
-import { Map as ReactMap, MapRef, Marker, useControl } from "react-map-gl";
+import { Map as ReactMap, MapRef, Marker, useControl } from "react-map-gl-v7";
 import maplibregl from "maplibre-gl";
 
 import "maplibre-gl/dist/maplibre-gl.css";
 import GeocoderControl from "./GeocoderControl";
-import DrawCircle from "./DrawCircle";
-import './Map.css';
 
 export const ResMap = (props) => {
   const mapRef = React.useRef<MapRef>();
@@ -33,8 +31,6 @@ export const ResMap = (props) => {
           setAddress={setAddress}
           address={address}
         />
-
-        <DrawCircle />
 
         {location && (
           <Marker

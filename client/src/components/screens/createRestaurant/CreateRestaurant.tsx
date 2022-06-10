@@ -26,7 +26,7 @@ import axios from "axios";
 
 import "./add-res.css";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-import { ResMap } from "src/components/Map/Map";
+import { ResMap } from "src/components/Map/MapWithDraw";
 import {
   Box,
   Card,

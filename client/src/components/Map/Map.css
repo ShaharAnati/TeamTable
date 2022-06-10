@@ -1,4 +1,0 @@
-.draw-bar-circle::after {
-  content: "〇";
-  padding-left: 1px;
-}
