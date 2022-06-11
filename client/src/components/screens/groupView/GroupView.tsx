@@ -64,11 +64,6 @@ const GroupView: React.FC = (): JSX.Element => {
         socket.emit("filtersUpdate", updatedGroup);
     };
 
-    const handleSelectedAreaChange = useCallback((newArea: any) =>  {
-        console.log('got1')
-        handleFiltersChange({ ...group?.filters, selectedArea: newArea })
-    },[group])
-
     useEffect(() => {
         const socket = initWebsocket();
         return () => socket.disconnect();
@@ -143,7 +138,7 @@ const GroupView: React.FC = (): JSX.Element => {
                 </Grid>
             </Container>
             </Box>
-            <CollapsableMap filters={group?.filters} selectedArea={group?.filters?.selectedArea} onSelectedAreaChange={handleSelectedAreaChange}/>
+            <CollapsableMap filters={group?.filters} onFiltersChange={handleFiltersChange} />
         </Box>
     );
 };

@@ -4,12 +4,11 @@ import { Box, Button, Collapse, ToggleButton } from "@mui/material";
 import { ResMap as MapWithDraw } from "./MapWithDraw";
 
 type Props = {
-    selectedArea?: any;
-    filters: any;
-    onSelectedAreaChange: Function;
+  filters: any;
+  onFiltersChange: Function;
 };
 
-function CollapsableMap({filters,selectedArea, onSelectedAreaChange}: Props) {
+function CollapsableMap({ filters, onFiltersChange }: Props) {
   const [expanded, setExpanded] = useState(true);
 
   return (
@@ -26,7 +25,7 @@ function CollapsableMap({filters,selectedArea, onSelectedAreaChange}: Props) {
       </Box>
       <Collapse in={expanded} orientation="horizontal" sx={{ height: "100%" }}>
         <Box sx={{ height: "100%", width: "420px" }}>
-          <MapWithDraw selectedArea={filters?.selectedArea} onSelectedAreaChange={onSelectedAreaChange} />
+          <MapWithDraw filters={filters} onFiltersChange={onFiltersChange} />
         </Box>
       </Collapse>
     </Box>

@@ -9,6 +9,7 @@ import {Filters} from "src/types/Group";
 import useUserLikedRestaurants from "src/hooks/useUserLikedRestaurants";
 import {useAuth} from "src/auth/AuthProvider";
 import {Restaurant as TypedRestaurant} from "src/types/Resturants";
+import { isPointInPolygon } from "src/helpers/filter-point-in-ploygon";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -53,11 +54,16 @@ export const AllRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.Elemen
       );
     };
 
-    console.log(filters.selectedArea)
+    const filterBySelectedArea = (restaurant) => {
+      if (!filters?.selectedArea) return true;
+      if (!restaurant.location) return false;
+      return isPointInPolygon(restaurant.location, filters.selectedArea);
+    }
 
     setFilteredRestaurants(
       restaurants
         ? restaurants
+            .filter(filterBySelectedArea)
             .filter(filterByDay)
             .filter(filterByHour)
             .filter(filterByPrice)

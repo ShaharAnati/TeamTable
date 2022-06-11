@@ -21,17 +21,21 @@ const DEFAULT_VIEWPORT = {
 };
 
 type Props = {
-  selectedArea?: any;
-  onSelectedAreaChange: Function;
+  filters: any;
+  onFiltersChange: Function;
 };
 
 export const ResMap = (props: Props) => {
-  const { selectedArea, onSelectedAreaChange } = props;
+  const { filters, onFiltersChange } = props;
 
   const mapRef = useRef<MapRef>();
   const editorRef = useRef<any>()!;
 
-  const [localFeatures, setLocalFeatures] = useState([]);
+  const featureExist = !!filters?.selectedArea;
+
+  const [localFeatures, setLocalFeatures] = useState(
+    filters?.selectedArea ? [filters.selectedArea] : []
+  );
 
   const [viewport, setViewport] = useState(DEFAULT_VIEWPORT);
   const [modeHandler, setModeHandler] = useState<any>(
@@ -39,24 +43,20 @@ export const ResMap = (props: Props) => {
   );
 
   useEffect(() => {
-    console.log('got3')
-
-    setLocalFeatures(selectedArea ? [selectedArea] : []);
-  }, [selectedArea]);
+    setLocalFeatures(filters?.selectedArea ? [filters.selectedArea] : []);
+  }, [filters?.selectedArea]);
 
   useEffect(() => {
-    console.log('got2')
-
-    onSelectedAreaChange(localFeatures);
-  }, [onSelectedAreaChange, localFeatures]);
-
-  useEffect(() => {
-    if (localFeatures.length === 0) {
+    if (!featureExist) {
       setModeHandler(new DrawCircleFromCenterMode());
     } else {
       setModeHandler(new EditingMode());
     }
-  }, [localFeatures.length]);
+  }, [featureExist]);
+
+  const handleSelectionChnage = (localFeatures) => {
+    onFiltersChange({ ...filters, selectedArea: localFeatures[0] });
+  };
 
   const onKeyDown = (event) => {
     if (["Delete", "Backspace"].includes(event.key)) {
@@ -65,13 +65,24 @@ export const ResMap = (props: Props) => {
       const selectedFeatureIndex = editor?.state.selectedFeatureIndex;
       if (selectedFeatureIndex == null) return;
 
-      localFeatures.splice(selectedFeatureIndex, 1);
-      setLocalFeatures(localFeatures);
+      handleSelectionChnage([null]);
+    }
+  };
+
+  const onMouseUp = (event) => {
+    if (localFeatures.length > 0) {
+      if (localFeatures[0] !== filters?.selectedArea) {
+        handleSelectionChnage(localFeatures);
+      }
     }
   };
 
   return (
-    <div style={{ height: "100%", width: "100%" }} onKeyDown={onKeyDown}>
+    <div
+      style={{ height: "100%", width: "100%" }}
+      onKeyDown={onKeyDown}
+      onMouseUp={onMouseUp}
+    >
       <MapGL
         {...viewport}
         width="100%"
