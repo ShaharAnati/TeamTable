@@ -16,3 +16,11 @@
 .single-tag {
   margin: 3px 3px 0 0;
 }
+
+.scroll-gradient {
+  position: absolute;
+  height: 30px;
+  bottom: 48px;
+  width: 100%;
+  background: linear-gradient(transparent, #f2f8f9);
+}

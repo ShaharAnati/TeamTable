@@ -166,7 +166,7 @@ const GroupView: React.FC = (): JSX.Element => {
               )}
             </div>
           </Box>
-                  <Box sx={{padding: '16px', overflow: 'auto'}}>
+                  <Box sx={{ overflow: 'auto', width: '100%'}}>
 
                   <AllRestaurants
                     restaurants={restaurants}
@@ -179,6 +179,7 @@ const GroupView: React.FC = (): JSX.Element => {
                     onRestaurantClick={(restaurant) =>
                       setSelectedRestaurant(restaurant)
                     }
+                    pagination={true}
                   />
                   </Box>
         </Box>
