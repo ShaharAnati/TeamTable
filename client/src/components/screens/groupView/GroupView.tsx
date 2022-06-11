@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from "react";
-import {Box, Button, Container, Grid, Typography,} from "@mui/material";
+import {Box, Button, CircularProgress, Container, Grid, Typography,} from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {useParams} from "react-router";
 import {Filters} from "src/types/Group";
@@ -69,7 +69,12 @@ const GroupView: React.FC = (): JSX.Element => {
         return () => socket.disconnect();
     }, []);
 
-    if (!socket) return null;
+    if (!socket || !group)
+        return (
+            <Box display='flex' justifyContent='center' alignItems='center' sx={{ height: "100%", width: "100%" }}>
+                <CircularProgress size={60} />
+            </Box>
+        );
 
     return (
         <Box sx={{display:'flex', height:'100%'}}>
