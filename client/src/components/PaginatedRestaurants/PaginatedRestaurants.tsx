@@ -85,7 +85,9 @@ export const PaginatedRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.
                     paddingBottom: "1%"
                 }}
             >
-                <IconButton onClick={handlePrev} disabled={pageNumber === 1}>
+                <IconButton onClick={handlePrev} disabled={pageNumber === 1} 
+                    style={{height: 'min-content',
+                            alignSelf: 'center'}}>
                     <ArrowBackIosIcon fontSize={"large"}/>
                 </IconButton>
                 {paginatedRestaurants?.map((restaurant, i) => (
@@ -94,7 +96,9 @@ export const PaginatedRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.
                                     likedRestaurants={userLikedRestaurantsQuery && userLikedRestaurantsQuery.data}/>
                     </div>
                 ))}
-                <IconButton onClick={handleNext} disabled={pageNumber === maxPageNumber}>
+                <IconButton onClick={handleNext} disabled={pageNumber === maxPageNumber} 
+                        style={{height: 'min-content',
+                        alignSelf: 'center'}}>
                     <ArrowForwardIosIcon fontSize={"large"}/>
                 </IconButton>
             </div>
