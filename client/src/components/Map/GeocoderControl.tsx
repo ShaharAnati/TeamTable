@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { useControl ,MapRef } from 'react-map-gl';
+import { useControl ,MapRef } from 'react-map-gl-v7';
 
 import { Address } from '../../types/Resturants';
 

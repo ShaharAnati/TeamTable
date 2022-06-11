@@ -7,6 +7,11 @@ import _ from "lodash";
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+
+import { styled } from "@mui/material/styles";
+import Rating from "@mui/material/Rating";
+import MoneyIcon from "@mui/icons-material/AttachMoney";
+
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
@@ -52,6 +57,15 @@ type Props = {
   onEditCallback?: Function;
 };
 
+const PriceRating = styled(Rating)({
+  "& .MuiRating-iconFilled": {
+    color: "#8dc149",
+  },
+  "& .MuiRating-iconHover": {
+    color: "#8dc149",
+  },
+});
+
 export const CreateRestaurant = ({
   restaurant,
   isEditMode,
@@ -68,7 +82,7 @@ export const CreateRestaurant = ({
     axios.get("/tags").then((tagsResponse) => {
       setTagOptions(tagsResponse.data);
     });
-  }, [])
+  }, []);
 
   const navigate = useNavigate();
 
@@ -76,6 +90,7 @@ export const CreateRestaurant = ({
     name: restaurant?.name || "",
     description: restaurant?.description || "",
     tags: restaurant?.tags || [],
+    pricePoint: restaurant ? ( restaurant.pricePoint ?  restaurant.pricePoint : 0) : 2,
     phoneNumber: restaurant?.contactInfo?.phoneNumber || "",
     email: restaurant?.contactInfo?.email || "",
     openingTimes: restaurant?.openingTimes || {
@@ -91,6 +106,7 @@ export const CreateRestaurant = ({
     location: restaurant?.location || null,
     url: restaurant?.url || "",
     imgUrl: restaurant?.imgUrl || null,
+    isVerified: restaurant?.isVerified || false
   };
 
   const validateTimes = (values, day: number): void => {
@@ -141,8 +157,9 @@ export const CreateRestaurant = ({
           phoneNumber: formik.values.phoneNumber,
           email: formik.values.email,
         },
+        pricePoint: formik.values.pricePoint,
         url: formik.values.url,
-        isVerified: false,
+        isVerified: INITIAL_VALUES.isVerified,
         openingTimes: formatOpeningTimes(formik.values.openingTimes),
         address: formik.values.address,
         imgUrl: imageAsUrl.imgUrl,
@@ -294,29 +311,53 @@ export const CreateRestaurant = ({
             />
           </Grid>
         </Grid>
-        <Box sx={{ margin: "0 32px", marginBottom: 4 }}>
-          <Autocomplete
-            multiple
-            id="restaurant-tags"
-            value={formik.values.tags}
-            options={tagOptions}
-            getOptionLabel={(option) => option}
-            defaultValue={formik.values.tags}
-            onChange={(event, value) => formik.setFieldValue("tags", value)}
-            size="small"
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                className="form-input"
-                variant="outlined"
-                label="Tags"
-                placeholder="Choose your tags"
-                error={formik.touched.tags && Boolean(formik.errors.tags)}
-                helperText={formik.touched.tags && formik.errors.tags}
-              />
-            )}
-          />
-        </Box>
+        <Grid container spacing={4} sx={{ padding: "24px 32px" }}>
+          <Grid item xs={8}>
+            <Autocomplete
+              multiple
+              id="restaurant-tags"
+              value={formik.values.tags}
+              options={tagOptions}
+              getOptionLabel={(option) => option}
+              defaultValue={formik.values.tags}
+              onChange={(event, value) => formik.setFieldValue("tags", value)}
+              size="small"
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  className="form-input"
+                  variant="outlined"
+                  label="Tags"
+                  placeholder="Choose your tags"
+                  error={formik.touched.tags && Boolean(formik.errors.tags)}
+                  helperText={formik.touched.tags && formik.errors.tags}
+                />
+              )}
+            />
+          </Grid>
+          <Grid
+            item
+            xs={4}
+            sx={{
+              display: 'flex',
+              justifyContent: 'center'
+            }}
+          >
+            <PriceRating
+              getLabelText={(value: number) =>
+                `${value} Heart${value !== 1 ? "s" : ""}`
+              }
+              id="pricePoint"
+              name="pricePoint"
+              onChange={formik.handleChange}
+              value={formik.values.pricePoint}
+              defaultValue={2}
+              max={4}
+              icon={<MoneyIcon fontSize="inherit" />}
+              emptyIcon={<MoneyIcon fontSize="inherit" />}
+            />
+          </Grid>
+        </Grid>
 
         <CardHeader
           title="Location"
