@@ -8,7 +8,7 @@ import Restaurant from "./restaurant/Restauant";
 import {Filters} from "src/types/Group";
 import useUserLikedRestaurants from "src/hooks/useUserLikedRestaurants";
 import {useAuth} from "src/auth/AuthProvider";
-import {Restaurant as TypedRestaurant} from "src/types/Resturants";
+import { Restaurant as TypedRestaurant} from "src/types/Resturants";
 import { isPointInPolygon } from "src/helpers/filter-point-in-ploygon";
 
 dayjs.extend(isSameOrAfter);
@@ -17,10 +17,12 @@ dayjs.extend(isSameOrBefore);
 interface AllRestaurantsProps {
   filters: Filters;
   restaurants: TypedRestaurant[];
+  selectedRestaurant?: TypedRestaurant;
+  onRestaurantClick?: (restaurant: TypedRestaurant) => void;
 }
 
 export const AllRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.Element => {
-  const { filters, restaurants } = props;
+  const { filters, restaurants, selectedRestaurant, onRestaurantClick } = props;
 
   const { loggedInUser } = useAuth();
   const userLikedRestaurantsQuery = useUserLikedRestaurants( loggedInUser ? loggedInUser.email: null);
@@ -80,8 +82,23 @@ export const AllRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.Elemen
       }}
     >
       {filteredRestaurants?.map((restaurant, i) => (
-        <div key={i} style={{ margin: "auto", padding: "0 16px 50px 16px" }}>
-          <Restaurant restaurant={restaurant} chosedTags={filters.tags} likedRestaurants={loggedInUser && loggedInUser.email ? userLikedRestaurantsQuery.data: []}/>
+        <div
+          key={i}
+          className={`restaurant-card-wrapper ${
+            restaurant === selectedRestaurant ? "selected" : ""
+          }`}
+          style={{ margin: "auto", padding: "0 16px 50px 16px" }}
+          onClick={() => onRestaurantClick && onRestaurantClick(restaurant)}
+        >
+          <Restaurant
+            restaurant={restaurant}
+            chosedTags={filters.tags}
+            likedRestaurants={
+              loggedInUser && loggedInUser.email
+                ? userLikedRestaurantsQuery.data
+                : []
+            }
+          />
         </div>
       ))}
     </div>

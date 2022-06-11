@@ -10,7 +10,7 @@ import PricePointsFilter from "../findRestaurants/PriceFilter";
 import {AllRestaurants} from "../findRestaurants/restaurants/allRestaurants";
 import "./GroupView.css";
 import {ExtendedGroupData, Group} from "../../../../../server/models/Group";
-import {Restaurant} from "../../../../../server/models/Restaurant";
+import {Restaurant} from "src/types/Resturants";
 import JoinGroupDialog from "../../JoinGroupDialog/JoinGroupDialog";
 import {useNavigate} from "react-router-dom";
 import CollapsableMap from "src/components/Map/CollapsableMap";
@@ -23,6 +23,7 @@ const GroupView: React.FC = (): JSX.Element => {
     const [group, setGroup] = useState<Group>(null);
     const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+    const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null);
     const navigate = useNavigate();
 
     const handleApprove = () => {
@@ -136,14 +137,21 @@ const GroupView: React.FC = (): JSX.Element => {
                                         />
                                     </div>
                                 </div>
-                                <AllRestaurants restaurants={restaurants} filters={group?.filters}/>
+                                <AllRestaurants
+                                    restaurants={restaurants}
+                                    filters={group?.filters}
+                                    selectedRestaurant={selectedRestaurant}
+                                    onRestaurantClick={(restaurant) =>
+                                        setSelectedRestaurant(restaurant)
+                                    }
+                                />                            
                             </div>
                         )}
                     </Grid>
                 </Grid>
             </Container>
             </Box>
-            <CollapsableMap filters={group?.filters} onFiltersChange={handleFiltersChange} />
+            <CollapsableMap filters={group?.filters} onFiltersChange={handleFiltersChange} selectedRestaurant={selectedRestaurant}/>
         </Box>
     );
 };

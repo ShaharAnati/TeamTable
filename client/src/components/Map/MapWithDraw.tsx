@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import MapGL, { MapRef, setRTLTextPlugin } from "react-map-gl";
+import MapGL, { MapRef, Marker, setRTLTextPlugin } from "react-map-gl";
 import maplibregl from "maplibre-gl";
 import {
   Editor,
@@ -7,6 +7,8 @@ import {
   EditingMode,
 } from "react-map-gl-draw";
 import "maplibre-gl/dist/maplibre-gl.css";
+import { Restaurant } from "src/types/Resturants";
+import Pin from "./Pin";
 
 setRTLTextPlugin(
   "https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js",
@@ -23,10 +25,11 @@ const DEFAULT_VIEWPORT = {
 type Props = {
   filters: any;
   onFiltersChange: Function;
+  selectedRestaurant?: Restaurant;
 };
 
 export const ResMap = (props: Props) => {
-  const { filters, onFiltersChange } = props;
+  const { filters, onFiltersChange, selectedRestaurant } = props;
 
   const mapRef = useRef<MapRef>();
   const editorRef = useRef<any>()!;
@@ -105,6 +108,16 @@ export const ResMap = (props: Props) => {
           }}
           editHandleShape={() => null}
         />
+
+        {selectedRestaurant?.location && (
+          <Marker
+            key={`marker-${selectedRestaurant?.id}`}
+            longitude={selectedRestaurant.location.lng}
+            latitude={selectedRestaurant.location.lat}
+          >
+            <Pin />
+          </Marker>
+        )}
       </MapGL>
     </div>
   );
