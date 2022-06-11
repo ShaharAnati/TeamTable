@@ -2,11 +2,23 @@ import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import React from "react";
+import React, {useState} from "react";
+import LeaveGroupDialog from "../LeaveGroupDialog/LeaveGroupDialog";
 
 export const GroupMenu = ({onLeaveGroup}): JSX.Element => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
+    const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+
+    const handleApprove = () => {
+        onLeaveGroup();
+        setIsDialogOpen(false);
+    }
+
+    const handleCancellation = () => {
+        setIsDialogOpen(false);
+    }
+
     const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -17,10 +29,13 @@ export const GroupMenu = ({onLeaveGroup}): JSX.Element => {
 
     const handleLeaveGroup = () => {
         setAnchorEl(null);
-        onLeaveGroup();
+        setIsDialogOpen(true);
     }
 
     return(<div>
+        <LeaveGroupDialog isOpen={isDialogOpen}
+                          onApprove={handleApprove}
+                          onCancellation={handleCancellation}></LeaveGroupDialog>
         <IconButton id="demo-positioned-button"
                     aria-controls={open ? 'demo-positioned-menu' : undefined}
                     aria-haspopup="true"
