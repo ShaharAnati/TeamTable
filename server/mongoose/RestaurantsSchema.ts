@@ -1,6 +1,5 @@
-import mongoose from "mongoose";
-import { Document } from 'mongoose';
-import { Restaurant } from "../models/Restaurant";
+import mongoose, {Document} from "mongoose";
+import {Restaurant} from "../models/Restaurant";
 
 const restaurantSchema = new mongoose.Schema({
   id: { type: String },
@@ -33,13 +32,18 @@ const restaurantSchema = new mongoose.Schema({
   },
   url: { type: String },
   isVerified: { type: Boolean },
-  pricePoint: { type: Number }
+  pricePoint: { type: Number },
+  likes: {type: Number}
 });
 
 const schema: any = mongoose.model("restaurants", restaurantSchema);
 
 export const getAllRestaurants = async (): Promise<Restaurant[]> => {
   return ((await schema.find({})) as Document[]).map(rest => rest.toObject() as Restaurant);
+}
+
+export const getMostLikedRestaurants = async (): Promise<Restaurant[]> => {
+  return ((await schema.find({}).sort({likes: -1}).limit(20)) as Document[]).map(rest => rest.toObject() as Restaurant);
 }
 
 export default schema;
