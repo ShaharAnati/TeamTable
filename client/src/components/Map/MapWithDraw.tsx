@@ -118,11 +118,11 @@ export const ResMap = (props: Props) => {
             latitude={restaurant.location.lat}
             offsetLeft={-10}
             offsetTop={-17}
-            className={restaurant === selectedRestaurant ? 'selected-restaurant-pin' : ''}
+            className={selectedRestaurant && restaurant.id === selectedRestaurant.id ? 'selected-restaurant-pin' : ''}
           >
             <Tooltip title={restaurant.name} placement="top">
               <div>
-                <Pin selected={restaurant === selectedRestaurant} />
+                <Pin selected={restaurant.id === selectedRestaurant?.id} />
               </div>
             </Tooltip>
           </Marker>

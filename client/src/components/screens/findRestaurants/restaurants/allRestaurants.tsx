@@ -68,7 +68,7 @@ export const AllRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.Elemen
 
       const isInArea = isPointInPolygon(restaurant.location, filters.selectedArea);
 
-      if (restaurant === selectedRestaurant && !isInArea) {
+      if (selectedRestaurant && restaurant?.id === selectedRestaurant?.id && !isInArea) {
         onRestaurantClick(null);
       }
       return isInArea
