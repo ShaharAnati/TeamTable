@@ -31,7 +31,7 @@ const MenuAppBar = () => {
   }
 
   return (
-      <AppBar style={{ background: 'white' }}>
+      <AppBar position="relative" style={{ background: 'white', zIndex: 1 }}>
         <Toolbar>
           <Box sx={{ flexGrow: 1 }}>       
               <Box

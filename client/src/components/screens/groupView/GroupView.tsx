@@ -69,11 +69,12 @@ const GroupView: React.FC = (): JSX.Element => {
     }, []);
 
     return (
-        <Box sx={{display:'flex'}}>
+        <Box sx={{display:'flex', height:'100%'}}>
             {group && (<JoinGroupDialog isOpen={isDialogOpen}
                                         onApprove={handleApprove}
                                         onCancellation={handleCancellation}
                                         group={group}></JoinGroupDialog>)}
+            <Box sx={{overflow: 'auto', width: '100%'}}>
             <Container maxWidth={"xl"} style={{marginTop: "1%"}}>
                 <Grid container spacing={5}>
                     <Grid item xs={4}>
@@ -127,6 +128,7 @@ const GroupView: React.FC = (): JSX.Element => {
                     </Grid>
                 </Grid>
             </Container>
+            </Box>
             <CollapsableMap />
         </Box>
     );
