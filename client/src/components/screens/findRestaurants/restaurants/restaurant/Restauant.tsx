@@ -33,7 +33,7 @@ const styles = {
     fontWeight: "bold",
   },
   content: {
-    padding: "8px 6px",
+    padding: "4px 7px",
   },
   price: {
     color: 'gray',
