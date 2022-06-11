@@ -114,10 +114,9 @@ const GroupView: React.FC = (): JSX.Element => {
         ></JoinGroupDialog>
       )}
       <Box sx={{display:'flex', flexDirection: 'column', width: '100%'}}>
-        <Box sx={{ display: 'flex', alignItems: 'center', height: 88, borderBottom: '1px solid #c1c1c13d', padding: '24px', paddingRight: '120px',backgroundColor: '#f8f8f8' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', height: 88, borderBottom: '1px solid #c1c1c13d', padding: '24px', paddingRight: '30px',backgroundColor: '#f8f8f8' }}>
             <Box sx={{marginRight: 'auto'}}>
                 <Typography variant="h5" >{group.name}</Typography>
-                <Typography variant="body1" >{group.creator}'s group</Typography>
             </Box>
           <DateTimeFilter
             filters={group.filters}

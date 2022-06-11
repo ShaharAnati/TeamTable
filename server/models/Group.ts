@@ -9,7 +9,7 @@ type Filters = {
 
 export interface Group {
     id: any;
-    name: string;
+    name?: string;
     creator?: string;
     members: GroupUser[];
     filters?: Filters;
