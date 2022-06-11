@@ -17,6 +17,7 @@ import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 
 import { dayMapping, Restaurant } from "../../../../../types/Resturants";
 import "../restaurant.css";
+import { useAuth } from "src/auth/AuthProvider";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -72,9 +73,10 @@ export const RestaurantComponent = (props: Props): JSX.Element => {
   const { id, name, description, tags, imgUrl, openingTimes } = restaurant;
 
   const [isLiked, setIsLiked] = useState<boolean>(false)
+  const { loggedInUser } = useAuth();
 
   useEffect(() => {
-    if (likedRestaurants.length > 0) {
+    if (likedRestaurants && likedRestaurants.length > 0) {
       setIsLiked(!!likedRestaurants.find(currId => currId == id))
     }
   }, [likedRestaurants])
@@ -128,7 +130,7 @@ export const RestaurantComponent = (props: Props): JSX.Element => {
       <CardContent style={ styles.content }>
         <div style={styles.header}>
           <div style={styles.title}>{name}</div>
-          {likedRestaurants.length > 0 && <IconButton
+          {loggedInUser && loggedInUser.email && <IconButton
             style={{
               padding: 0,
               height: "inherit",
