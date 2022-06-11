@@ -1,53 +1,55 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
-
-import { ArrowForward } from "@mui/icons-material";
-import { Button} from "@mui/material";
-
-import { Restaurant } from "../../../../../server/models/Restaurant";
-import { AllRestaurants } from "../findRestaurants/restaurants/allRestaurants";
+// @ts-ignore
+import BackgroundImg from "../../../../assets/images/background.jpg";
+import {Restaurant} from "../../../../../server/models/Restaurant";
+import {Button} from "@mui/material";
+import {ArrowForward} from "@mui/icons-material";
 
 import "./AltHome.css";
+import {PaginatedRestaurants} from "../../PaginatedRestaurants/PaginatedRestaurants";
 
 type Props = {};
 
 function AltHome({}: Props) {
   const navigate = useNavigate();
 
-  const [restaurantsToShow, setRestaurantsToShow] = useState<Restaurant[]>([])
+  const [restaurantsToShow, setRestaurantsToShow] = useState<Restaurant[]>([]);
 
   useEffect(() => {
-    axios(`/restaurants`).then(rests => {
-      setRestaurantsToShow(rests.data);
-    })
+    fetchFavoriteRestaurants();
   }, [])
 
-  const homePageHeaderContent: JSX.Element = (
-    <>
-      <div className="image-text">Where are we eating today?</div>
-      <Button
-        variant="contained"
-        endIcon={<ArrowForward />}
-        component={Link}
-        to="/create-group-screen"
-        sx={{ backgroundColor: "#00000080", color: "white" }}
-      >
-        Find us a table
-      </Button>
+  function fetchFavoriteRestaurants() {
+    return axios.get("/restaurants/top/favorite-restaurants")
+        .then((res) => setRestaurantsToShow(res.data));
+  }
 
-      <div className="add-restaurant-text">
-        <span className="own-restaurant">Didn't find a restaurant?</span>
-        <span
-          className="add-now-button"
-          onClick={() => navigate("/create-restaurant", { replace: true })}
+  const homePageHeaderContent: JSX.Element = (
+      <>
+        <div className="image-text">Where are we eating today?</div>
+        <Button
+            variant="contained"
+            endIcon={<ArrowForward />}
+            component={Link}
+            to="/create-group-screen"
+            sx={{ backgroundColor: "#00000080", color: "white" }}
         >
+          Find us a table
+        </Button>
+
+        <div className="add-restaurant-text">
+          <span className="own-restaurant">Didn't find a restaurant?</span>
+          <span
+              className="add-now-button"
+              onClick={() => navigate("/create-restaurant", { replace: true })}
+          >
           Add it <u>here</u> now!
         </span>
-      </div>
-    </>
+        </div>
+      </>
   )
-
 
   return (
     <div>
@@ -58,7 +60,7 @@ function AltHome({}: Props) {
       </div>
 
       <div className="all-restaurant-area">
-        <AllRestaurants filters={{}} restaurants={restaurantsToShow} />
+        <PaginatedRestaurants restaurants={restaurantsToShow}></PaginatedRestaurants>
       </div>
     </div>
   );
