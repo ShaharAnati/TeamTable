@@ -8,7 +8,8 @@ const groupSchema = new mongoose.Schema({
     filters: {
         tags: { type: [String] },
         hour: { type: String },
-        day: { type: String }
+        day: { type: String },
+        priceRange: [{ type: Number }]
     }
 }, {
     timestamps: true
