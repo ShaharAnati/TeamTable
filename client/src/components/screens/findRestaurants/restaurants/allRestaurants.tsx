@@ -22,7 +22,7 @@ export const AllRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.Elemen
   const { filters, restaurants } = props;
 
   const { loggedInUser } = useAuth();
-  const userLikedRestaurantsQuery = useUserLikedRestaurants( loggedInUser ? loggedInUser.email: null);
+  const userLikedRestaurantsQuery = useUserLikedRestaurants(loggedInUser?.email);
 
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
 
