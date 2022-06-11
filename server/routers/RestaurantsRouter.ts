@@ -1,9 +1,9 @@
-import { Request, Response, Router } from "express";
-import { uuid } from "uuidv4";
-import { Restaurant } from "../../client/src/types/Resturants";
-import { rankByTags } from "../BL/restaurantsBL";
+import {Request, Response, Router} from "express";
+import {uuid} from "uuidv4";
+import {Restaurant} from "../../client/src/types/Resturants";
+import {rankByTags} from "../BL/restaurantsBL";
 
-import RestaurantsSchema from "../mongoose/RestaurantsSchema";
+import RestaurantsSchema, {getMostLikedRestaurants} from "../mongoose/RestaurantsSchema";
 
 const buildRouter = (): Router => {
   const router: Router = Router();
@@ -48,7 +48,7 @@ const buildRouter = (): Router => {
 
     } catch (error) {
         console.log(error)
-        return res.status(500).send();;
+        return res.status(500).send();
     }
   });
 
@@ -87,6 +87,13 @@ const buildRouter = (): Router => {
           res.status(500).json(error);
       }
   });
+
+    router.get("/top/favorite-restaurants", async (req, res) => {
+        try {
+            const restaurants: Restaurant[] = await getMostLikedRestaurants();
+            return res.status(200).json(restaurants);
+        } catch (error) { }
+    });
 
   return router;
 };
