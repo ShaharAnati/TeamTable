@@ -8,7 +8,7 @@ import Restaurant from "./restaurant/Restauant";
 import {Filters} from "src/types/Group";
 import useUserLikedRestaurants from "src/hooks/useUserLikedRestaurants";
 import {useAuth} from "src/auth/AuthProvider";
-import { Restaurant as TypedRestaurant} from "src/types/Resturants";
+import { dayMapping, Restaurant as TypedRestaurant} from "src/types/Resturants";
 import { isPointInPolygon } from "src/helpers/filter-point-in-ploygon";
 
 dayjs.extend(isSameOrAfter);
@@ -38,21 +38,22 @@ export const AllRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.Elemen
 
 
   useEffect(() => {
+    const dayIndex = Object.keys(dayMapping).findIndex(day => dayMapping[day] == filters.day);
     const filterByPrice = (restaurant: TypedRestaurant) =>
     !filters.priceRange || filters.priceRange.length === 0 || filters.priceRange.indexOf(restaurant.pricePoint) > -1;
 
     const filterByDay = (restaurant) =>
-      !filters.day || restaurant.openingTimes[filters.day] != null;
+      !filters.day || restaurant.openingTimes[dayIndex] != null;
 
     const filterByHour = (restaurant) => {
       const { day, hour } = filters;
       const wasNotChosen = !day || !hour;
       if (wasNotChosen) return true;
 
-      if (!restaurant.openingTimes[day]) return false;
+      if (!restaurant.openingTimes[dayIndex]) return false;
 
-      const openingHour = restaurant.openingTimes[day][0];
-      const closingHour = restaurant.openingTimes[day][1];
+      const openingHour = restaurant.openingTimes[dayIndex][0];
+      const closingHour = restaurant.openingTimes[dayIndex][1];
 
       return (
         dayjs(`01-01-2000 ${hour}`).isSameOrAfter(
