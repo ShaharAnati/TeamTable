@@ -43,7 +43,7 @@ export const AllRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.Elemen
   const paginationSize = 15;
 
   useEffect(() => {
-    const dayIndex = Object.keys(dayMapping).findIndex(day => dayMapping[day] == filters.day);
+    const dayIndex = Object.keys(dayMapping).find(day => dayMapping[day] == filters.day);
     const filterByPrice = (restaurant: TypedRestaurant) =>
     !filters.priceRange || filters.priceRange.length === 0 || filters.priceRange.indexOf(restaurant.pricePoint) > -1;
 
