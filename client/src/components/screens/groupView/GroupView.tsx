@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Button, Container, Grid, Typography,} from "@mui/material";
+import {Box, Button, Container, Grid, Typography,} from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {useParams} from "react-router";
 import {Filters} from "src/types/Group";
@@ -13,6 +13,7 @@ import {ExtendedGroupData, Group} from "../../../../../server/models/Group";
 import {Restaurant} from "../../../../../server/models/Restaurant";
 import JoinGroupDialog from "../../JoinGroupDialog/JoinGroupDialog";
 import {useNavigate} from "react-router-dom";
+import CollapsableMap from "src/components/Map/CollapsableMap";
 
 const io = require("socket.io-client");
 let socket;
@@ -69,11 +70,12 @@ const GroupView: React.FC = (): JSX.Element => {
     }, []);
 
     return (
-        <div>
+        <Box sx={{display:'flex', height:'100%'}}>
             {group && (<JoinGroupDialog isOpen={isDialogOpen}
                                         onApprove={handleApprove}
                                         onCancellation={handleCancellation}
                                         group={group}></JoinGroupDialog>)}
+            <Box sx={{overflow: 'auto', width: '100%'}}>
             <Container maxWidth={"xl"} style={{marginTop: "1%"}}>
                 <Grid container spacing={5}>
                     <Grid item xs={4}>
@@ -133,7 +135,9 @@ const GroupView: React.FC = (): JSX.Element => {
                     </Grid>
                 </Grid>
             </Container>
-        </div>
+            </Box>
+            <CollapsableMap />
+        </Box>
     );
 };
 
