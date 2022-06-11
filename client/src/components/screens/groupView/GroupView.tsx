@@ -130,7 +130,7 @@ const GroupView: React.FC = (): JSX.Element => {
         </Box>
 
         <Box sx={{ display: "flex", overflow: "auto", width: "100%", height:'100%' }}>
-          <Box sx={{ width: 300, borderRight: '1px solid #c1c1c13d', padding: '8px', backgroundColor: '#f8f8f8'}}>
+          <Box sx={{ minWidth:300, width: 300, borderRight: '1px solid #c1c1c13d', padding: '8px', overflow:'auto', backgroundColor: '#f8f8f8'}}>
             <div style={{ display: "flex" }}>
               <GroupMenu onLeaveGroup={handleLeaveGroup}></GroupMenu>
               <Button
@@ -149,12 +149,6 @@ const GroupView: React.FC = (): JSX.Element => {
                 </span>
               </Button>
             </div>
-            <Typography
-              color="inherit"
-              variant='h5'
-            >
-              Participants
-            </Typography>
             <GroupMembersList group={group}></GroupMembersList>
             <div>
               {group && (
