@@ -6,6 +6,7 @@ import {Filters} from "src/types/Group";
 import GroupMembersList from "../../GroupMembersList/GroupMembersList";
 import TagFilters from "../findRestaurants/TagFilters";
 import DateTimeFilter from "../findRestaurants/DateTimeFilter";
+import PricePointsFilter from "../findRestaurants/PriceFilter";
 import {AllRestaurants} from "../findRestaurants/restaurants/allRestaurants";
 import "./GroupView.css";
 import {ExtendedGroupData, Group} from "../../../../../server/models/Group";
@@ -126,6 +127,12 @@ const GroupView: React.FC = (): JSX.Element => {
                                     <div style={{marginBottom: "2%"}}>
                                         <DateTimeFilter filters={group.filters}
                                                         onFiltersChange={handleFiltersChange}
+                                        />
+                                    </div>
+                                    <div> 
+                                        <PricePointsFilter 
+                                            filters={group.filters}
+                                            onFiltersChange={handleFiltersChange}
                                         />
                                     </div>
                                 </div>

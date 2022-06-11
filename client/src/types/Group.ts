@@ -1,8 +1,9 @@
 export type Filters = {
     day?: string;
     hour?: string;
-    tags?: string[];
-    selectedArea? :any;
+    tags?: string[]
+    priceRange?: number[]
+    selectedArea? :any
 }
 
 export interface Group {
