@@ -69,7 +69,7 @@ export const AllRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.Elemen
     >
       {filteredRestaurants?.map((restaurant, i) => (
         <div key={i} style={{ margin: "auto", padding: "0 16px 50px 16px" }}>
-          <Restaurant restaurant={restaurant} chosedTags={filters.tags} likedRestaurants={userLikedRestaurantsQuery ? userLikedRestaurantsQuery.data : []}/>
+          <Restaurant restaurant={restaurant} chosedTags={filters.tags} likedRestaurants={userLikedRestaurantsQuery && userLikedRestaurantsQuery.data}/>
         </div>
       ))}
     </div>
