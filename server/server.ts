@@ -16,6 +16,7 @@ import AuthRouter from './routers/AuthenticationRouter';
 import {updateGroup} from "./BL/groupsService";
 import {rankByTags} from "./BL/restaurantsBL";
 import {Restaurant} from "./models/Restaurant";
+import GroupSchema from "./mongoose/GroupSchema";
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("../swagger.json");
@@ -48,6 +49,17 @@ function createNewGroup(groupId: any, user: string) {
   return {...group, restaurants: []}
 }
 
+async function handleCreatorLeavingGroup(group: Group, socket: any, groupId: string) {
+  if (!group.members) {
+    await GroupSchema.deleteOne(group.id);
+    groupsDataCache.delete(group.id);
+  } else {
+    group.creator = group.members[0].username;
+    socket.to(groupId).emit("groupDataChanged", group);
+    updateGroup(groupId, group);
+  }
+}
+
 io.on("connection", (socket: any) => {
   console.log(socket.id);
 
@@ -77,8 +89,12 @@ io.on("connection", (socket: any) => {
     if (groupsDataCache.has(groupId)) {
       const group: Group = groupsDataCache.get(groupId)!;
       group.members = group.members.filter(member => member.username != user);
-      socket.to(groupId).emit("groupDataChanged", group);
-      updateGroup(groupId, group);
+      if(group.creator && group.creator === user) {
+        await handleCreatorLeavingGroup(group, socket, groupId);
+      } else {
+        socket.to(groupId).emit("groupDataChanged", group);
+        updateGroup(groupId, group);
+      }
     }
   })
 
