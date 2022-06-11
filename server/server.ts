@@ -86,17 +86,15 @@ io.on("connection", (socket: any) => {
       const group: Group = groupsDataCache.get(groupId)!;
       group.members = [...group.members, { username: user, active: true }];
 
-      let extendedGroup: ExtendedGroupData = {
-        ...group,
-        restaurants: await rankByTags(data?.filters?.tags || [], data.members)
-      };
-
-      io.to(groupId).emit("groupDataChanged", extendedGroup);
+      io.to(groupId).emit("groupDataChanged", group);
 
       console.log("joined group: " + groupId);
 
-      const { restaurants, ...groupToSave } = extendedGroup;
-      updateGroup(groupId, groupToSave);
+      delayRestaurantsCalc(groupId, (rankedRestaurants) => {
+        io.in(groupId).emit('restaurantsUpdate', rankedRestaurants)
+      })
+
+      updateGroup(groupId, group);
     }
   })
 
@@ -111,6 +109,11 @@ io.on("connection", (socket: any) => {
         await handleCreatorLeavingGroup(group, socket, groupId);
       } else {
         socket.to(groupId).emit("groupDataChanged", group);
+
+        delayRestaurantsCalc(groupId, (rankedRestaurants) => {
+          io.in(groupId).emit('restaurantsUpdate', rankedRestaurants)
+        })
+
         updateGroup(groupId, group);
       }
 
