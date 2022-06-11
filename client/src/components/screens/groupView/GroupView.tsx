@@ -133,8 +133,8 @@ const GroupView: React.FC = (): JSX.Element => {
                                                         onFiltersChange={handleFiltersChange}
                                         />
                                     </div>
-                                    <div> 
-                                        <PricePointsFilter 
+                                    <div>
+                                        <PricePointsFilter
                                             filters={group.filters}
                                             onFiltersChange={handleFiltersChange}
                                         />
