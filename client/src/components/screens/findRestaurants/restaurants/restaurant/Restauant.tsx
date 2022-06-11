@@ -180,6 +180,7 @@ export const RestaurantComponent = (props: Props): JSX.Element => {
           {tags.map((tag) => (
             <Chip
               key={tag}
+              className={"single-tag"}
               label={tag}
               size="small"
               variant="outlined"
