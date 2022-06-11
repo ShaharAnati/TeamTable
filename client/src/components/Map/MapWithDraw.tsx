@@ -114,6 +114,8 @@ export const ResMap = (props: Props) => {
             key={`marker-${selectedRestaurant?.id}`}
             longitude={selectedRestaurant.location.lng}
             latitude={selectedRestaurant.location.lat}
+            offsetLeft={-10}
+            offsetTop={-17}
           >
             <Pin />
           </Marker>

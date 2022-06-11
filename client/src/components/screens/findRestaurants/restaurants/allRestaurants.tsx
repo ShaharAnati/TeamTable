@@ -59,7 +59,13 @@ export const AllRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.Elemen
     const filterBySelectedArea = (restaurant) => {
       if (!filters?.selectedArea) return true;
       if (!restaurant.location) return false;
-      return isPointInPolygon(restaurant.location, filters.selectedArea);
+
+      const isInArea = isPointInPolygon(restaurant.location, filters.selectedArea);
+
+      if (restaurant === selectedRestaurant && !isInArea) {
+        onRestaurantClick(null);
+      }
+      return isInArea
     }
 
     setFilteredRestaurants(
