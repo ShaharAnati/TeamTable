@@ -4,11 +4,11 @@ import axios from "axios";
 // @ts-ignore
 import BackgroundImg from "../../../../assets/images/background.jpg";
 import {Restaurant} from "../../../../../server/models/Restaurant";
-import {AllRestaurants} from "../findRestaurants/restaurants/allRestaurants";
 import {Button} from "@mui/material";
 import {ArrowForward} from "@mui/icons-material";
 
 import "./AltHome.css";
+import {PaginatedRestaurants} from "../../PaginatedRestaurants/PaginatedRestaurants";
 
 type Props = {};
 
@@ -55,7 +55,7 @@ function AltHome({}: Props) {
       </div>
 
       <div className="all-restaurant-area">
-        <AllRestaurants filters={{}} restaurants={restaurantsToShow} />
+        <PaginatedRestaurants restaurants={restaurantsToShow}></PaginatedRestaurants>
       </div>
     </div>
   );
