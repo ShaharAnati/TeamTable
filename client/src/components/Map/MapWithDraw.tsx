@@ -9,7 +9,8 @@ import {
 import "maplibre-gl/dist/maplibre-gl.css";
 import { Restaurant } from "src/types/Resturants";
 import Pin from "./Pin";
-import { Tooltip } from "@mui/material";
+import { Box, ToggleButton, Tooltip } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 setRTLTextPlugin(
   "https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js",
@@ -38,6 +39,8 @@ export const ResMap = (props: Props) => {
 
   const featureExist = !!filters?.selectedArea;
 
+  const [isFeatureSelected, setIsFeatureSelected] = useState(false);
+
   const [localFeatures, setLocalFeatures] = useState(
     filters?.selectedArea ? [filters.selectedArea] : []
   );
@@ -63,14 +66,17 @@ export const ResMap = (props: Props) => {
     onFiltersChange({ ...filters, selectedArea: localFeatures[0] });
   };
 
+  const handleCircleDelete = () => {
+    const editor = editorRef.current!;
+    const selectedFeatureIndex = editor?.state.selectedFeatureIndex;
+    if (selectedFeatureIndex == null) return;
+    handleSelectionChnage([null]);
+    setIsFeatureSelected(false);
+  };
+
   const onKeyDown = (event) => {
     if (["Delete", "Backspace"].includes(event.key)) {
-      const editor = editorRef.current!;
-
-      const selectedFeatureIndex = editor?.state.selectedFeatureIndex;
-      if (selectedFeatureIndex == null) return;
-
-      handleSelectionChnage([null]);
+      handleCircleDelete();
     }
   };
 
@@ -84,7 +90,7 @@ export const ResMap = (props: Props) => {
 
   return (
     <div
-      style={{ height: "100%", width: "100%" }}
+      style={{ height: "100%", width: "100%", position: "relative" }}
       onKeyDown={onKeyDown}
       onMouseUp={onMouseUp}
     >
@@ -108,6 +114,9 @@ export const ResMap = (props: Props) => {
               setLocalFeatures(data);
             }
           }}
+          onSelect={({ selectedFeature }) =>
+            setIsFeatureSelected(!!selectedFeature)
+          }
           editHandleShape={() => null}
         />
 
@@ -118,7 +127,11 @@ export const ResMap = (props: Props) => {
             latitude={restaurant.location.lat}
             offsetLeft={-10}
             offsetTop={-17}
-            className={selectedRestaurant && restaurant.id === selectedRestaurant.id ? 'selected-restaurant-pin' : ''}
+            className={
+              selectedRestaurant && restaurant.id === selectedRestaurant.id
+                ? "selected-restaurant-pin"
+                : ""
+            }
           >
             <Tooltip title={restaurant.name} placement="top">
               <div>
@@ -128,6 +141,18 @@ export const ResMap = (props: Props) => {
           </Marker>
         ))}
       </MapGL>
+      {isFeatureSelected && (
+        <Box sx={{ position: "absolute", top: 23, right: 10 }}>
+          <ToggleButton
+            size="small"
+            value="check"
+            selected={true}
+            onClick={() => handleCircleDelete()}
+          >
+            <DeleteIcon />
+          </ToggleButton>
+        </Box>
+      )}
     </div>
   );
 };
