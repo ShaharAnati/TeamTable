@@ -113,10 +113,6 @@ const GroupView: React.FC = (): JSX.Element => {
                         </span>
                             </Button>
                         </div>
-                        <Typography color="inherit"
-                                    style={{marginLeft: "6%", fontSize: "2vw", paddingTop: "5%"}}>
-                            Table Members
-                        </Typography>
                         <GroupMembersList group={group}></GroupMembersList>
                         <div>
                             {group && (
