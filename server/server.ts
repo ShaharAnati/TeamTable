@@ -1,10 +1,10 @@
 import express from "express";
 import * as bodyParser from "body-parser";
 
-import { initLogger } from "./conf/Logger";
-import { withAuth } from "./middlewares/auth";
-import { connectToDatabase } from "./mongoose/DatabaseEndpoint";
-import { ExtendedGroupData, Group } from "./models/Group";
+import {initLogger} from "./conf/Logger";
+import {withAuth} from "./middlewares/auth";
+import {connectToDatabase} from "./mongoose/DatabaseEndpoint";
+import {ExtendedGroupData, Group} from "./models/Group";
 
 import BuildResourceRouter from "./routers/ResourcesRouter";
 import LoginRouter from "./routers/LoginRouter";
@@ -13,9 +13,9 @@ import RestaurantsRouter from "./routers/RestaurantsRouter";
 import TagsRouter from "./routers/TagsRouter";
 import UsersRouter from "./routers/UsersRouter";
 import AuthRouter from './routers/AuthenticationRouter';
-import { updateGroup } from "./BL/groupsService";
-import { rankByTags } from "./BL/restaurantsBL";
-import { Restaurant } from "./models/Restaurant";
+import {updateGroup} from "./BL/groupsService";
+import {rankByTags} from "./BL/restaurantsBL";
+import {Restaurant} from "./models/Restaurant";
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("../swagger.json");
@@ -69,6 +69,16 @@ io.on("connection", (socket: any) => {
 
       const { restaurants, ...groupToSave} = extendedGroup;
       updateGroup(groupId, groupToSave);
+    }
+  })
+
+  socket.on("leaveGroup", async (data: any) => {
+    const {user, groupId} = data;
+    if (groupsDataCache.has(groupId)) {
+      const group: Group = groupsDataCache.get(groupId)!;
+      group.members = group.members.filter(member => member.username != user);
+      socket.to(groupId).emit("groupDataChanged", group);
+      updateGroup(groupId, group);
     }
   })
 

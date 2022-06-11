@@ -23,6 +23,7 @@ const GroupView: React.FC = (): JSX.Element => {
     const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
     const navigate = useNavigate();
+    const curUser = sessionStorage.getItem("user_email");
 
     const handleApprove = () => {
         const curUser = sessionStorage.getItem("user_email");
@@ -36,13 +37,12 @@ const GroupView: React.FC = (): JSX.Element => {
     }
 
     const handleLeaveGroup = () => {
-        console.log("leave group");
+        socket.emit("leaveGroup", {user: curUser, groupId: id});
+        navigate("/")
     }
 
     function initWebsocket() {
         socket = io();
-
-        const curUser = sessionStorage.getItem("user_email");
         socket.emit("joinGroup", {user: curUser, groupId: id});
         socket.on("newUser", (data) => {
             if(sessionStorage.getItem("user_email") === data) {
