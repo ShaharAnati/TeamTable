@@ -75,11 +75,12 @@ export default function PricePointsFilter({ onFiltersChange, filters }: Props) {
   return (
     <div>
       <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id="demo-multiple-checkbox-label">Price Range</InputLabel>
+        <InputLabel id="demo-multiple-checkbox-label" size='small'>Price Range</InputLabel>
         <Select
           labelId="demo-multiple-checkbox-label"
           id="demo-multiple-checkbox"
           multiple
+          size="small"
           value={filters.priceRange || []}
           onChange={handleChange}
           input={<OutlinedInput label="Price Range" />}
