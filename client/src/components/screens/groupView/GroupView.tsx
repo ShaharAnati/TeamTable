@@ -12,7 +12,6 @@ import { useParams } from "react-router";
 import { Filters } from "src/types/Group";
 import GroupMembersList from "../../GroupMembersList/GroupMembersList";
 import TagFilters from "../findRestaurants/TagFilters";
-import DateTimeFilter from "../findRestaurants/DateTimeFilter";
 import PricePointsFilter from "../findRestaurants/PriceFilter";
 import { AllRestaurants } from "../findRestaurants/restaurants/allRestaurants";
 import "./GroupView.css";
@@ -22,7 +21,7 @@ import JoinGroupDialog from "../../JoinGroupDialog/JoinGroupDialog";
 import { useNavigate } from "react-router-dom";
 import GroupMenu from "../../GroupMenu/GroupMenu";
 import CollapsableMap from "src/components/Map/CollapsableMap";
-import axios from "axios";
+import WeekDayFilter from "../findRestaurants/WeekDayFilter";
 
 const io = require("socket.io-client");
 let socket;
@@ -90,6 +89,9 @@ const GroupView: React.FC = (): JSX.Element => {
     const socket = initWebsocket();
     return () => socket.disconnect();
   }, []);
+    const handleWeekDayFilterChange = (newDay: string, newTime: string): void => {
+        handleFiltersChange({...group.filters, day: newDay, hour: newTime});
+    }
 
   if (!socket || !group)
     return (
@@ -118,9 +120,10 @@ const GroupView: React.FC = (): JSX.Element => {
             <Box sx={{marginRight: 'auto'}}>
                 <Typography variant="h5" >{group.name}</Typography>
             </Box>
-          <DateTimeFilter
-            filters={group.filters}
-            onFiltersChange={handleFiltersChange}
+            <WeekDayFilter 
+              initialDay={group.filters.day}
+              initialTime={group.filters.hour}
+              onValueChange={handleWeekDayFilterChange}
           />
           <PricePointsFilter
             filters={group.filters}
