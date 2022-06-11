@@ -82,8 +82,7 @@ export const PaginatedRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.
                     display: "flex",
                     flexWrap: "wrap",
                     justifyContent: "center",
-                    padding: "1%",
-                    paddingTop: 0
+                    paddingBottom: "1%"
                 }}
             >
                 <IconButton onClick={handlePrev} disabled={pageNumber === 1}>
