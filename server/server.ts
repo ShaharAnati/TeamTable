@@ -13,8 +13,8 @@ import RestaurantsRouter from "./routers/RestaurantsRouter";
 import TagsRouter from "./routers/TagsRouter";
 import UsersRouter from "./routers/UsersRouter";
 import AuthRouter from './routers/AuthenticationRouter';
-import {updateGroup} from "./BL/groupsService";
-import {rankByTags} from "./BL/restaurantsBL";
+import {getAllGroups, updateGroup} from "./BL/groupsService";
+import {rankByTags, getRestaurants} from "./BL/restaurantsBL";
 import {Restaurant} from "./models/Restaurant";
 import GroupSchema from "./mongoose/GroupSchema";
 
@@ -121,11 +121,14 @@ io.on("connection", (socket: any) => {
 
       extendedGroup = {
         ...group,
-        restaurants: await rankByTags(data?.filters?.tags || [], data.members)
+        restaurants: await rankByTags(group?.filters?.tags || [], group.members)
       };
       
     } else {
-      extendedGroup = createNewGroup(groupId, user);
+      extendedGroup = {
+        ...createNewGroup(groupId, user),
+        restaurants: await getRestaurants()
+      }
     }    
 
     groupsUserSocketId.set(socket.id, { user, groupId });
@@ -139,6 +142,7 @@ io.on("connection", (socket: any) => {
   });
 
   socket.on("filtersUpdate", async (data: Group) => {
+    console.log('received filtersUpdate event')
     const { id: groupId } = data;
     groupsDataCache.set(groupId, data);
 
@@ -182,6 +186,15 @@ io.on("connection", (socket: any) => {
 const init = async (): Promise<void> => {
   await initLogger();
   await connectToDatabase();
+
+  try {
+    // initialize in-memory groups cache
+    (await getAllGroups()).forEach((group:any) => {
+      groupsDataCache.set(group.id, group);
+    })
+  } catch (err) {
+    console.error('Failed initializing in-memory group cache')
+  }
 
   app.use(bodyParser.json());
 

@@ -77,8 +77,6 @@ const GroupView: React.FC = (): JSX.Element => {
     }
     
     useEffect(() => {
-        axios.get('/restaurants').then(response => setRestaurants(response.data))
-
         const socket = initWebsocket();
         return () => socket.disconnect();
     }, []);
