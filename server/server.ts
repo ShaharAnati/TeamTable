@@ -50,7 +50,7 @@ function createNewGroup(groupId: any, user: string) {
 }
 
 async function handleCreatorLeavingGroup(group: Group, socket: any, groupId: string) {
-  if (!group.members) {
+  if (group.members.length === 0) {
     await GroupSchema.deleteOne(group.id);
     groupsDataCache.delete(group.id);
   } else {
@@ -86,15 +86,19 @@ io.on("connection", (socket: any) => {
 
   socket.on("leaveGroup", async (data: any) => {
     const {user, groupId} = data;
+    
     if (groupsDataCache.has(groupId)) {
       const group: Group = groupsDataCache.get(groupId)!;
       group.members = group.members.filter(member => member.username != user);
+
       if(group.creator && group.creator === user) {
         await handleCreatorLeavingGroup(group, socket, groupId);
       } else {
         socket.to(groupId).emit("groupDataChanged", group);
         updateGroup(groupId, group);
       }
+
+      groupsUserSocketId.delete(socket.id);
     }
   })
 
