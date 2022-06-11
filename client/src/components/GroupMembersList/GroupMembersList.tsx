@@ -1,5 +1,9 @@
 import React from "react";
 import {Avatar, Badge, List, ListItem, ListItemAvatar, ListItemText} from "@mui/material";
+import Typography from "@mui/material/Typography";
+import Chip from "@mui/material/Chip";
+import Divider from "@mui/material/Divider";
+
 import ImageIcon from "@mui/icons-material/Image";
 import {Group} from "../../../../server/models/Group";
 
@@ -14,16 +18,40 @@ const GroupMembersList: React.FC<GroupMembersListProps> = (props): JSX.Element =
     return (<div style={{
         textAlign: "center",
         overflowY: "auto",
+        margin: "10px 0",
+        backgroundColor: "white",
+        height: '35vh',
+        minHeight: '240px',
+        maxHeight: '300px',
+        width: '230px',
+        borderRadius: '12px',
+        overflow: 'hidden',
+        paddingBottom: '30px'
     }}>
+        <Typography color="inherit"
+                    style={{ 
+                        fontSize: "1.2rem", 
+                        paddingTop: "8px",
+                        fontWeight: 500}}>
+            Table Members
+        </Typography>
+        <Divider variant={"middle"} />
+        <div style={{
+                overflow: 'scroll',
+                height: '-webkit-fill-available',
+            }}>
         {group
-            ? group.members.map((member) => {
+            ? group.members.sort((a,b) => +b.active - +a.active )
+            .map((member) => {
                 return (
                     <List
                         key={member.username}
                         sx={{
                             width: "-webkit-fill-available",
                             maxWidth: 360,
-                            bgcolor: "background.paper"
+                            bgcolor: "background.paper",
+                            paddingBottom: 0,
+                            paddingTop: 0
                         }}
                     >
                         <ListItem>
@@ -49,12 +77,22 @@ const GroupMembersList: React.FC<GroupMembersListProps> = (props): JSX.Element =
                                 </Avatar>
                             </Badge>
                             </ListItemAvatar>
-                            <ListItemText primary={member.username} />
+                            <ListItemText primary={member.username} secondary={
+                                group.creator === member.username &&  
+                                    <Chip 
+                                        sx={{
+                                            fontSize: '0.7rem',
+                                            height: '16px'
+                                        }}
+                                        label="admin" 
+                                        variant="outlined" 
+                                        size="small" />} />
                         </ListItem>
                     </List>
                 );
             })
             : null}
+        </div>
     </div>)
 }
 
