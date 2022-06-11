@@ -2,6 +2,15 @@ import { Group, GroupLikedRestaurants, GroupUser } from '../models/Group';
 import GroupSchema from '../mongoose/GroupSchema';
 import {getLikedRestaurantsByUserIds} from '../mongoose/UserSchema';
 
+export const getAllGroups = async () => {
+    try {
+        const a = await GroupSchema.find().lean();
+        return a;
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
+}
 
 export const updateGroup = async (id: string, group: Group) => {
     try {
