@@ -19,6 +19,7 @@ export interface Restaurant {
     }  
     url?: string;
     isVerified?: boolean;
+    pricePoint?: number;
 }
 
 export interface TagGroup {

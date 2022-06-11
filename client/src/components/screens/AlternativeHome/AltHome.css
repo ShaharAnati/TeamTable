@@ -1,17 +1,47 @@
+
 .background-img {
-  height: 440px;
-  background-size: auto 1157px;
-  background-position-y: center;
+  height: 50vh;
+  background-size: cover;
+  background-position: center center;
+  backface-visibility: hidden;
+  width: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-image: url('../../../../assets/images/homePageBackgrounds/background.jpg');
+  animation: slideShow 40s linear infinite 0s;
+  animation-timing-function: cubic-bezier(1,.02,.6,-0.17);
 }
+
+@keyframes slideShow {
+  0% {
+    background-image: url('../../../../assets/images/homePageBackgrounds/background.jpg');
+  }
+
+  20% {
+    background-image: url('../../../../assets/images/homePageBackgrounds/background1.jpg');
+  }
+
+  40% {
+    background-image: url('../../../../assets/images/homePageBackgrounds/background2.jpg');
+  }
+
+  60% {
+    background-image: url('../../../../assets/images/homePageBackgrounds/background3.jpg');
+  }
+
+  80% {
+    background-image: url('../../../../assets/images/homePageBackgrounds/background4.jpg');
+  }
+}
+
 
 .image-text {
   margin: 0 auto;
   width: fit-content;
   color: white;
+  -webkit-text-stroke: 0.5px black;
   font-size: 34px;
   padding-top: 110px;
   padding-bottom: 25px;
@@ -38,6 +68,5 @@
 
 .all-restaurant-area {
   background-color: #fafafa;
-  padding: 0 100px;
-  padding-top: 50px;
+  padding: 0 50px;
 }

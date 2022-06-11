@@ -21,7 +21,13 @@ module.exports = (env, argv) => {
         devtool: argv.mode === 'development' ? 'inline-source-map' : false,
         resolve: {
             extensions: [".ts", ".tsx", ".js"],
-            plugins: [new TsconfigPathsPlugin()]
+            plugins: [new TsconfigPathsPlugin()],
+            fallback: {
+                "fs": false
+            },
+            alias: {
+                "mapbox-gl" : "maplibre-gl"
+            }
         },
         module: {
             rules: [
@@ -48,17 +54,10 @@ module.exports = (env, argv) => {
                 {
                     test: /\.css$/i,
                     use: ["style-loader", "css-loader"],
-                  },
+                },
                 {
-                    test: /\.(png|jpg|jpeg|gif|ico)$/,
-                    use: [
-                        {
-                            loader: 'file-loader',
-                            options: {
-                                name: './img/[name].[hash].[ext]'
-                            }
-                        }
-                    ]
+                    test: /\.(png|jpg|jpeg|gif)$/i,
+                    type: "asset/resource",
                 }
             ]
         },

@@ -1,10 +1,10 @@
 import express from "express";
 import * as bodyParser from "body-parser";
 
-import { initLogger } from "./conf/Logger";
-import { withAuth } from "./middlewares/auth";
-import { connectToDatabase } from "./mongoose/DatabaseEndpoint";
-import { ExtendedGroupData, Group } from "./models/Group";
+import {initLogger} from "./conf/Logger";
+import {withAuth} from "./middlewares/auth";
+import {connectToDatabase} from "./mongoose/DatabaseEndpoint";
+import {ExtendedGroupData, Group} from "./models/Group";
 
 import BuildResourceRouter from "./routers/ResourcesRouter";
 import LoginRouter from "./routers/LoginRouter";
@@ -13,9 +13,10 @@ import RestaurantsRouter from "./routers/RestaurantsRouter";
 import TagsRouter from "./routers/TagsRouter";
 import UsersRouter from "./routers/UsersRouter";
 import AuthRouter from './routers/AuthenticationRouter';
-import { updateGroup } from "./BL/groupsService";
-import { rankByTags } from "./BL/restaurantsBL";
-import { Restaurant } from "./models/Restaurant";
+import {getAllGroups, updateGroup} from "./BL/groupsService";
+import {rankByTags, getRestaurants} from "./BL/restaurantsBL";
+import {Restaurant} from "./models/Restaurant";
+import GroupSchema from "./mongoose/GroupSchema";
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("../swagger.json");
@@ -64,6 +65,17 @@ function createNewGroup(groupId: any, user: string) {
   return { ...group, restaurants: [] }
 }
 
+async function handleCreatorLeavingGroup(group: Group, socket: any, groupId: string) {
+  if (group.members.length === 0) {
+    await GroupSchema.deleteOne(group.id);
+    groupsDataCache.delete(group.id);
+  } else {
+    group.creator = group.members[0].username;
+    socket.to(groupId).emit("groupDataChanged", group);
+    updateGroup(groupId, group);
+  }
+}
+
 io.on("connection", (socket: any) => {
   console.log(socket.id);
 
@@ -85,6 +97,24 @@ io.on("connection", (socket: any) => {
 
       const { restaurants, ...groupToSave } = extendedGroup;
       updateGroup(groupId, groupToSave);
+    }
+  })
+
+  socket.on("leaveGroup", async (data: any) => {
+    const {user, groupId} = data;
+    
+    if (groupsDataCache.has(groupId)) {
+      const group: Group = groupsDataCache.get(groupId)!;
+      group.members = group.members.filter(member => member.username != user);
+
+      if(group.creator && group.creator === user) {
+        await handleCreatorLeavingGroup(group, socket, groupId);
+      } else {
+        socket.to(groupId).emit("groupDataChanged", group);
+        updateGroup(groupId, group);
+      }
+
+      groupsUserSocketId.delete(socket.id);
     }
   })
 
@@ -123,6 +153,7 @@ io.on("connection", (socket: any) => {
   });
 
   socket.on("filtersUpdate", async (data: Group) => {
+    console.log('received filtersUpdate event')
     const { id: groupId } = data;
     groupsDataCache.set(groupId, data);
 
@@ -163,6 +194,15 @@ io.on("connection", (socket: any) => {
 const init = async (): Promise<void> => {
   await initLogger();
   await connectToDatabase();
+
+  try {
+    // initialize in-memory groups cache
+    (await getAllGroups()).forEach((group:any) => {
+      groupsDataCache.set(group.id, group);
+    })
+  } catch (err) {
+    console.error('Failed initializing in-memory group cache')
+  }
 
   app.use(bodyParser.json());
 

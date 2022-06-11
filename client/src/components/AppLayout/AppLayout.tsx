@@ -8,7 +8,7 @@ function AppLayout({}) {
   return (
     <div className="AppLayout">
       <AppBar />
-      <div style={{ minHeight: "100vh", paddingTop: 70 }}>
+      <div style={{ height: "calc(100vh - 71px)", overflow: "auto" }}>
         <Outlet />
       </div>
     </div>

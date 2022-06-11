@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import UserSchema from "../mongoose/UserSchema";
+import RestaurantsSchema from "../mongoose/RestaurantsSchema";
 
 const buildRouter = (): Router => {
   const router: Router = Router();
@@ -26,6 +27,7 @@ const buildRouter = (): Router => {
       const { email, restaurantId } = req.body;
 
       const user = await UserSchema.findOne({ email });
+      const restaurant = await RestaurantsSchema.findOne({ "id": restaurantId });
 
       if (!user) {
         res.sendStatus(404);
@@ -36,6 +38,11 @@ const buildRouter = (): Router => {
         await UserSchema.findOneAndUpdate(
           { email },
           { likedRestaurants: newlikedRestaurants }
+        );
+
+        await RestaurantsSchema.findOneAndUpdate(
+            {"id": restaurantId},
+            {likes: restaurant.likes >= 0 ? restaurant.likes + 1 : 0}
         );
       }
 
@@ -50,12 +57,19 @@ const buildRouter = (): Router => {
       const { email, restaurantId } = req.body;
 
       const user = await UserSchema.findOne({ email });
+      const restaurant = await RestaurantsSchema.findOne({ "id": restaurantId });
+
       const newlikedRestaurants = user.likedRestaurants.filter(
         (r: string) => r !== restaurantId
       );
       await UserSchema.findOneAndUpdate(
         { email },
         { likedRestaurants: newlikedRestaurants }
+      );
+
+      await RestaurantsSchema.findOneAndUpdate(
+          {"id": restaurantId},
+          {likes: restaurant.likes > 0 ? restaurant.likes - 1 : 0}
       );
 
       res.sendStatus(200);
