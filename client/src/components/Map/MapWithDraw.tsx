@@ -9,6 +9,7 @@ import {
 import "maplibre-gl/dist/maplibre-gl.css";
 import { Restaurant } from "src/types/Resturants";
 import Pin from "./Pin";
+import { Tooltip } from "@mui/material";
 
 setRTLTextPlugin(
   "https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js",
@@ -117,7 +118,11 @@ export const ResMap = (props: Props) => {
             offsetLeft={-10}
             offsetTop={-17}
           >
-            <Pin />
+            <Tooltip title={selectedRestaurant.name} placement="top">
+              <div>
+                <Pin />
+              </div>
+            </Tooltip>
           </Marker>
         )}
       </MapGL>
