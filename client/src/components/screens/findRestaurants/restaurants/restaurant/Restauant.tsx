@@ -15,7 +15,7 @@ import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 
-import { dayMapping, Restaurant } from "../../../../../types/Resturants";
+import { dayMapping, Restaurant, priceText} from "../../../../../types/Resturants";
 import "../restaurant.css";
 import { useAuth } from "src/auth/AuthProvider";
 
@@ -29,15 +29,17 @@ const styles = {
     alignItems: "center",
   },
   title: {
-    fontSize: "1.3vw",
+    fontSize: "1.05rem",
     fontWeight: "bold",
   },
   content: {
-    padding: "1% 3%",
-    maxHeight : "110px",
-    'overflow-y': "auto"
+    padding: "8px 6px",
+  },
+  price: {
+    color: 'gray',
+    fontSize: '0.78rem',
+    fontWeight: 400
   }
-
 };
 
 type Props = {
@@ -67,10 +69,9 @@ const OpeningHours = ({ openingTimes }): JSX.Element => {
   );
 };
 
-// TODO: opening hours
 export const RestaurantComponent = (props: Props): JSX.Element => {
   const { restaurant, chosedTags = [], likedRestaurants = [] } = props;
-  const { id, name, description, tags, imgUrl, openingTimes } = restaurant;
+  const { id, name, pricePoint, description, tags, imgUrl, openingTimes } = restaurant;
 
   const [isLiked, setIsLiked] = useState<boolean>(false)
   const { loggedInUser } = useAuth();
@@ -119,61 +120,74 @@ export const RestaurantComponent = (props: Props): JSX.Element => {
     }
   }
 
+  const likeButton = (): JSX.Element => (
+    loggedInUser && loggedInUser.email && 
+        <IconButton
+          style={{
+            padding: '4px',
+            position: 'absolute',
+            top: '5px',
+            right: '5px',
+            backgroundColor: 'white',
+            boxShadow: '0px 0px 1px 0px inset grey',
+            color: isLiked ? "red" : "gray"
+          }}
+          onClick={isLiked ? handleUnLikeClicked : handleLikeClicked}
+        >
+          <FavoriteIcon />
+        </IconButton>
+  );
+  
+  const timesButton = () => (
+    <Tooltip
+      title={
+        <div>
+          <OpeningHours openingTimes={openingTimes} />
+        </div>
+      }
+    >
+      <IconButton
+        style={{
+          padding: 0,
+          height: "inherit"
+        }}
+      >
+        <AccessTimeIcon />
+      </IconButton>
+    </Tooltip>
+  );
+
+
   return (
-    <Card sx={{ width: "270px", height: "250px", margin: "auto" }}>
+    <Card sx={{ width: "285px", height: "270px", position: "relative", margin: "auto" }}>
+      {likeButton()}
       <CardMedia
         component="img"
         height="140"
         image={imgUrl}
-        alt="green iguana"
       />
       <CardContent style={ styles.content }>
         <div style={styles.header}>
-          <div style={styles.title}>{name}</div>
-          {loggedInUser && loggedInUser.email && <IconButton
-            style={{
-              padding: 0,
-              height: "inherit",
-              color: isLiked ? "red" : "gray"
-            }}
-            onClick={isLiked ? handleUnLikeClicked : handleLikeClicked}
-          >
-            <FavoriteIcon />
-          </IconButton>}
+          <div style={styles.title}>{name} <span style={styles.price}> {priceText[pricePoint]}</span></div>
+          {timesButton()}
         </div>
         <div>
           <Typography variant="body2" color="text.secondary">
             {description}
           </Typography>
         </div>
-        {tags.map((tag) => (
-          <Chip
-            key={tag}
-            label={tag}
-            size="small"
-            variant="outlined"
-            {...(chosedTags.includes(tag)
-              ? { variant: "filled", color: "success" }
-              : {})}
-          />
-        ))}
-        <div style={{ textAlign: "right" }}>
-          <Tooltip
-            title={
-              <div>
-                <OpeningHours openingTimes={openingTimes} />
-              </div>
-            }
-          >
-            <IconButton
-              style={{
-                padding: 0,
-                height: "inherit"
-              }}
-            >
-              <AccessTimeIcon />
-            </IconButton>
-          </Tooltip>
+        <div className={"restaurant-tags"}>
+          {tags.map((tag) => (
+            <Chip
+              key={tag}
+              label={tag}
+              size="small"
+              variant="outlined"
+              {...(chosedTags.includes(tag)
+                ? { variant: "filled", color: "success" }
+                : {})}
+            />
+          ))}
         </div>
       </CardContent>
     </Card>

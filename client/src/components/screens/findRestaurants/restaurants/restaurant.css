@@ -3,6 +3,26 @@
     justify-content: space-between;
 }
 
-    .restaurant-title {
-      font-size: 40px;   
-    }
+.restaurant-title {
+  font-size: 40px;   
+}
+
+.restaurant-tags {
+  overflow-y: scroll;
+  height: 54px;
+  margin-top: 3px;
+  padding: 1px 0;
+}
+
+.restaurant-tags::-webkit-scrollbar { /* WebKit */
+  width: 5px;
+}
+
+.restaurant-tags::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.restaurant-tags::-webkit-scrollbar-thumb {
+  background-color: #d6dee1;
+  border-radius: 8px;
+}
