@@ -24,6 +24,7 @@ const GroupView: React.FC = (): JSX.Element => {
     const {id} = useParams();
     const [group, setGroup] = useState<Group>(null);
     const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+    const [filteredRestaurants, setFilteredRestaurants] = useState<Restaurant[]>([]);
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
     const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null);
     const navigate = useNavigate();
@@ -70,6 +71,10 @@ const GroupView: React.FC = (): JSX.Element => {
         setGroup(updatedGroup);
         socket.emit("filtersUpdate", updatedGroup);
     };
+
+    const handleFilteredRestaurantsChnage = (newFilteredRestaurants) => {
+        setFilteredRestaurants(newFilteredRestaurants)
+    }
     
     useEffect(() => {
         axios.get('/restaurants').then(response => setRestaurants(response.data))
@@ -152,6 +157,8 @@ const GroupView: React.FC = (): JSX.Element => {
                                     restaurants={restaurants}
                                     filters={group?.filters}
                                     selectedRestaurant={selectedRestaurant}
+                                    filteredRestaurants={filteredRestaurants}
+                                    onFilteredRestaurantsChange={handleFilteredRestaurantsChnage}
                                     onRestaurantClick={(restaurant) =>
                                         setSelectedRestaurant(restaurant)
                                     }
@@ -162,8 +169,13 @@ const GroupView: React.FC = (): JSX.Element => {
                 </Grid>
             </Container>
             </Box>
-            <CollapsableMap filters={group?.filters} onFiltersChange={handleFiltersChange} selectedRestaurant={selectedRestaurant}/>
-        </Box>
+                <CollapsableMap
+                    filters={group?.filters}
+                    onFiltersChange={handleFiltersChange}
+                    selectedRestaurant={selectedRestaurant}
+                    restaurants={filteredRestaurants}
+                />
+            </Box>
     );
 };
 

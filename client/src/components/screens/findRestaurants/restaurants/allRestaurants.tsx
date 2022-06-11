@@ -17,18 +17,24 @@ dayjs.extend(isSameOrBefore);
 interface AllRestaurantsProps {
   filters: Filters;
   restaurants: TypedRestaurant[];
+  filteredRestaurants?: TypedRestaurant[];
+  onFilteredRestaurantsChange?: (restaurants: TypedRestaurant[]) => void;
   selectedRestaurant?: TypedRestaurant;
   onRestaurantClick?: (restaurant: TypedRestaurant) => void;
 }
 
 export const AllRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.Element => {
-  const { filters, restaurants, selectedRestaurant, onRestaurantClick } = props;
+  const {
+    filters,
+    restaurants,
+    filteredRestaurants,
+    onFilteredRestaurantsChange,
+    selectedRestaurant,
+    onRestaurantClick,
+  } = props;
 
   const { loggedInUser } = useAuth();
   const userLikedRestaurantsQuery = useUserLikedRestaurants(loggedInUser?.email);
-
-  const [filteredRestaurants, setFilteredRestaurants] = useState([]);
-
 
 
   useEffect(() => {
@@ -68,15 +74,18 @@ export const AllRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.Elemen
       return isInArea
     }
 
-    setFilteredRestaurants(
-      restaurants
-        ? restaurants
-            .filter(filterBySelectedArea)
-            .filter(filterByDay)
-            .filter(filterByHour)
-            .filter(filterByPrice)
-        : []
-    );
+    if (onFilteredRestaurantsChange) {
+      onFilteredRestaurantsChange(
+        restaurants
+          ? restaurants
+              .filter(filterBySelectedArea)
+              .filter(filterByDay)
+              .filter(filterByHour)
+              .filter(filterByPrice)
+          : []
+      );
+    }
+
   }, [restaurants, filters]);
 
   return (
@@ -87,7 +96,7 @@ export const AllRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.Elemen
         justifyContent: "flex-start",
       }}
     >
-      {filteredRestaurants?.map((restaurant, i) => (
+      {(filteredRestaurants || restaurants).map((restaurant, i) => (
         <div
           key={i}
           className={`restaurant-card-wrapper ${

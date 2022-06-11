@@ -27,10 +27,11 @@ type Props = {
   filters: any;
   onFiltersChange: Function;
   selectedRestaurant?: Restaurant;
+  restaurants: Restaurant[];
 };
 
 export const ResMap = (props: Props) => {
-  const { filters, onFiltersChange, selectedRestaurant } = props;
+  const { filters, onFiltersChange, selectedRestaurant, restaurants } = props;
 
   const mapRef = useRef<MapRef>();
   const editorRef = useRef<any>()!;
@@ -110,21 +111,22 @@ export const ResMap = (props: Props) => {
           editHandleShape={() => null}
         />
 
-        {selectedRestaurant?.location && (
+        {restaurants.map((restaurant) => (
           <Marker
-            key={`marker-${selectedRestaurant?.id}`}
-            longitude={selectedRestaurant.location.lng}
-            latitude={selectedRestaurant.location.lat}
+            key={`marker-${restaurant?.id}`}
+            longitude={restaurant.location.lng}
+            latitude={restaurant.location.lat}
             offsetLeft={-10}
             offsetTop={-17}
+            className={restaurant === selectedRestaurant ? 'selected-restaurant-pin' : ''}
           >
-            <Tooltip title={selectedRestaurant.name} placement="top">
+            <Tooltip title={restaurant.name} placement="top">
               <div>
-                <Pin />
+                <Pin selected={restaurant === selectedRestaurant} />
               </div>
             </Tooltip>
           </Marker>
-        )}
+        ))}
       </MapGL>
     </div>
   );
