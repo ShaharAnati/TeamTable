@@ -90,7 +90,7 @@ export const CreateRestaurant = ({
     name: restaurant?.name || "",
     description: restaurant?.description || "",
     tags: restaurant?.tags || [],
-    pricePoint: restaurant?.pricePoint || 2,
+    pricePoint: restaurant ? ( restaurant.pricePoint ?  restaurant.pricePoint : 0) : 2,
     phoneNumber: restaurant?.contactInfo?.phoneNumber || "",
     email: restaurant?.contactInfo?.email || "",
     openingTimes: restaurant?.openingTimes || {
