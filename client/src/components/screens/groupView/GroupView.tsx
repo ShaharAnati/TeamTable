@@ -14,6 +14,7 @@ import {Restaurant} from "../../../../../server/models/Restaurant";
 import JoinGroupDialog from "../../JoinGroupDialog/JoinGroupDialog";
 import {useNavigate} from "react-router-dom";
 import CollapsableMap from "src/components/Map/CollapsableMap";
+import axios from "axios";
 
 const io = require("socket.io-client");
 let socket;
@@ -63,6 +64,10 @@ const GroupView: React.FC = (): JSX.Element => {
         setGroup(updatedGroup);
         socket.emit("filtersUpdate", updatedGroup);
     };
+
+    useEffect(() => {
+        axios.get('/restaurants').then(response => setRestaurants(response.data))
+    }, []);
 
     useEffect(() => {
         const socket = initWebsocket();
