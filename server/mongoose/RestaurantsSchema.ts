@@ -32,7 +32,8 @@ const restaurantSchema = new mongoose.Schema({
     email: { type: String }
   },
   url: { type: String },
-  isVerified: { type: Boolean }
+  isVerified: { type: Boolean },
+  pricePoint: { type: Number }
 });
 
 const schema: any = mongoose.model("restaurants", restaurantSchema);

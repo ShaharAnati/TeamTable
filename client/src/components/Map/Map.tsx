@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Map as ReactMap, MapRef, Marker, useControl } from "react-map-gl";
+import { Map as ReactMap, MapRef, Marker, useControl } from "react-map-gl-v7";
 import maplibregl from "maplibre-gl";
 
 import "maplibre-gl/dist/maplibre-gl.css";
