@@ -12,6 +12,7 @@ import {ExtendedGroupData, Group} from "../../../../../server/models/Group";
 import {Restaurant} from "../../../../../server/models/Restaurant";
 import JoinGroupDialog from "../../JoinGroupDialog/JoinGroupDialog";
 import {useNavigate} from "react-router-dom";
+import GroupMenu from "../../GroupMenu/GroupMenu";
 
 const io = require("socket.io-client");
 let socket;
@@ -32,6 +33,10 @@ const GroupView: React.FC = (): JSX.Element => {
     const handleCancellation = () => {
         setIsDialogOpen(false);
         navigate("/", { replace: true });
+    }
+
+    const handleLeaveGroup = () => {
+        console.log("leave group");
     }
 
     function initWebsocket() {
@@ -76,18 +81,21 @@ const GroupView: React.FC = (): JSX.Element => {
             <Container maxWidth={"xl"} style={{marginTop: "1%"}}>
                 <Grid container spacing={5}>
                     <Grid item xs={4}>
-                        <Button
-                            variant="outlined"
-                            size="medium"
-                            color="inherit"
-                            endIcon={<ContentCopyIcon/>}
-                            onClick={() => navigator.clipboard.writeText(window.location.href)}
-                            className="CopyToClipboardButton">
-                            {window.location.href}
-                            <span className="ContentCopyIcon">
+                        <div style={{display: "flex"}}>
+                            <GroupMenu onLeaveGroup={handleLeaveGroup}></GroupMenu>
+                            <Button
+                                variant="outlined"
+                                size="medium"
+                                color="inherit"
+                                endIcon={<ContentCopyIcon/>}
+                                onClick={() => navigator.clipboard.writeText(window.location.href)}
+                                className="CopyToClipboardButton">
+                                {window.location.href}
+                                <span className="ContentCopyIcon">
                             <ContentCopyIcon style={{backgroundColor: "white"}}/>
                         </span>
-                        </Button>
+                            </Button>
+                        </div>
                         <Typography color="inherit"
                                     style={{marginLeft: "6%", fontSize: "2vw", paddingTop: "5%"}}>
                             Table Members
