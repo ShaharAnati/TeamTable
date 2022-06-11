@@ -20,7 +20,14 @@ const DEFAULT_VIEWPORT = {
   zoom: 13,
 };
 
-export const ResMap = (props) => {
+type Props = {
+  selectedArea?: any;
+  onSelectedAreaChange: Function;
+};
+
+export const ResMap = (props: Props) => {
+  const { selectedArea, onSelectedAreaChange } = props;
+
   const mapRef = useRef<MapRef>();
   const editorRef = useRef<any>()!;
 
@@ -30,6 +37,18 @@ export const ResMap = (props) => {
   const [modeHandler, setModeHandler] = useState<any>(
     new DrawCircleFromCenterMode()
   );
+
+  useEffect(() => {
+    console.log('got3')
+
+    setLocalFeatures(selectedArea ? [selectedArea] : []);
+  }, [selectedArea]);
+
+  useEffect(() => {
+    console.log('got2')
+
+    onSelectedAreaChange(localFeatures);
+  }, [onSelectedAreaChange, localFeatures]);
 
   useEffect(() => {
     if (localFeatures.length === 0) {

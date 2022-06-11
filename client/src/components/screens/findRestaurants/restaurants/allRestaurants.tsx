@@ -50,6 +50,8 @@ export const AllRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.Elemen
       );
     };
 
+    console.log(filters.selectedArea)
+
     setFilteredRestaurants(
       restaurants
         ? restaurants

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {Box, Button, Container, Grid, Typography,} from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {useParams} from "react-router";
@@ -63,10 +63,17 @@ const GroupView: React.FC = (): JSX.Element => {
         socket.emit("filtersUpdate", updatedGroup);
     };
 
+    const handleSelectedAreaChange = useCallback((newArea: any) =>  {
+        console.log('got1')
+        handleFiltersChange({ ...group?.filters, selectedArea: newArea })
+    },[group])
+
     useEffect(() => {
         const socket = initWebsocket();
         return () => socket.disconnect();
     }, []);
+
+    if (!socket) return null;
 
     return (
         <Box sx={{display:'flex', height:'100%'}}>
@@ -129,7 +136,7 @@ const GroupView: React.FC = (): JSX.Element => {
                 </Grid>
             </Container>
             </Box>
-            <CollapsableMap />
+            <CollapsableMap filters={group?.filters} selectedArea={group?.filters?.selectedArea} onSelectedAreaChange={handleSelectedAreaChange}/>
         </Box>
     );
 };
