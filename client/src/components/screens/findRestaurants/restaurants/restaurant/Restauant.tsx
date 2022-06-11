@@ -159,11 +159,11 @@ export const RestaurantComponent = (props: Props): JSX.Element => {
 
 
   return (
-    <Card sx={{ width: "285px", height: "270px", position: "relative", margin: "auto" }}>
+    <Card sx={{ width: "240px", height: "240px", position: "relative", margin: "auto" }}>
       {likeButton()}
       <CardMedia
         component="img"
-        height="140"
+        height="110"
         image={imgUrl}
       />
       <CardContent style={ styles.content }>

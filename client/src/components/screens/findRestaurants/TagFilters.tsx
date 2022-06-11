@@ -34,6 +34,7 @@ const TagFilters: React.FC<Props> = (props: Props): JSX.Element => {
         <div key={tag} className="TagFilters-chip">
           <Chip
             label={tag}
+            size="small"
             onClick={() => handleTagsChange(_.xor(selectedTags, [tag]))}
             {...(selectedTags.includes(tag) ? { color: "success" } : {})}
           />
