@@ -22,6 +22,13 @@ export interface Restaurant {
   pricePoint?: number;
 }
 
+export const priceText = {
+  1: "$",
+  2: "$$",
+  3: "$$$",
+  4: "$$$$",
+};
+
 export const dayMapping = {
   "1": "Sunday",
   "2": "Monday",

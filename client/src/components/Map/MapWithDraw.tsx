@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import MapGL, { MapRef, setRTLTextPlugin } from "react-map-gl";
+import MapGL, { MapRef, Marker, setRTLTextPlugin } from "react-map-gl";
 import maplibregl from "maplibre-gl";
 import {
   Editor,
@@ -7,6 +7,10 @@ import {
   EditingMode,
 } from "react-map-gl-draw";
 import "maplibre-gl/dist/maplibre-gl.css";
+import { Restaurant } from "src/types/Resturants";
+import Pin from "./Pin";
+import { Box, ToggleButton, Tooltip } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 setRTLTextPlugin(
   "https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js",
@@ -20,11 +24,26 @@ const DEFAULT_VIEWPORT = {
   zoom: 13,
 };
 
-export const ResMap = (props) => {
+type Props = {
+  filters: any;
+  onFiltersChange: Function;
+  selectedRestaurant?: Restaurant;
+  restaurants: Restaurant[];
+};
+
+export const ResMap = (props: Props) => {
+  const { filters, onFiltersChange, selectedRestaurant, restaurants } = props;
+
   const mapRef = useRef<MapRef>();
   const editorRef = useRef<any>()!;
 
-  const [localFeatures, setLocalFeatures] = useState([]);
+  const featureExist = !!filters?.selectedArea;
+
+  const [isFeatureSelected, setIsFeatureSelected] = useState(false);
+
+  const [localFeatures, setLocalFeatures] = useState(
+    filters?.selectedArea ? [filters.selectedArea] : []
+  );
 
   const [viewport, setViewport] = useState(DEFAULT_VIEWPORT);
   const [modeHandler, setModeHandler] = useState<any>(
@@ -32,27 +51,49 @@ export const ResMap = (props) => {
   );
 
   useEffect(() => {
-    if (localFeatures.length === 0) {
+    setLocalFeatures(filters?.selectedArea ? [filters.selectedArea] : []);
+  }, [filters?.selectedArea]);
+
+  useEffect(() => {
+    if (!featureExist) {
       setModeHandler(new DrawCircleFromCenterMode());
     } else {
       setModeHandler(new EditingMode());
     }
-  }, [localFeatures.length]);
+  }, [featureExist]);
+
+  const handleSelectionChnage = (localFeatures) => {
+    onFiltersChange({ ...filters, selectedArea: localFeatures[0] });
+  };
+
+  const handleCircleDelete = () => {
+    const editor = editorRef.current!;
+    const selectedFeatureIndex = editor?.state.selectedFeatureIndex;
+    if (selectedFeatureIndex == null) return;
+    handleSelectionChnage([null]);
+    setIsFeatureSelected(false);
+  };
 
   const onKeyDown = (event) => {
     if (["Delete", "Backspace"].includes(event.key)) {
-      const editor = editorRef.current!;
+      handleCircleDelete();
+    }
+  };
 
-      const selectedFeatureIndex = editor?.state.selectedFeatureIndex;
-      if (selectedFeatureIndex == null) return;
-
-      localFeatures.splice(selectedFeatureIndex, 1);
-      setLocalFeatures(localFeatures);
+  const onMouseUp = (event) => {
+    if (localFeatures.length > 0) {
+      if (localFeatures[0] !== filters?.selectedArea) {
+        handleSelectionChnage(localFeatures);
+      }
     }
   };
 
   return (
-    <div style={{ height: "100%", width: "100%" }} onKeyDown={onKeyDown}>
+    <div
+      style={{ height: "100%", width: "100%", position: "relative" }}
+      onKeyDown={onKeyDown}
+      onMouseUp={onMouseUp}
+    >
       <MapGL
         {...viewport}
         width="100%"
@@ -73,9 +114,45 @@ export const ResMap = (props) => {
               setLocalFeatures(data);
             }
           }}
+          onSelect={({ selectedFeature }) =>
+            setIsFeatureSelected(!!selectedFeature)
+          }
           editHandleShape={() => null}
         />
+
+        {restaurants.map((restaurant) => (
+          <Marker
+            key={`marker-${restaurant?.id}`}
+            longitude={restaurant.location.lng}
+            latitude={restaurant.location.lat}
+            offsetLeft={-10}
+            offsetTop={-17}
+            className={
+              selectedRestaurant && restaurant.id === selectedRestaurant.id
+                ? "selected-restaurant-pin"
+                : ""
+            }
+          >
+            <Tooltip title={restaurant.name} placement="top">
+              <div>
+                <Pin selected={restaurant.id === selectedRestaurant?.id} />
+              </div>
+            </Tooltip>
+          </Marker>
+        ))}
       </MapGL>
+      {isFeatureSelected && (
+        <Box sx={{ position: "absolute", top: 23, right: 10 }}>
+          <ToggleButton
+            size="small"
+            value="check"
+            selected={true}
+            onClick={() => handleCircleDelete()}
+          >
+            <DeleteIcon />
+          </ToggleButton>
+        </Box>
+      )}
     </div>
   );
 };

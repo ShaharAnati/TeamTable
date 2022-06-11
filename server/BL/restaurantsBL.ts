@@ -5,6 +5,10 @@ import { getAllTagGroups } from '../mongoose/TagsSchema';
 import { getGroupLikedRestaurants } from './groupsService';
 // import { getAllTagGroups } from '../mongoose/TagsSchema';
 
+export const getRestaurants = async () => {
+    const restaurants: Restaurant[] = (await getAllRestaurants()).filter(res => res.isVerified);
+    return restaurants;
+}
 
 export const rankByTags = async (tagNames: string[], groupUsers?: GroupUser[]): Promise<Restaurant[]> => {
     const restaurants: Restaurant[] = (await getAllRestaurants()).filter(res => res.isVerified);

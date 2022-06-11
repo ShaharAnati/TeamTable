@@ -10,6 +10,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
 
 import { Filters } from "../../../types/Group";
+import { priceText } from "../../../types/Resturants";
 
 type Props = {
   onFiltersChange: (filters: Filters) => void;
@@ -28,13 +29,6 @@ const MenuProps = {
 };
 
 const pricePoints = [1, 2, 3, 4];
-
-const priceText = {
-  1: "$",
-  2: "$$",
-  3: "$$$",
-  4: "$$$$",
-};
 
 export default function PricePointsFilter({ onFiltersChange, filters }: Props) {
 //   const [selectedPriceRange, setSelectedPriceRange] = React.useState<number[]>(

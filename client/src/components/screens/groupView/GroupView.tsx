@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {Box, Button, Container, Grid, Typography,} from "@mui/material";
+import React, {useCallback, useEffect, useState} from "react";
+import {Box, Button, CircularProgress, Container, Grid, Typography,} from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {useParams} from "react-router";
 import {Filters} from "src/types/Group";
@@ -10,7 +10,7 @@ import PricePointsFilter from "../findRestaurants/PriceFilter";
 import {AllRestaurants} from "../findRestaurants/restaurants/allRestaurants";
 import "./GroupView.css";
 import {ExtendedGroupData, Group} from "../../../../../server/models/Group";
-import {Restaurant} from "../../../../../server/models/Restaurant";
+import {Restaurant} from "src/types/Resturants";
 import JoinGroupDialog from "../../JoinGroupDialog/JoinGroupDialog";
 import {useNavigate} from "react-router-dom";
 import GroupMenu from "../../GroupMenu/GroupMenu";
@@ -24,7 +24,9 @@ const GroupView: React.FC = (): JSX.Element => {
     const {id} = useParams();
     const [group, setGroup] = useState<Group>(null);
     const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+    const [filteredRestaurants, setFilteredRestaurants] = useState<Restaurant[]>([]);
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+    const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null);
     const navigate = useNavigate();
     const curUser = sessionStorage.getItem("user_email");
 
@@ -69,13 +71,22 @@ const GroupView: React.FC = (): JSX.Element => {
         setGroup(updatedGroup);
         socket.emit("filtersUpdate", updatedGroup);
     };
+
+    const handleFilteredRestaurantsChnage = (newFilteredRestaurants) => {
+        setFilteredRestaurants(newFilteredRestaurants)
+    }
     
     useEffect(() => {
-        axios.get('/restaurants').then(response => setRestaurants(response.data))
-
         const socket = initWebsocket();
         return () => socket.disconnect();
     }, []);
+
+    if (!socket || !group)
+        return (
+            <Box display='flex' justifyContent='center' alignItems='center' sx={{ height: "100%", width: "100%" }}>
+                <CircularProgress size={60} />
+            </Box>
+        );
 
     return (
         <Box sx={{display:'flex', height:'100%'}}>
@@ -140,15 +151,29 @@ const GroupView: React.FC = (): JSX.Element => {
                                         />
                                     </div>
                                 </div>
-                                <AllRestaurants restaurants={restaurants} filters={group?.filters}/>
+                                <AllRestaurants
+                                    restaurants={restaurants}
+                                    filters={group?.filters}
+                                    selectedRestaurant={selectedRestaurant}
+                                    filteredRestaurants={filteredRestaurants}
+                                    onFilteredRestaurantsChange={handleFilteredRestaurantsChnage}
+                                    onRestaurantClick={(restaurant) =>
+                                        setSelectedRestaurant(restaurant)
+                                    }
+                                />                            
                             </div>
                         )}
                     </Grid>
                 </Grid>
             </Container>
             </Box>
-            <CollapsableMap />
-        </Box>
+                <CollapsableMap
+                    filters={group?.filters}
+                    onFiltersChange={handleFiltersChange}
+                    selectedRestaurant={selectedRestaurant}
+                    restaurants={filteredRestaurants}
+                />
+            </Box>
     );
 };
 

@@ -1,11 +1,22 @@
 import React, { useState } from "react";
 import MapIcon from "@mui/icons-material/Map";
-import { Box, Button, Collapse, ToggleButton } from "@mui/material";
+import { Box, Collapse, ToggleButton } from "@mui/material";
 import { ResMap as MapWithDraw } from "./MapWithDraw";
+import { Restaurant } from "src/types/Resturants";
 
-type Props = {};
+type Props = {
+  filters: any;
+  onFiltersChange: Function;
+  selectedRestaurant?: Restaurant;
+  restaurants?: Restaurant[];
+};
 
-function CollapsableMap({}: Props) {
+function CollapsableMap({
+  filters,
+  onFiltersChange,
+  selectedRestaurant,
+  restaurants
+}: Props) {
   const [expanded, setExpanded] = useState(true);
 
   return (
@@ -22,7 +33,12 @@ function CollapsableMap({}: Props) {
       </Box>
       <Collapse in={expanded} orientation="horizontal" sx={{ height: "100%" }}>
         <Box sx={{ height: "100%", width: "420px" }}>
-          <MapWithDraw />
+          <MapWithDraw
+            filters={filters}
+            onFiltersChange={onFiltersChange}
+            selectedRestaurant={selectedRestaurant}
+            restaurants={restaurants}
+          />
         </Box>
       </Collapse>
     </Box>
