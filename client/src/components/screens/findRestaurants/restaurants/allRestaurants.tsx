@@ -8,7 +8,8 @@ import Restaurant from "./restaurant/Restauant";
 import {Filters} from "src/types/Group";
 import useUserLikedRestaurants from "src/hooks/useUserLikedRestaurants";
 import {useAuth} from "src/auth/AuthProvider";
-import {Restaurant as TypedRestaurant} from "src/types/Resturants";
+import { Restaurant as TypedRestaurant} from "src/types/Resturants";
+import { isPointInPolygon } from "src/helpers/filter-point-in-ploygon";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -16,16 +17,24 @@ dayjs.extend(isSameOrBefore);
 interface AllRestaurantsProps {
   filters: Filters;
   restaurants: TypedRestaurant[];
+  filteredRestaurants?: TypedRestaurant[];
+  onFilteredRestaurantsChange?: (restaurants: TypedRestaurant[]) => void;
+  selectedRestaurant?: TypedRestaurant;
+  onRestaurantClick?: (restaurant: TypedRestaurant) => void;
 }
 
 export const AllRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.Element => {
-  const { filters, restaurants } = props;
+  const {
+    filters,
+    restaurants,
+    filteredRestaurants,
+    onFilteredRestaurantsChange,
+    selectedRestaurant,
+    onRestaurantClick,
+  } = props;
 
   const { loggedInUser } = useAuth();
   const userLikedRestaurantsQuery = useUserLikedRestaurants(loggedInUser?.email);
-
-  const [filteredRestaurants, setFilteredRestaurants] = useState([]);
-
 
 
   useEffect(() => {
@@ -53,14 +62,30 @@ export const AllRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.Elemen
       );
     };
 
-    setFilteredRestaurants(
-      restaurants
-        ? restaurants
-            .filter(filterByDay)
-            .filter(filterByHour)
-            .filter(filterByPrice)
-        : []
-    );
+    const filterBySelectedArea = (restaurant) => {
+      if (!filters?.selectedArea) return true;
+      if (!restaurant.location) return false;
+
+      const isInArea = isPointInPolygon(restaurant.location, filters.selectedArea);
+
+      if (selectedRestaurant && restaurant?.id === selectedRestaurant?.id && !isInArea) {
+        onRestaurantClick(null);
+      }
+      return isInArea
+    }
+
+    if (onFilteredRestaurantsChange) {
+      onFilteredRestaurantsChange(
+        restaurants
+          ? restaurants
+              .filter(filterBySelectedArea)
+              .filter(filterByDay)
+              .filter(filterByHour)
+              .filter(filterByPrice)
+          : []
+      );
+    }
+
   }, [restaurants, filters]);
 
   return (
@@ -71,9 +96,20 @@ export const AllRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.Elemen
         justifyContent: "flex-start",
       }}
     >
-      {filteredRestaurants?.map((restaurant, i) => (
-        <div key={i} style={{ margin: "auto", padding: "0 16px 50px 16px" }}>
-          <Restaurant restaurant={restaurant} chosedTags={filters.tags} likedRestaurants={userLikedRestaurantsQuery && userLikedRestaurantsQuery.data}/>
+      {(filteredRestaurants || restaurants).map((restaurant, i) => (
+        <div
+          key={i}
+          className={`restaurant-card-wrapper ${
+            restaurant === selectedRestaurant ? "selected" : ""
+          }`}
+          style={{ margin: "auto", padding: "0 16px 50px 16px" }}
+          onClick={() => onRestaurantClick && onRestaurantClick(restaurant)}
+        >
+          <Restaurant
+            restaurant={restaurant}
+            chosedTags={filters.tags}
+            likedRestaurants={userLikedRestaurantsQuery && userLikedRestaurantsQuery.data}
+          />
         </div>
       ))}
     </div>

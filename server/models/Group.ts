@@ -3,7 +3,8 @@ import { Restaurant } from "./Restaurant";
 type Filters = {
     day?: string;
     hour?: string;
-    tags?: string[]
+    tags?: string[];
+    selectedArea?: any;
 }
 
 export interface Group {
