@@ -52,9 +52,10 @@ function delayRestaurantsCalc(groupId: string, eventEmitCb: (restaurants: Restau
 }
 
 
-function createNewGroup(groupId: any, user: string) {
+function createNewGroup(groupId: any, user: string, name: string) {
   const group: Group = {
     id: groupId,
+    name,
     members: [{ username: user, active: true }],
     creator: user,
     filters: {},
@@ -123,7 +124,7 @@ io.on("connection", (socket: any) => {
 
   // Somebody entered the group room
   socket.on("joinGroup", async (data: any) => {
-    const { user, groupId, name } = data;
+    const { user, groupId, groupName } = data;
     socket.join(groupId);
 
     let group: Group;
@@ -139,7 +140,7 @@ io.on("connection", (socket: any) => {
         io.to(groupId).emit("newUser", user);
       }
     } else {
-      group = createNewGroup(groupId, user);
+      group = createNewGroup(groupId, user, groupName);
     }
 
     groupsUserSocketId.set(socket.id, { user, groupId });

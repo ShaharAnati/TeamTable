@@ -47,6 +47,8 @@ type Props = {
   onFavoriteClick?: Function;
   chosedTags: string[];
   likedRestaurants: string[];
+  isSelected?: boolean;
+  onClick?;
 };
 
 const OpeningHours = ({ openingTimes }): JSX.Element => {
@@ -70,7 +72,7 @@ const OpeningHours = ({ openingTimes }): JSX.Element => {
 };
 
 export const RestaurantComponent = (props: Props): JSX.Element => {
-  const { restaurant, chosedTags = [], likedRestaurants = [] } = props;
+  const { restaurant, chosedTags = [], likedRestaurants = [], isSelected, onClick } = props;
   const { id, name, pricePoint, description, tags, imgUrl, openingTimes } = restaurant;
 
   const [isLiked, setIsLiked] = useState<boolean>(false)
@@ -159,7 +161,10 @@ export const RestaurantComponent = (props: Props): JSX.Element => {
 
 
   return (
-    <Card sx={{ width: "240px", height: "240px", position: "relative", margin: "auto" }}>
+    <Card
+      onClick={onClick}
+     sx={{ width: "240px", height: "240px", position: "relative", margin: "auto" }}
+     className={`${isSelected && "selected"}`}>
       {likeButton()}
       <CardMedia
         component="img"
