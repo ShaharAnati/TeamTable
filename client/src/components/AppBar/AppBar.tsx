@@ -90,12 +90,6 @@ const MenuAppBar = () => {
                     onClick={handleClose}>
                     log in
                   </MenuItem>
-                  <MenuItem
-                    component={Link}
-                    to="/register-screen"
-                    onClick={handleClose}>
-                    register
-                  </MenuItem>
                 </div>
               }
             </Menu>
