@@ -60,35 +60,38 @@ const GroupView: React.FC = (): JSX.Element => {
     navigate("/");
   };
 
-  function initWebsocket() {
-    socket = io();
-    socket.emit("joinGroup", { user: curUser, groupId: id });
-    socket.on("newUser", (data) => {
-      if (sessionStorage.getItem("user_email") === data) {
-        setIsDialogOpen(true);
-      }
-    });
-    socket.on("groupDataChanged", (data: ExtendedGroupData) => {
-      console.log("received groupDataChanged");
-      const { restaurants, ...groupData } = data;
-      setGroup(groupData);
-      if (restaurants) {
-        setRestaurants(restaurants);
-      }
-    });
 
-    return socket;
-  }
+    function initWebsocket() {
+        socket = io();
+        socket.emit("joinGroup", {user: curUser, groupId: id});
+        socket.on("newUser", (data) => {
+            if(sessionStorage.getItem("user_email") === data) {
+                setIsDialogOpen(true);
+            }
+        })
+        socket.on("groupDataChanged", (groupData: Group) => {
+            console.log('received groupDataChanged')
+            setGroup(groupData);
+        });
 
-  const handleFiltersChange = (newFilters: Filters) => {
-    const updatedGroup = { ...group, filters: newFilters } as Group;
-    setGroup(updatedGroup);
-    socket.emit("filtersUpdate", updatedGroup);
-  };
+        socket.on('restaurantsUpdate', (restaurants: Restaurant[]) => {
+            if (restaurants) {
+                setRestaurants(restaurants);
+            }
+        })
 
-  const handleFilteredRestaurantsChnage = (newFilteredRestaurants) => {
-    setFilteredRestaurants(newFilteredRestaurants);
-  };
+        return socket;
+    }
+
+    const handleFilteredRestaurantsChnage = (newFilteredRestaurants) => {
+        setFilteredRestaurants(newFilteredRestaurants);
+    };
+
+    const handleFiltersChange = (newFilters: Filters) => {
+        const updatedGroup = {...group, filters: newFilters} as Group;
+        setGroup(updatedGroup);
+        socket.emit("filtersUpdate", updatedGroup);
+    };
 
   useEffect(() => {
     const socket = initWebsocket();
