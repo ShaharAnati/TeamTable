@@ -60,22 +60,6 @@ const GroupView: React.FC = (): JSX.Element => {
     navigate("/");
   };
 
-  function initWebsocket() {
-    socket = io();
-    socket.emit("joinGroup", { user: curUser, groupId: id });
-    socket.on("newUser", (data) => {
-      if (sessionStorage.getItem("user_email") === data) {
-        setIsDialogOpen(true);
-      }
-    });
-    socket.on("groupDataChanged", (data: ExtendedGroupData) => {
-      console.log("received groupDataChanged");
-      const { restaurants, ...groupData } = data;
-      setGroup(groupData);
-      if (restaurants) {
-        setRestaurants(restaurants);
-      }
-    });
 
     function initWebsocket() {
         socket = io();
@@ -91,7 +75,6 @@ const GroupView: React.FC = (): JSX.Element => {
         });
 
         socket.on('restaurantsUpdate', (restaurants: Restaurant[]) => {
-            console.log("sdsdasad")
             if (restaurants) {
                 setRestaurants(restaurants);
             }
@@ -102,10 +85,11 @@ const GroupView: React.FC = (): JSX.Element => {
 
     const handleFilteredRestaurantsChnage = (newFilteredRestaurants) => {
         setFilteredRestaurants(newFilteredRestaurants);
-        };
+    };
 
     const handleFiltersChange = (newFilters: Filters) => {
         const updatedGroup = {...group, filters: newFilters} as Group;
+        setGroup(updatedGroup);
         socket.emit("filtersUpdate", updatedGroup);
     };
 
