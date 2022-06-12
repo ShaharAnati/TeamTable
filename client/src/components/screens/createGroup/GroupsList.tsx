@@ -34,7 +34,7 @@ function GroupsList({}: Props) {
           const isActive = group.members.some((member) => member.active);
 
           return (
-            <Grid item xs={4}>
+            <Grid item xs={4} key={group.id}>
               <Paper
                 variant="outlined"
                 sx={{
