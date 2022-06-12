@@ -18,7 +18,7 @@ import "./GroupView.css";
 import { ExtendedGroupData, Group } from "../../../../../server/models/Group";
 import { Restaurant } from "src/types/Resturants";
 import JoinGroupDialog from "../../JoinGroupDialog/JoinGroupDialog";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import GroupMenu from "../../GroupMenu/GroupMenu";
 import CollapsableMap from "src/components/Map/CollapsableMap";
 import WeekDayFilter from "../findRestaurants/WeekDayFilter";
@@ -36,8 +36,13 @@ const GroupView: React.FC = (): JSX.Element => {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [selectedRestaurant, setSelectedRestaurant] =
     useState<Restaurant | null>(null);
-  const navigate = useNavigate();
+
   const curUser = sessionStorage.getItem("user_email");
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const state = location.state as { group: Group };
+
 
   const handleApprove = () => {
     const curUser = sessionStorage.getItem("user_email");
@@ -118,7 +123,7 @@ const GroupView: React.FC = (): JSX.Element => {
       <Box sx={{display:'flex', flexDirection: 'column', width: '100%'}}>
         <Box sx={{ display: 'flex', alignItems: 'center', height: 88, borderBottom: '1px solid #c1c1c13d', padding: '24px', paddingRight: '30px',backgroundColor: '#f8f8f8' }}>
             <Box sx={{marginRight: 'auto'}}>
-                <Typography variant="h5" >{group.name}</Typography>
+                <Typography variant="h5" >{state ? state.group.name : group.name}</Typography>
             </Box>
             <WeekDayFilter 
               initialDay={group.filters.day}
