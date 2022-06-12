@@ -38,7 +38,7 @@ const groupsUserSocketId = new Map();
 
 const delayedRestaurantsCalc = new Map<string, ReturnType<typeof setTimeout>>();
 
-function delayRestaurantsCalc(groupId: string, eventEmitCb: (restaurants: Restaurant[]) => void) {
+function delayRestaurantsCalc(groupId: string, eventEmitCb: (restaurants: Restaurant[]) => void, delayInMs = 100) {
   const prevDelayedCalculateRestaurants = delayedRestaurantsCalc.get(groupId);
   clearTimeout(prevDelayedCalculateRestaurants);
 
@@ -46,7 +46,7 @@ function delayRestaurantsCalc(groupId: string, eventEmitCb: (restaurants: Restau
     const cachedGroup = groupsDataCache.get(groupId);
     const rankedRestaurants: Restaurant[] = await rankByTags(cachedGroup?.filters?.tags || [], cachedGroup?.members);
     eventEmitCb(rankedRestaurants);
-  }, 100)
+  }, delayInMs)
 
   delayedRestaurantsCalc.set(groupId, newDelayedCalculateRestaurants);
 }
@@ -148,7 +148,7 @@ io.on("connection", (socket: any) => {
 
     delayRestaurantsCalc(groupId, (rankedRestaurants) => {
       io.in(groupId).emit('restaurantsUpdate', rankedRestaurants)
-    })
+    }, 0)
 
     console.log("joined group: " + groupId);
 
