@@ -67,7 +67,7 @@ function createNewGroup(groupId: any, user: string) {
 
 async function handleCreatorLeavingGroup(group: Group, socket: any, groupId: string) {
   if (group.members.length === 0) {
-    await GroupSchema.deleteOne(group.id);
+    await GroupSchema.deleteOne({ id: group.id });
     groupsDataCache.delete(group.id);
   } else {
     group.creator = group.members[0].username;
@@ -123,7 +123,7 @@ io.on("connection", (socket: any) => {
 
   // Somebody entered the group room
   socket.on("joinGroup", async (data: any) => {
-    const { user, groupId } = data;
+    const { user, groupId, name } = data;
     socket.join(groupId);
 
     let group: Group;
