@@ -82,6 +82,9 @@ const GroupMembersList: React.FC<GroupMembersListProps> = (props): JSX.Element =
                                 </ListItemAvatar>
                                 <ListItemText 
                                     primary={member.username} 
+                                    secondaryTypographyProps={{
+                                        component: 'span'
+                                    }}
                                     secondary={
                                         group.creator === member.username &&  
                                         <Chip 

@@ -60,35 +60,38 @@ const GroupView: React.FC = (): JSX.Element => {
     navigate("/");
   };
 
-  function initWebsocket() {
-    socket = io();
-    socket.emit("joinGroup", { user: curUser, groupId: id });
-    socket.on("newUser", (data) => {
-      if (sessionStorage.getItem("user_email") === data) {
-        setIsDialogOpen(true);
-      }
-    });
-    socket.on("groupDataChanged", (data: ExtendedGroupData) => {
-      console.log("received groupDataChanged");
-      const { restaurants, ...groupData } = data;
-      setGroup(groupData);
-      if (restaurants) {
-        setRestaurants(restaurants);
-      }
-    });
 
-    return socket;
-  }
+    function initWebsocket() {
+        socket = io();
+        socket.emit("joinGroup", {user: curUser, groupId: id, groupName: state && state?.group?.name});
+        socket.on("newUser", (data) => {
+            if(sessionStorage.getItem("user_email") === data) {
+                setIsDialogOpen(true);
+            }
+        })
+        socket.on("groupDataChanged", (groupData: Group) => {
+            console.log('received groupDataChanged')
+            setGroup(groupData);
+        });
 
-  const handleFiltersChange = (newFilters: Filters) => {
-    const updatedGroup = { ...group, filters: newFilters } as Group;
-    setGroup(updatedGroup);
-    socket.emit("filtersUpdate", updatedGroup);
-  };
+        socket.on('restaurantsUpdate', (restaurants: Restaurant[]) => {
+            if (restaurants) {
+                setRestaurants(restaurants);
+            }
+        })
 
-  const handleFilteredRestaurantsChnage = (newFilteredRestaurants) => {
-    setFilteredRestaurants(newFilteredRestaurants);
-  };
+        return socket;
+    }
+
+    const handleFilteredRestaurantsChnage = (newFilteredRestaurants) => {
+        setFilteredRestaurants(newFilteredRestaurants);
+    };
+
+    const handleFiltersChange = (newFilters: Filters) => {
+        const updatedGroup = {...group, filters: newFilters} as Group;
+        setGroup(updatedGroup);
+        socket.emit("filtersUpdate", updatedGroup);
+    };
 
   useEffect(() => {
     const socket = initWebsocket();
@@ -125,7 +128,7 @@ const GroupView: React.FC = (): JSX.Element => {
         <Box sx={{ borderBottom: '1px solid #c1c1c13d', backgroundColor: '#f8f8f8' }}>
           <Box sx={{ height: 88,display: 'flex', alignItems: 'center', maxWidth: 'calc(100vw - 70px)', padding: '24px', paddingRight: '30px'  }}>
               <Box sx={{marginRight: 'auto'}}>
-                  <Typography variant="h5" >{state ? state.group.name : group.name}</Typography>
+                  <Typography variant="h5" >{ group.name ? group.name : state && state.group.name }</Typography>
               </Box>
               <WeekDayFilter 
                 initialDay={group.filters.day}

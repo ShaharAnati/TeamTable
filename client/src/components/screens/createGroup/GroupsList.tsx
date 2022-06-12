@@ -48,7 +48,7 @@ function GroupsList({}: Props) {
                     borderColor: "primary.main",
                   },
                 }}
-                onClick={() => navigate(`/group-page/${group.id}`)}
+                onClick={() => navigate(`/group-page/${group.id}`, {state: { group }})}
               >
                 <Box
                   sx={{

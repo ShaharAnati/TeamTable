@@ -24,7 +24,7 @@ const CreateGroupContainer: React.FC = (): JSX.Element => {
             }
         }); // TODO: remove localhost
         
-        navigate('/group-page/' + newGroup.data.id,  {state: { group: newGroup.data} })
+        navigate('/group-page/' + newGroup.data.id, {state: { group: newGroup.data} })
     }
 
     return (

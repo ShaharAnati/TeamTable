@@ -59,6 +59,7 @@ function Participants({ members, max = 5 }: Props) {
           {members?.map((member, i) => {
             return (
               <Badge
+                key={member.username}
                 overlap="circular"
                 anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                 variant="dot"
