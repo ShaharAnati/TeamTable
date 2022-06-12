@@ -152,7 +152,7 @@ io.on("connection", (socket: any) => {
       ...data
     }
 
-    io.to(groupId).emit("groupDataChanged", dataToReturn);
+    socket.to(groupId).emit("groupDataChanged", dataToReturn);
   });
 
   socket.on("disconnect", async () => {
