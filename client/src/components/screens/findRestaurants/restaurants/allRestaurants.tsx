@@ -126,6 +126,8 @@ export const AllRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.Elemen
           justifyContent: "flex-start",
           overflow: "auto",
           height: "100%",
+          paddingTop: '20px',
+          minWidth: '300px'
         }}
       >
         {getRestaurants().map((restaurant, i) => (

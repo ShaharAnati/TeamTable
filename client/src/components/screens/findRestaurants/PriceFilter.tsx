@@ -87,6 +87,16 @@ export default function PricePointsFilter({ onFiltersChange, filters }: Props) {
           renderValue={(selected) => renderValue(selected)}
           MenuProps={MenuProps}
           autoWidth
+          IconComponent={null}
+          sx= {{
+            '.MuiOutlinedInput-notchedOutline': {
+              borderColor: 'black',
+            },
+            '&:hover .MuiOutlinedInput-notchedOutline': {
+              borderColor: 'black',
+              borderWidth: '0.15rem',
+            },
+          }}
         >
           {pricePoints.map((price) => (
             <MenuItem key={price} value={price}>

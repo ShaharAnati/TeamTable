@@ -58,7 +58,7 @@ function DateTimeFilter({ onFiltersChange, filters }: Props): JSX.Element {
                                                     "pick opening time" : null}/>}
         />
         <FormControl style={{ width: "10vw" }}>
-            <InputLabel id="demo-simple-select-label" size="small">Day</InputLabel>
+            <InputLabel id="demo-simple-select-label" >Day</InputLabel>
             <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
