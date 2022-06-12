@@ -68,7 +68,7 @@ function createNewGroup(groupId: any, user: string, name: string) {
 
 async function handleCreatorLeavingGroup(group: Group, socket: any, groupId: string) {
   if (group.members.length === 0) {
-    await GroupSchema.deleteOne(group.id);
+    await GroupSchema.deleteOne({ id: group.id });
     groupsDataCache.delete(group.id);
   } else {
     group.creator = group.members[0].username;
