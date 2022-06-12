@@ -133,10 +133,8 @@ export const AllRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.Elemen
         {getRestaurants().map((restaurant, i) => (
           <div
             key={restaurant.id}
-            className={`restaurant-card-wrapper ${restaurant === selectedRestaurant ? "selected" : ""
-              }`}
+            className={`restaurant-card-wrapper`}
             style={{ margin: "0 auto", padding: "0 16px 50px 16px" }}
-            onClick={() => onRestaurantClick && onRestaurantClick(restaurant)}
           >
             <Restaurant
               restaurant={restaurant}
@@ -144,6 +142,8 @@ export const AllRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.Elemen
               likedRestaurants={
                 userLikedRestaurantsQuery && userLikedRestaurantsQuery.data
               }
+              isSelected={restaurant === selectedRestaurant}
+              onClick={() => onRestaurantClick && onRestaurantClick(restaurant)}
             />
           </div>
         ))}
