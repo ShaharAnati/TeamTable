@@ -44,7 +44,7 @@ const buildRouter = (): Router => {
 
       await RestaurantsSchema.findOneAndUpdate({ id: id }, restaurant);
 
-      return res.status(200).send();
+      return res.sendStatus(200);
 
     } catch (error) {
         console.log(error)
@@ -57,7 +57,18 @@ const buildRouter = (): Router => {
       const id = req.params.id;
       await RestaurantsSchema.findOneAndUpdate({ id: id }, { isVerified: true });
 
-      return res.status(200);
+      return res.sendStatus(200);
+    } catch (error) {
+      return res.status(500);
+    }
+  });
+
+  router.patch("/:id/unverify", async (req, res) => {
+    try {
+      const id = req.params.id;
+      await RestaurantsSchema.findOneAndUpdate({ id: id }, { isVerified: false });
+
+      return res.sendStatus(200);
     } catch (error) {
       return res.status(500);
     }
@@ -68,7 +79,7 @@ const buildRouter = (): Router => {
       const id = req.params.id;
       await RestaurantsSchema.deleteOne({ id });
 
-      return res.status(200);
+      return res.sendStatus(200);
     } catch (error) {
       return res.status(500);
     }

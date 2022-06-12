@@ -1,0 +1,76 @@
+.popoverContent {
+    display: flex;
+    flex-direction: column;
+    height: 50vh;
+    width: 15vw;
+    min-width: 250px;
+}
+
+.popoverBody {
+    height: 92%;
+    display: flex;
+}
+
+.popoverBottom {
+    height: 8%;
+    display: flex;
+    justify-content: end;
+    border-top: solid;
+    border-top-width: thin;
+    border-top-color: lightgray;
+}
+
+.dayPickerContent {
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    border-right: solid;
+    border-right-width: thin;
+    border-right-color: lightgray;
+    align-items: center;
+}
+
+.dayButton {
+    width: 4vw;
+    height: 3vh;
+    margin-top: 1.5vh;
+    font-size: xx-small;
+    color: darkgray !important;
+    border-color: darkgray !important;
+}
+@media only screen and (min-width: 1600px){
+    .dayButton {
+        font-size: x-small
+    }
+}
+ 
+.activeDayButton {
+    border-color: darkblue !important;
+    background-color: #00008b0f !important;
+}
+
+.timePickerContent {
+    width: 70%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.hoursButtons {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.singleHourButton {
+    width: 4vw;
+    height: 3vh;
+    margin-top: 0.5vh;
+    font-size: x-small;
+    color: darkgray !important;
+    border-color: darkgray !important;
+}
+
+.activeHourButton {
+    border-color: darkblue !important;
+    background-color: #00008b0f !important;
+}

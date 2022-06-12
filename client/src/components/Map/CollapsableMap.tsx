@@ -27,6 +27,7 @@ function CollapsableMap({
           value="check"
           selected={expanded}
           onChange={() => setExpanded((x) => !x)}
+          sx={{borderColor: !expanded && 'black'}}
         >
           <MapIcon />
         </ToggleButton>
