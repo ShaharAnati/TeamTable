@@ -23,7 +23,7 @@ const GroupMembersList: React.FC<GroupMembersListProps> = (props): JSX.Element =
         height: '35vh',
         minHeight: '240px',
         maxHeight: '300px',
-        width: '230px',
+        width: '100%',
         borderRadius: '12px',
         overflow: 'hidden',
         paddingBottom: '30px'

@@ -42,6 +42,11 @@ const WeekDayFilter: React.FC<WeekDayFilterProps> = (props): JSX.Element => {
         setTime(`${hour}:00`);
     }
 
+    const openStyles = {
+        borderColor: "#59d8c9",
+        borderWidth: '0.15rem'
+    };
+
     return (
         <div>
             <Button 
@@ -49,6 +54,14 @@ const WeekDayFilter: React.FC<WeekDayFilterProps> = (props): JSX.Element => {
                 variant="outlined"
                 endIcon={<AccessTimeIcon />}
                 onClick={onWeekDayFilterButtonClick}
+                sx={ { 
+                    height: '40px',
+                    '&:hover': {
+                        borderWidth: '0.15rem',
+                        backgroundColor: 'transparent'
+                    },
+                    ...(!!anchorEl && openStyles) 
+                }}
             >
                 {initialDay ? `${initialDay}, ${initialTime}` : 'hours'}
             </Button>
