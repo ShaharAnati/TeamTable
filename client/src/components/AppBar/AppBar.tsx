@@ -45,7 +45,7 @@ const MenuAppBar = () => {
                   onClick={navigateHome}
                 />
           </Box>
-          {(auth?.loggedInUser?.email && !auth?.loggedInUser?.isAdmin) &&  <span> {`Hello, ${auth?.loggedInUser.email}`}  </span> }
+          {(auth.isTokenValid() === TokenState.VALID && !auth?.loggedInUser?.isAdmin) &&  <span> {`Hello, ${auth?.loggedInUser.email}`}  </span> }
           <div>
             {auth?.loggedInUser?.isAdmin && <Button component={Link} to="/verify-restaurant" sx={{ color:'#266d70', fontWeight: 600 }} >Admin Manage</Button>}
             <IconButton
