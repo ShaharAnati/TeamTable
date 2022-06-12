@@ -121,19 +121,22 @@ const GroupView: React.FC = (): JSX.Element => {
         ></JoinGroupDialog>
       )}
       <Box sx={{display:'flex', flexDirection: 'column', width: '100%'}}>
-        <Box sx={{ display: 'flex', alignItems: 'center', height: 88, borderBottom: '1px solid #c1c1c13d', padding: '24px', paddingRight: '30px',backgroundColor: '#f8f8f8' }}>
-            <Box sx={{marginRight: 'auto'}}>
-                <Typography variant="h5" >{state ? state.group.name : group.name}</Typography>
-            </Box>
-            <WeekDayFilter 
-              initialDay={group.filters.day}
-              initialTime={group.filters.hour}
-              onValueChange={handleWeekDayFilterChange}
-          />
-          <PricePointsFilter
-            filters={group.filters}
-            onFiltersChange={handleFiltersChange}
-          />
+
+        <Box sx={{ borderBottom: '1px solid #c1c1c13d', backgroundColor: '#f8f8f8' }}>
+          <Box sx={{ height: 88,display: 'flex', alignItems: 'center', maxWidth: 'calc(100vw - 70px)', padding: '24px', paddingRight: '30px'  }}>
+              <Box sx={{marginRight: 'auto'}}>
+                  <Typography variant="h5" >{state ? state.group.name : group.name}</Typography>
+              </Box>
+              <WeekDayFilter 
+                initialDay={group.filters.day}
+                initialTime={group.filters.hour}
+                onValueChange={handleWeekDayFilterChange}
+            />
+            <PricePointsFilter
+              filters={group.filters}
+              onFiltersChange={handleFiltersChange}
+            />
+          </Box>
         </Box>
 
         <Box sx={{ display: "flex", overflow: "auto", width: "100%", height:'100%' }}>
