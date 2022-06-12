@@ -6,6 +6,22 @@ import RestaurantsSchema from "../mongoose/RestaurantsSchema";
 const buildRouter = (): Router => {
   const router: Router = Router();
 
+  router.get("/:email", async (req, res) => {
+    try {
+      const email  = req.params.email;
+      const user = await UserSchema.findOne({ email });
+
+      if (!user) {
+        res.sendStatus(404);
+      }
+
+      res.status(200);
+      res.send(user);
+    } catch (error) {
+      res.status(500);
+    }
+  });
+
   router.get("/:email/all-liked-restaurants", async (req, res) => {
     try {
       const email  = req.params.email;
