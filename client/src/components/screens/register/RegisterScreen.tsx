@@ -28,10 +28,6 @@ const Register = (): JSX.Element => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    if (auth?.loggedInUser?.email) {
-        return <Navigate to="/" state={{ from: location }} replace />;
-    }
-
     useEffect(() => {
         setAreAllFieldsValid(
             REQUIRED_FIELDS.every(field => field.length > 0) &&
@@ -56,6 +52,10 @@ const Register = (): JSX.Element => {
             setUsernameErrorText('Username is taken!')
         }
     }, [doesUserAlreadyExist])
+
+    if (auth?.loggedInUser?.email) {
+        return <Navigate to="/" state={{ from: location }} replace />;
+    }
 
     const validateUsername = (username: string): void => {
         setDoesUserAlreadyExist(false);
