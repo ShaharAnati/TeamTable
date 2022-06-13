@@ -18,7 +18,11 @@ const RequireAuth = ({ adminAuth = false, children }: { adminAuth?: boolean, chi
 
     const onDialogClose = () => {
         setIsDialogOpen(false);
-        refreshToken();
+        try {
+            refreshToken();
+        } catch (error) {
+            return <Navigate to="/login-screen" state={{ from: location }} replace />;
+        }
     }
 
     if (isTokenValid() === TokenState.VALID) {

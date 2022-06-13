@@ -134,7 +134,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setLoggedInUser({email: res.data.user?.email, token: res.data.token, isAdmin: res.data.user?.isAdmin})
       }
 
-    } catch (error) { }
+    } catch (error) {
+      // signout();
+      
+     }
   };
 
   const isTokenValid = (): TokenState => {
