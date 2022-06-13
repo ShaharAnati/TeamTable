@@ -106,6 +106,7 @@ const UserProfile = (): JSX.Element => {
                                name="username"
                                variant="outlined"
                                value={username}
+                               helperText={' '}
                                disabled={true}
                                fullWidth
                                required
