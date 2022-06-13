@@ -7,40 +7,6 @@ import {User} from "../models/User";
 const buildRouter = (): Router => {
   const router: Router = Router();
 
-  router.get("/:email", async (req, res) => {
-    try {
-      const email  = req.params.email;
-      const user = await UserSchema.findOne({ email });
-
-      if (!user) {
-        res.sendStatus(404);
-      }
-
-      res.status(200);
-      res.send(user);
-    } catch (error) {
-      res.status(500);
-    }
-  });
-
-  router.patch("/:email", async (req, res) => {
-    try {
-      const user: User  = req.body.editedUser;
-      //const user = await UserSchema.findOne({ username });
-
-      if (!user) {
-        res.sendStatus(404);
-      }
-
-      await UserSchema.findOneAndUpdate({"email": user.email}, user);
-
-      res.status(200);
-      res.send(user);
-    } catch (error) {
-      res.status(500);
-    }
-  });
-
   router.get("/:email/all-liked-restaurants", async (req, res) => {
     try {
       const email  = req.params.email;
@@ -108,6 +74,40 @@ const buildRouter = (): Router => {
       );
 
       res.sendStatus(200);
+    } catch (error) {
+      res.status(500);
+    }
+  });
+
+  router.get("/:email", async (req, res) => {
+    try {
+      const email  = req.params.email;
+      const user = await UserSchema.findOne({ email });
+
+      if (!user) {
+        res.sendStatus(404);
+      }
+
+      res.status(200);
+      res.send(user);
+    } catch (error) {
+      res.status(500);
+    }
+  });
+
+  router.patch("/:email", async (req, res) => {
+    try {
+      const user: User  = req.body.editedUser;
+      //const user = await UserSchema.findOne({ username });
+
+      if (!user) {
+        res.sendStatus(404);
+      }
+
+      await UserSchema.findOneAndUpdate({"email": user.email}, user);
+
+      res.status(200);
+      res.send(user);
     } catch (error) {
       res.status(500);
     }
