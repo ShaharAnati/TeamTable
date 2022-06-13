@@ -11,6 +11,7 @@ import {useAuth} from "src/auth/AuthProvider";
 import { dayMapping, Restaurant as TypedRestaurant} from "src/types/Resturants";
 import { isPointInPolygon } from "src/helpers/filter-point-in-ploygon";
 import { Pagination } from "@mui/material";
+import noResults from '@assets/images/NoResults.png';
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -130,6 +131,9 @@ export const AllRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.Elemen
           minWidth: '300px'
         }}
       >
+        <div>
+          {getRestaurants().length === 0 && <img src={noResults} style={{width: '100%'}} alt=""/>}
+        </div>
         {getRestaurants().map((restaurant, i) => (
           <div
             key={restaurant.id}
