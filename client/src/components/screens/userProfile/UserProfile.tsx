@@ -1,12 +1,17 @@
 import React, {useEffect, useState} from "react";
-import {Button, Grid, Paper, TextField, Typography} from "@mui/material";
+import {Button, Collapse, Grid, Paper, TextField, Typography} from "@mui/material";
 import axios from "axios";
 import * as _ from 'lodash';
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from '@mui/icons-material/Close';
+import Alert from '@mui/material/Alert';
 
 const UserProfile = (): JSX.Element => {
     const [username, setUsername] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [fullName, setFullName] = useState('');
+    const [editSuccessAlertOpen, setEditSuccessAlertOpen] = useState(false);
+    const [editFailedAlertOpen, setEditFailedAlertOpen] = useState(false);
     const [user, setUser] = useState({email: '',
         password: '',
         phoneNumber: '',
@@ -80,9 +85,10 @@ const UserProfile = (): JSX.Element => {
             let editedUser = userRef.current;
 
             await axios.patch(`users/${username}`, {editedUser});
-
+            setEditSuccessAlertOpen(true);
         } catch (err) {
             console.log(err);
+            setEditFailedAlertOpen(true)
         }
 
     };
@@ -140,6 +146,46 @@ const UserProfile = (): JSX.Element => {
                         Save details
                     </Button>
                 </div>
+                <Collapse in={editSuccessAlertOpen}>
+                    <Alert
+                        severity={"success"}
+                        action={
+                            <IconButton
+                                aria-label="close"
+                                color="inherit"
+                                size="small"
+                                onClick={() => {
+                                    setEditSuccessAlertOpen(false);
+                                }}
+                            >
+                                <CloseIcon fontSize="inherit" />
+                            </IconButton>
+                        }
+                        sx={{ mb: 2 }}
+                    >
+                        Your profile was edited successfully!
+                    </Alert>
+                </Collapse>
+                <Collapse in={editFailedAlertOpen}>
+                    <Alert
+                        severity={"error"}
+                        action={
+                            <IconButton
+                                aria-label="close"
+                                color="inherit"
+                                size="small"
+                                onClick={() => {
+                                    setEditFailedAlertOpen(false);
+                                }}
+                            >
+                                <CloseIcon fontSize="inherit" />
+                            </IconButton>
+                        }
+                        sx={{ mb: 2 }}
+                    >
+                        Something went wrong with your profile editing...
+                    </Alert>
+                </Collapse>
             </Paper>
         </Grid>
     </div>
