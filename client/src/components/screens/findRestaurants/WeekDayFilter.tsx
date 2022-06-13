@@ -54,8 +54,10 @@ const WeekDayFilter: React.FC<WeekDayFilterProps> = (props): JSX.Element => {
                 variant="outlined"
                 endIcon={<AccessTimeIcon />}
                 onClick={onWeekDayFilterButtonClick}
-                sx={ { 
+                sx={ {
                     height: '40px',
+                    textTransform: 'none',
+                    color: 'rgba(0, 0, 0, 0.6)',
                     '&:hover': {
                         borderWidth: '0.15rem',
                         backgroundColor: 'transparent'
@@ -63,7 +65,7 @@ const WeekDayFilter: React.FC<WeekDayFilterProps> = (props): JSX.Element => {
                     ...(!!anchorEl && openStyles) 
                 }}
             >
-                {initialDay ? `${initialDay}, ${initialTime}` : 'hours'}
+                {initialDay ? `${initialDay}, ${initialTime}` : 'Hours'}
             </Button>
             <Popover
                 open={!!anchorEl}
