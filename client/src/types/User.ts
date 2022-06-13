@@ -1,5 +1,4 @@
-export interface User {
-    _id?: string;
+export type User = {
     email: string;
     password: string;
     phoneNumber: string;
