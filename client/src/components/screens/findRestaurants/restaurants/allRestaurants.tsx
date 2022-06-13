@@ -134,7 +134,7 @@ export const AllRestaurants: React.FC<AllRestaurantsProps> = (props): JSX.Elemen
           <div
             key={restaurant.id}
             className={`restaurant-card-wrapper`}
-            style={{ margin: "0 auto", padding: "0 16px 50px 16px" }}
+            style={{ margin: "0 auto", padding: "0 16px 50px 16px", cursor: "pointer" }}
           >
             <Restaurant
               restaurant={restaurant}
