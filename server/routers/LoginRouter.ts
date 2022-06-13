@@ -7,7 +7,7 @@ import UserSchema from '../mongoose/UserSchema';
 
 const buildRouter = (): Router => {
     const router: Router = Router();
-    const TOKEN_EXPIRY_IN_MIN = 15;
+    const TOKEN_EXPIRY_IN_MIN = +(process.env.TOKEN_EXPIRY_TIME || 15);
     const TOKEN_EXPIRY_TIME_IN_MS = TOKEN_EXPIRY_IN_MIN * 60 * 1000;
 
     // Register

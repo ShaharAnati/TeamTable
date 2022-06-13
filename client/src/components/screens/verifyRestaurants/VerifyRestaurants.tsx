@@ -20,6 +20,7 @@ import {
   Grid,
   DialogTitle,
   IconButton,
+  CircularProgress,
 } from "@mui/material";
 import RestaurantListItem from "./RestaurantListItem";
 import { CreateRestaurant } from "../createRestaurant/CreateRestaurant";
@@ -78,10 +79,36 @@ export const VerifyRestaurants = (props): JSX.Element => {
     }
   };
 
+  const unverifyRestaurant = (restaurantId: string) => {
+    try {
+      axios
+        .patch(`/restaurants/${restaurantId}/unverify`)
+        .then((res) => {
+          refetch();
+        });
+    } catch (error) {
+      console.log("error unverifying restaurant, ", error);
+    }
+  };
+
+
   const handleClickOnEdit = (restaurant: Restaurant) => {
     setSelectedRestaurant(restaurant);
     setEditOpen(true);
   };
+
+  if(isLoading) { 
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        sx={{ height: "100%", width: "100%" }}
+      >
+        <CircularProgress size={60} />
+      </Box>
+    )
+  }
 
   return (
     <Box sx={{ padding: "32px 48px" }}>
@@ -120,7 +147,7 @@ export const VerifyRestaurants = (props): JSX.Element => {
             <RestaurantListItem
               restaurant={restaurant}
               onApprove={approveRestaurant}
-              onDecline={declineRestaurant}
+              onDecline={restaurant.isVerified ? unverifyRestaurant : declineRestaurant}
               onEdit={handleClickOnEdit}
             />
           </Grid>

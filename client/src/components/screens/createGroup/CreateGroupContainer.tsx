@@ -14,6 +14,7 @@ const CreateGroupContainer: React.FC = (): JSX.Element => {
 
     const onSubmitGroupCreationForm = async (): Promise<void> => {
         const sessionStorageUser = sessionStorage.getItem('user_token');
+
         const body = {name: groupName, creator, members: [{ username: creatorEmail }] };
         const newGroup = await axios.post('/groups', body, {
             headers: {
@@ -22,7 +23,8 @@ const CreateGroupContainer: React.FC = (): JSX.Element => {
                 'Content-Type': 'application/json'
             }
         }); // TODO: remove localhost
-        navigate('/group-page/' + newGroup.data.id)
+        
+        navigate('/group-page/' + newGroup.data.id, {state: { group: newGroup.data} })
     }
 
     return (

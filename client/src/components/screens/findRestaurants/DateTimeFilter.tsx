@@ -52,15 +52,17 @@ function DateTimeFilter({ onFiltersChange, filters }: Props): JSX.Element {
             value={filters.hour ? dayjs(`01-01-2000 ${filters.hour}`) : null}
             onChange={handleHourChange}
             renderInput={(params) => <TextField {...params}
+                                                size='small'
                                                 error={!filters.hour && !!filters.day}
                                                 helperText={!filters.hour && !!filters.day ?
                                                     "pick opening time" : null}/>}
         />
         <FormControl style={{ width: "10vw" }}>
-            <InputLabel id="demo-simple-select-label">Day</InputLabel>
+            <InputLabel id="demo-simple-select-label" >Day</InputLabel>
             <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
+                size='small'
                 value={filters.day || ""}
                 label="Day"
                 onChange={handleDayChange}

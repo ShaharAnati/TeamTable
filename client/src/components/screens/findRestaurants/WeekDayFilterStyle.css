@@ -3,6 +3,7 @@
     flex-direction: column;
     height: 50vh;
     width: 15vw;
+    min-width: 250px;
 }
 
 .popoverBody {

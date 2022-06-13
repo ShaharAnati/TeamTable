@@ -74,17 +74,28 @@ export default function PricePointsFilter({ onFiltersChange, filters }: Props) {
 
   return (
     <div>
-      <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id="demo-multiple-checkbox-label">Price Range</InputLabel>
+      <FormControl sx={{ m: 1, minWidth: 80 }}>
+        <InputLabel id="demo-multiple-checkbox-label">Price</InputLabel>
         <Select
           labelId="demo-multiple-checkbox-label"
           id="demo-multiple-checkbox"
           multiple
+          size="small"
           value={filters.priceRange || []}
           onChange={handleChange}
-          input={<OutlinedInput label="Price Range" />}
+          input={<OutlinedInput label="Price" />}
           renderValue={(selected) => renderValue(selected)}
           MenuProps={MenuProps}
+          autoWidth
+          sx= {{
+            '.MuiOutlinedInput-notchedOutline': {
+              borderColor: 'black',
+            },
+            '&:hover .MuiOutlinedInput-notchedOutline': {
+              borderColor: 'black',
+              borderWidth: '0.15rem',
+            },
+          }}
         >
           {pricePoints.map((price) => (
             <MenuItem key={price} value={price}>
