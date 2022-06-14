@@ -24,7 +24,24 @@ import '@maplibre/maplibre-gl-geocoder/dist/maplibre-gl-geocoder.css'
 
 const getItemValue = (item) => {
     const { address: { house_number, house_name, road, city, town, village, municipality } } = item.properties;
-    return `${road} ${house_number || house_name}, ${city || town || village || municipality}`;
+    let addressString="";
+    addressString+=(road || "");
+
+    if(house_number || house_name) {
+        addressString+=" "
+    }
+
+    addressString+=house_number || house_name || "";
+
+    if(house_number || house_name) {
+        addressString+=", "
+    } else if (road) {
+        addressString+=", "
+    }
+    
+    addressString+=city || town || village || municipality;
+    
+    return addressString;
 }
 
 /* eslint-disable complexity,max-statements */
