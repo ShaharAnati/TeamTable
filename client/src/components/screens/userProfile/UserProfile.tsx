@@ -43,7 +43,7 @@ const UserProfile = (): JSX.Element => {
 
     useEffect(() => {
         setAreAllFieldsValid(
-            REQUIRED_FIELDS.every(field => field.length > 0) &&
+            REQUIRED_FIELDS.every(field => field && field.length > 0) &&
             !!!fullnameErrorText &&
             !!!phoneNumberErrorText &&
             (userRef.current.phoneNumber !== phoneNumber || userRef.current.fullName !== fullName)
