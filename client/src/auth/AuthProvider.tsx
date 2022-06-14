@@ -135,8 +135,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
     } catch (error) {
-      // signout();
-      
+      localStorage.setItem('didRefreshFail', 'true');
+      signout();  
      }
   };
 
