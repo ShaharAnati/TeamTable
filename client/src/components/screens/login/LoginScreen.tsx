@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
-import {Button, Grid, Paper, TextField, Typography} from "@mui/material";
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Paper, TextField, Typography} from "@mui/material";
 import {LocationState, useAuth} from '../../../auth/AuthProvider';
 
 interface LoginScreenProps {
@@ -14,10 +14,16 @@ const Login: React.FC<LoginScreenProps> = (props): JSX.Element => {
     const [password, setPassword] = useState('');
     const [isUsernameInvalid, setIsUsernameInvalid] = useState(false);
     const [isPasswordInvalid, setIsPasswordInvalid] = useState(false);
+    const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
     const auth = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
+
+    useEffect(() => {
+        const isRefreshedLogin = localStorage.getItem('didRefreshFail');
+        isRefreshedLogin && setIsDialogOpen(true);
+    }, [])
 
     const validate = (): void => {
         if (!!username) {
@@ -44,10 +50,13 @@ const Login: React.FC<LoginScreenProps> = (props): JSX.Element => {
         setPassword(event.target.value);
     }
 
+
+
     const handleSubmit = async () => {
         if (!isUsernameInvalid && !isPasswordInvalid) {
             // proceed to submit
             try {
+                
                 await auth.signin(username, password);
 
                 const { state } = location as { state: LocationState }
@@ -62,8 +71,25 @@ const Login: React.FC<LoginScreenProps> = (props): JSX.Element => {
         }
     };
 
+    const onDialogClose = () => {
+        setIsDialogOpen(false);
+        localStorage.removeItem('didRefreshFail');
+    }
+
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}>
+        <>
+            <Dialog open={isDialogOpen} >
+                <DialogTitle>We had some trouble identifying you</DialogTitle>
+                <DialogContent>
+                    login again and we can continue
+                </DialogContent>
+                <DialogActions>
+                    <Button autoFocus onClick={() => onDialogClose()}>
+                        OK
+                    </Button>
+                </DialogActions>
+            </Dialog>   
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}>
             <Grid>
                 <Paper elevation={0} classes={{root: 'paper-style'}}>
                     <div style={{ marginBottom: '10px' }}>
@@ -113,6 +139,7 @@ const Login: React.FC<LoginScreenProps> = (props): JSX.Element => {
                 </Paper>
             </Grid>
         </div>
+        </>
     )
 }
 
