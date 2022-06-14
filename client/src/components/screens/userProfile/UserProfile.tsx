@@ -31,7 +31,7 @@ const UserProfile = (): JSX.Element => {
         setUser(x);
     };
 
-    useEffect(() => {
+    function getCurrentUserProfile() {
         axios.get(`users/${sessionStorage.getItem("user_email")}`).then(res => {
             let fetchedUser = _.clone(res.data);
             setCurUser(fetchedUser);
@@ -39,6 +39,10 @@ const UserProfile = (): JSX.Element => {
             setPhoneNumber(_.clone(userRef.current.phoneNumber));
             setFullName(_.clone(userRef.current.fullName));
         })
+    }
+
+    useEffect(() => {
+        getCurrentUserProfile();
     }, [])
 
     useEffect(() => {
@@ -86,6 +90,7 @@ const UserProfile = (): JSX.Element => {
 
             await axios.patch(`users/${username}`, {editedUser});
             setEditSuccessAlertOpen(true);
+            getCurrentUserProfile();
         } catch (err) {
             console.log(err);
             setEditFailedAlertOpen(true)
