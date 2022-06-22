@@ -26,7 +26,7 @@ const Register = (): JSX.Element => {
 
     const auth = useAuth();
     const navigate = useNavigate();
-    const location = useLocation();
+    const location = useLocation() as { state: LocationState };
 
     useEffect(() => {
         setAreAllFieldsValid(
@@ -54,7 +54,7 @@ const Register = (): JSX.Element => {
     }, [doesUserAlreadyExist])
 
     if (auth?.loggedInUser?.email) {
-        return <Navigate to="/" state={{ from: location }} replace />;
+        return <Navigate to="/" state={{ from: location.pathmame }} replace />;
     }
 
     const validateUsername = (username: string): void => {
@@ -219,7 +219,7 @@ const Register = (): JSX.Element => {
                             margin: "auto",
                             cursor: "pointer",
                         }}
-                        onClick={() => navigate("/login-screen", { state: { from: location }, replace: true })}
+                        onClick={() => navigate("/login-screen", { state: location.state, replace: true })}
                         >
                         Already have an account?
                     </Typography>

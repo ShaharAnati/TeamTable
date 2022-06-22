@@ -18,7 +18,7 @@ const Login: React.FC<LoginScreenProps> = (props): JSX.Element => {
 
     const auth = useAuth();
     const navigate = useNavigate();
-    const location = useLocation();
+    const location = useLocation() as { state: LocationState };
 
     useEffect(() => {
         const isRefreshedLogin = localStorage.getItem('didRefreshFail');
@@ -132,7 +132,7 @@ const Login: React.FC<LoginScreenProps> = (props): JSX.Element => {
                             margin: "auto",
                             cursor: "pointer",
                         }}
-                        onClick={() => navigate("/register-screen", { state: { from: location }, replace: true })}
+                        onClick={() => navigate("/register-screen", { state: location.state, replace: true })}
                         >
                         Don't have an account?
                     </Typography>
