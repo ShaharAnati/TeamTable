@@ -36,6 +36,39 @@ const doc = {
       pricePoint: 3,
       url: "www.good.com",
     },
+    Group: {
+      id: "f8ad5f63-4de0-4c32-9ad8-3df925ac303c",
+      creator: "noam",
+      name: "my-group",
+      members: [
+        {
+          username: "pavel12",
+          active: false,
+        },
+        {
+          username: "noam",
+          active: false,
+        },
+      ],
+      filters: {
+        priceRange: [],
+        tags: [
+          "light",
+          "dairy",
+          "vegan",
+          "heavy",
+          "thai",
+          "salad",
+          "hummus",
+          "dairy-free",
+          "nuts-free",
+          "dessert",
+          "healthy",
+        ],
+        day: "Tuesday",
+        hour: "18:00",
+      },
+    },
   },
 };
 

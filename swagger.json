@@ -143,7 +143,16 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Found Groups",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Group"
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "400": {
             "description": "Bad Request"
@@ -193,7 +202,10 @@
         ],
         "responses": {
           "201": {
-            "description": "Created"
+            "description": "Group created.",
+            "schema": {
+              "$ref": "#/definitions/Group"
+            }
           },
           "401": {
             "description": "Unauthorized"
@@ -219,7 +231,16 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Found Groupds",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Group"
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "400": {
             "description": "Bad Request"
@@ -241,7 +262,14 @@
             "type": "string"
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "Found Group.",
+            "schema": {
+              "$ref": "#/definitions/Group"
+            }
+          }
+        }
       }
     },
     "/restaurants/": {
@@ -761,6 +789,76 @@
         "url": {
           "type": "string",
           "example": "www.good.com"
+        }
+      }
+    },
+    "Group": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "f8ad5f63-4de0-4c32-9ad8-3df925ac303c"
+        },
+        "creator": {
+          "type": "string",
+          "example": "noam"
+        },
+        "name": {
+          "type": "string",
+          "example": "my-group"
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "username": {
+                "type": "string",
+                "example": "noam"
+              },
+              "active": {
+                "type": "boolean",
+                "example": false
+              }
+            }
+          }
+        },
+        "filters": {
+          "type": "object",
+          "properties": {
+            "priceRange": {
+              "type": "array",
+              "example": [],
+              "items": {}
+            },
+            "tags": {
+              "type": "array",
+              "example": [
+                "light",
+                "dairy",
+                "vegan",
+                "heavy",
+                "thai",
+                "salad",
+                "hummus",
+                "dairy-free",
+                "nuts-free",
+                "dessert",
+                "healthy"
+              ],
+              "items": {
+                "type": "string"
+              }
+            },
+            "day": {
+              "type": "string",
+              "example": "Tuesday"
+            },
+            "hour": {
+              "type": "string",
+              "example": "18:00"
+            }
+          }
         }
       }
     }

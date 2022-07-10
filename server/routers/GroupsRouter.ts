@@ -11,6 +11,10 @@ const buildRouter = (): Router => {
          /*
             #swagger.tags = ['Group']
             #swagger.description = 'Get all user's groups'
+            #swagger.responses[200] = {
+              description: 'Found Groups',
+              schema: [{ $ref: '#/definitions/Group' }]
+            }
         */       
         const username = req.query.username;
         if (!username) {
@@ -25,6 +29,10 @@ const buildRouter = (): Router => {
          /*
             #swagger.tags = ['Group']
             #swagger.description = 'Get all user's groups with recent activity'
+            #swagger.responses[200] = {
+              description: 'Found Groupds',
+              schema: [{ $ref: '#/definitions/Group' }]
+            }
         */     
         const username = req.query.username;
         if (!username) {
@@ -44,6 +52,10 @@ const buildRouter = (): Router => {
          /*
             #swagger.tags = ['Group']
             #swagger.description = 'Get group by id'
+            #swagger.responses[200] = {
+              description: 'Found Group.',
+              schema: { $ref: '#/definitions/Group' }
+            }
         */     
         const id = req.params.id;
         GroupSchema.findOne({ id }).lean().exec(function (err: any, group: any) {
@@ -55,6 +67,10 @@ const buildRouter = (): Router => {
         /*
             #swagger.tags = ['Group']
             #swagger.description = 'Create new group'
+            #swagger.responses[201] = {
+              description: 'Group created.',
+              schema: { $ref: '#/definitions/Group' }
+            }
         */     
         try {
             const { creator, name, members, filters } = req.body;
