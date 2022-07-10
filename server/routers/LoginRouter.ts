@@ -144,6 +144,19 @@ const buildRouter = (): Router => {
 
 
     router.post("/refresh", async (req, res) => {
+        /*
+            #swagger.tags = ['Authentication']
+            #swagger.parameters['authorization'] = {
+                in: 'header',
+                description: 'User refresh token',
+                required: true,
+                schema: {
+                    email: "user@mail.com",
+                    password: "1234"
+                }
+            }
+        */
+
         let receivedRefreshToken = req.headers['authorization']
         // const token = authHeaders && authHeaders.split(' ')[1];
 

@@ -8,6 +8,10 @@ const buildRouter = (): Router => {
     const router: Router = Router();
 
     router.get('/', async (req, res) => {
+         /*
+            #swagger.tags = ['Group']
+            #swagger.description = 'Get all user's groups'
+        */       
         const username = req.query.username;
         if (!username) {
             return res.status(400).send();
@@ -18,6 +22,10 @@ const buildRouter = (): Router => {
     })
 
     router.get('/recent', async (req, res) => {
+         /*
+            #swagger.tags = ['Group']
+            #swagger.description = 'Get all user's groups with recent activity'
+        */     
         const username = req.query.username;
         if (!username) {
             return res.status(400).send();
@@ -33,7 +41,10 @@ const buildRouter = (): Router => {
     })
 
     router.get('/get/:id', async (req, res) => {
-
+         /*
+            #swagger.tags = ['Group']
+            #swagger.description = 'Get group by id'
+        */     
         const id = req.params.id;
         GroupSchema.findOne({ id }).lean().exec(function (err: any, group: any) {
             return res.end(JSON.stringify(group));
@@ -41,6 +52,10 @@ const buildRouter = (): Router => {
     })
 
     router.post('/', withAuth, async (req, res) => {
+        /*
+            #swagger.tags = ['Group']
+            #swagger.description = 'Create new group'
+        */     
         try {
             const { creator, name, members, filters } = req.body;
 
