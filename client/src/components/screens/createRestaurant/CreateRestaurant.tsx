@@ -90,7 +90,11 @@ export const CreateRestaurant = ({
     name: restaurant?.name || "",
     description: restaurant?.description || "",
     tags: restaurant?.tags || [],
-    pricePoint: restaurant ? ( restaurant.pricePoint ?  restaurant.pricePoint : 0) : 2,
+    pricePoint: restaurant
+      ? restaurant.pricePoint
+        ? restaurant.pricePoint
+        : 0
+      : 2,
     phoneNumber: restaurant?.contactInfo?.phoneNumber || "",
     email: restaurant?.contactInfo?.email || "",
     openingTimes: restaurant?.openingTimes || {
@@ -106,7 +110,7 @@ export const CreateRestaurant = ({
     location: restaurant?.location || null,
     url: restaurant?.url || "",
     imgUrl: restaurant?.imgUrl || null,
-    isVerified: restaurant?.isVerified || false
+    isVerified: restaurant?.isVerified || false,
   };
 
   const validateTimes = (values, day: number): void => {
@@ -319,6 +323,7 @@ export const CreateRestaurant = ({
               value={formik.values.tags}
               options={tagOptions}
               getOptionLabel={(option) => option}
+              isOptionEqualToValue={(option, value) => option === value}
               defaultValue={formik.values.tags}
               onChange={(event, value) => formik.setFieldValue("tags", value)}
               size="small"
@@ -339,8 +344,8 @@ export const CreateRestaurant = ({
             item
             xs={4}
             sx={{
-              display: 'flex',
-              justifyContent: 'center'
+              display: "flex",
+              justifyContent: "center",
             }}
           >
             <PriceRating
