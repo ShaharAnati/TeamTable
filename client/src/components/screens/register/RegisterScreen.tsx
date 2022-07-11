@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { Location, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Button, Grid, InputAdornment, Paper, TextField, Tooltip, Typography } from "@mui/material";
 import { LocationState, useAuth } from '../../../auth/AuthProvider';
 import './Login.css'
@@ -26,7 +26,7 @@ const Register = (): JSX.Element => {
 
     const auth = useAuth();
     const navigate = useNavigate();
-    const location = useLocation() as { state: LocationState };
+    const location = useLocation() as Location;
 
     useEffect(() => {
         setAreAllFieldsValid(
@@ -54,7 +54,7 @@ const Register = (): JSX.Element => {
     }, [doesUserAlreadyExist])
 
     if (auth?.loggedInUser?.email) {
-        return <Navigate to="/" state={{ from: location.state.from.pathname }} replace />;
+        return <Navigate to="/" state={{ from: location.pathname }} replace />;
     }
 
     const validateUsername = (username: string): void => {
