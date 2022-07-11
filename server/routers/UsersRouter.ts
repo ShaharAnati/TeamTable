@@ -8,6 +8,10 @@ const buildRouter = (): Router => {
   const router: Router = Router();
 
   router.get("/:email/all-liked-restaurants", async (req, res) => {
+          /*
+            #swagger.tags = ['Users']
+            #swagger.description = 'Get user's liked restaurants'
+        */   
     try {
       const email  = req.params.email;
       const user = await UserSchema.findOne({ email });
@@ -24,6 +28,10 @@ const buildRouter = (): Router => {
   });
 
   router.patch("/like-restaurant", async (req, res) => {
+              /*
+            #swagger.tags = ['Users']
+            #swagger.description = 'Like restaurant for user'
+        */   
     try {
       const { email, restaurantId } = req.body;
 
@@ -54,6 +62,10 @@ const buildRouter = (): Router => {
   });
 
   router.patch("/unlike-restaurant", async (req, res) => {
+                  /*
+            #swagger.tags = ['Users']
+            #swagger.description = 'Unlike restaurant for user'
+        */   
     try {
       const { email, restaurantId } = req.body;
 
@@ -80,6 +92,10 @@ const buildRouter = (): Router => {
   });
 
   router.get("/:email", async (req, res) => {
+                  /*
+            #swagger.tags = ['Users']
+            #swagger.description = 'Get user'
+        */   
     try {
       const email  = req.params.email;
       const user = await UserSchema.findOne({ email });
@@ -96,6 +112,10 @@ const buildRouter = (): Router => {
   });
 
   router.patch("/:email", async (req, res) => {
+                      /*
+            #swagger.tags = ['Users']
+            #swagger.description = 'Update user'
+        */   
     try {
       const user: User  = req.body.editedUser;
       //const user = await UserSchema.findOne({ username });

@@ -39,8 +39,8 @@
           }
         ],
         "responses": {
-          "201": {
-            "description": "Created"
+          "200": {
+            "description": "OK"
           },
           "400": {
             "description": "Bad Request"
@@ -84,6 +84,780 @@
           },
           "400": {
             "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/refresh": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "description": "User refresh token",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "user@mail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "1234"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/groups/": {
+      "get": {
+        "tags": [
+          "Group"
+        ],
+        "description": "Get all user",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found Groups",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Group"
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Group"
+        ],
+        "description": "Create new group",
+        "parameters": [
+          {
+            "name": "x-access-token",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "creator": {
+                  "example": "any"
+                },
+                "name": {
+                  "example": "any"
+                },
+                "members": {
+                  "example": "any"
+                },
+                "filters": {
+                  "example": "any"
+                },
+                "token": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Group created.",
+            "schema": {
+              "$ref": "#/definitions/Group"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/groups/recent": {
+      "get": {
+        "tags": [
+          "Group"
+        ],
+        "description": "Get all user",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found Groupds",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Group"
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/groups/get/{id}": {
+      "get": {
+        "tags": [
+          "Group"
+        ],
+        "description": "Get group by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found Group.",
+            "schema": {
+              "$ref": "#/definitions/Group"
+            }
+          }
+        }
+      }
+    },
+    "/restaurants/": {
+      "get": {
+        "tags": [
+          "Restaurants"
+        ],
+        "description": "Get restaurants by status",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "return restaurnats",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Restaurant"
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Restaurants"
+        ],
+        "description": "Create new unverified restaurant",
+        "parameters": [
+          {
+            "name": "restaurant",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/Restaurant"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Restaurant created.",
+            "schema": {
+              "$ref": "#/definitions/Restaurant"
+            }
+          }
+        }
+      }
+    },
+    "/restaurants/{id}": {
+      "patch": {
+        "tags": [
+          "Restaurants"
+        ],
+        "description": "Update restaurant by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "restaurant",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/Restaurant"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/restaurants/{id}/approve": {
+      "patch": {
+        "tags": [
+          "Restaurants"
+        ],
+        "description": "Make restaurant verified by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/restaurants/{id}/unverify": {
+      "patch": {
+        "tags": [
+          "Restaurants"
+        ],
+        "description": "Make restaurant unverified by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/restaurants/{id}/decline": {
+      "delete": {
+        "tags": [
+          "Restaurants"
+        ],
+        "description": "Delete restaurant by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/restaurants/{tags}": {
+      "get": {
+        "tags": [
+          "Restaurants"
+        ],
+        "description": "Get restaurants ranked by provided tags",
+        "parameters": [
+          {
+            "name": "tags",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/restaurants/top/favorite-restaurants": {
+      "get": {
+        "tags": [
+          "Restaurants"
+        ],
+        "description": "Get most liked restaurants",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Return liked restaurants.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Restaurant"
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tags/": {
+      "get": {
+        "tags": [
+          "Tags"
+        ],
+        "description": "Get all coolinary tags",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/users/{email}/all-liked-restaurants": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Get user",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/like-restaurant": {
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Like restaurant for user",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "any"
+                },
+                "restaurantId": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/unlike-restaurant": {
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Unlike restaurant for user",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "any"
+                },
+                "restaurantId": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/{email}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Get user",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Update user",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "editedUser": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Restaurant": {
+      "type": "object",
+      "properties": {
+        "openingTimes": {
+          "type": "object",
+          "properties": {
+            "1": {
+              "type": "array",
+              "example": [
+                "11:00",
+                "00:00"
+              ],
+              "items": {
+                "type": "string"
+              }
+            },
+            "2": {
+              "type": "array",
+              "example": [
+                "11:00",
+                "00:00"
+              ],
+              "items": {
+                "type": "string"
+              }
+            },
+            "3": {
+              "type": "array",
+              "example": [
+                "11:00",
+                "00:00"
+              ],
+              "items": {
+                "type": "string"
+              }
+            },
+            "4": {
+              "type": "array",
+              "example": [
+                "11:00",
+                "00:00"
+              ],
+              "items": {
+                "type": "string"
+              }
+            },
+            "5": {
+              "type": "array",
+              "example": [
+                "12:00",
+                "00:00"
+              ],
+              "items": {
+                "type": "string"
+              }
+            },
+            "6": {
+              "type": "array",
+              "example": [
+                "12:00",
+                "00:00"
+              ],
+              "items": {
+                "type": "string"
+              }
+            },
+            "7": {
+              "type": "array",
+              "example": [
+                "12:00",
+                "00:00"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "location": {
+          "type": "object",
+          "properties": {
+            "lat": {
+              "type": "number",
+              "example": 32.09014
+            },
+            "lng": {
+              "type": "number",
+              "example": 34.77385
+            }
+          }
+        },
+        "contactInfo": {
+          "type": "object",
+          "properties": {
+            "phoneNumber": {
+              "type": "string",
+              "example": "+97236969629"
+            },
+            "email": {
+              "type": "string",
+              "example": ""
+            }
+          }
+        },
+        "name": {
+          "type": "string",
+          "example": "Wok Republic"
+        },
+        "description": {
+          "type": "string",
+          "example": "Street food"
+        },
+        "tags": {
+          "type": "array",
+          "example": [
+            "street-food",
+            "asian",
+            "thai",
+            "vegan"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "imgUrl": {
+          "type": "string",
+          "example": "https://imageproxy.wolt.com/venue/5df7ae7668e0074e549b36c3/c5924ede-2a4b-11ea-b1b0-0a58646cbf5f_yaelitz.jpg"
+        },
+        "id": {
+          "type": "string",
+          "example": "3"
+        },
+        "pricePoint": {
+          "type": "number",
+          "example": 3
+        },
+        "url": {
+          "type": "string",
+          "example": "www.good.com"
+        }
+      }
+    },
+    "Group": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "f8ad5f63-4de0-4c32-9ad8-3df925ac303c"
+        },
+        "creator": {
+          "type": "string",
+          "example": "noam"
+        },
+        "name": {
+          "type": "string",
+          "example": "my-group"
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "username": {
+                "type": "string",
+                "example": "noam"
+              },
+              "active": {
+                "type": "boolean",
+                "example": false
+              }
+            }
+          }
+        },
+        "filters": {
+          "type": "object",
+          "properties": {
+            "priceRange": {
+              "type": "array",
+              "example": [],
+              "items": {}
+            },
+            "tags": {
+              "type": "array",
+              "example": [
+                "light",
+                "dairy",
+                "vegan",
+                "heavy",
+                "thai",
+                "salad",
+                "hummus",
+                "dairy-free",
+                "nuts-free",
+                "dessert",
+                "healthy"
+              ],
+              "items": {
+                "type": "string"
+              }
+            },
+            "day": {
+              "type": "string",
+              "example": "Tuesday"
+            },
+            "hour": {
+              "type": "string",
+              "example": "18:00"
+            }
           }
         }
       }

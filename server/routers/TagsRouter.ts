@@ -8,7 +8,10 @@ const buildRouter = (): Router => {
     const router: Router = Router();
 
     router.get('/', async (req, res) => {
-
+          /*
+            #swagger.tags = ['Tags']
+            #swagger.description = 'Get all coolinary tags'
+        */   
         try {
             const tagGroups: TagGroup[] = await getAllTagGroups();
 

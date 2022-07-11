@@ -220,6 +220,7 @@ const init = async (): Promise<void> => {
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
   app.post("/welcome", (req, res) => {
+    // #swagger.ignore = true
     res.status(200).send("Welcome 🙌 ");
   });
 
