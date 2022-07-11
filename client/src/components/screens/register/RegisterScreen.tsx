@@ -54,7 +54,7 @@ const Register = (): JSX.Element => {
     }, [doesUserAlreadyExist])
 
     if (auth?.loggedInUser?.email) {
-        return <Navigate to="/" state={{ from: location.pathmame }} replace />;
+        return <Navigate to="/" state={{ from: location.state.from.pathname }} replace />;
     }
 
     const validateUsername = (username: string): void => {
