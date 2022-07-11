@@ -4,6 +4,7 @@ const buildRouter = (): Router => {
     const router: Router = Router();
 
     router.get('/validate', async (req, res) => {
+        // #swagger.ignore = true
         res.sendStatus(200);
     })
 

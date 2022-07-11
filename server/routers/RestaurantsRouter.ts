@@ -9,6 +9,14 @@ const buildRouter = (): Router => {
   const router: Router = Router();
 
   router.get("/", async (req, res) => {
+        /*
+            #swagger.tags = ['Restaurants']
+            #swagger.description = 'Get restaurants by status'
+            #swagger.responses[200] = {
+              description: 'return restaurnats',
+              schema: [{ $ref: '#/definitions/Restaurant' }]
+            }
+        */     
     try {
       const status = req.query.status || 'verified';
 
@@ -23,6 +31,18 @@ const buildRouter = (): Router => {
   });
 
   router.post("/", async (req, res) => {
+        /*
+            #swagger.tags = ['Restaurants']
+            #swagger.description = 'Create new unverified restaurant'
+            #swagger.parameters['restaurant'] = {
+              in: 'body',
+              schema: { $ref: '#/definitions/Restaurant' }
+            }
+            #swagger.responses[201] = {
+              description: 'Restaurant created.',
+              schema: { $ref: '#/definitions/Restaurant' }
+            }
+        */     
     try {
         const restaurant: Restaurant = req.body;
 
@@ -38,6 +58,14 @@ const buildRouter = (): Router => {
   });
 
   router.patch("/:id", async (req, res) => {
+            /*
+            #swagger.tags = ['Restaurants']
+            #swagger.description = 'Update restaurant by id'
+            #swagger.parameters['restaurant'] = {
+              in: 'body',
+              schema: { $ref: '#/definitions/Restaurant' }
+            }
+        */   
     try {
       const id = req.params.id;
       const restaurant: Restaurant = req.body;
@@ -53,6 +81,10 @@ const buildRouter = (): Router => {
   });
 
   router.patch("/:id/approve", async (req, res) => {
+                /*
+            #swagger.tags = ['Restaurants']
+            #swagger.description = 'Make restaurant verified by id'
+        */   
     try {
       const id = req.params.id;
       await RestaurantsSchema.findOneAndUpdate({ id: id }, { isVerified: true });
@@ -64,6 +96,10 @@ const buildRouter = (): Router => {
   });
 
   router.patch("/:id/unverify", async (req, res) => {
+          /*
+            #swagger.tags = ['Restaurants']
+            #swagger.description = 'Make restaurant unverified by id'
+        */   
     try {
       const id = req.params.id;
       await RestaurantsSchema.findOneAndUpdate({ id: id }, { isVerified: false });
@@ -75,6 +111,10 @@ const buildRouter = (): Router => {
   });
 
   router.delete("/:id/decline", async (req, res) => {
+          /*
+            #swagger.tags = ['Restaurants']
+            #swagger.description = 'Delete restaurant by id'
+        */   
     try {
       const id = req.params.id;
       await RestaurantsSchema.deleteOne({ id });
@@ -86,6 +126,10 @@ const buildRouter = (): Router => {
   });
 
   router.get("/:tags", async (req: Request, res: Response) => {
+          /*
+            #swagger.tags = ['Restaurants']
+            #swagger.description = 'Get restaurants ranked by provided tags'
+        */   
       try {
           const { tags } = req.params;
           const tagsToRankBy: string[] = (tags as string).split(',');
@@ -100,6 +144,14 @@ const buildRouter = (): Router => {
   });
 
     router.get("/top/favorite-restaurants", async (req, res) => {
+          /*
+            #swagger.tags = ['Restaurants']
+            #swagger.description = 'Get most liked restaurants'
+            #swagger.responses[200] = {
+              description: 'Return liked restaurants.',
+              schema: [{ $ref: '#/definitions/Restaurant' }]
+            }
+        */         
         try {
             const restaurants: Restaurant[] = await getMostLikedRestaurants();
             return res.status(200).json(restaurants);
