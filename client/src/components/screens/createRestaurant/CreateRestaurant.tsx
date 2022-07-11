@@ -323,7 +323,6 @@ export const CreateRestaurant = ({
               value={formik.values.tags}
               options={tagOptions}
               getOptionLabel={(option) => option}
-              isOptionEqualToValue={(option, value) => option === value}
               defaultValue={formik.values.tags}
               onChange={(event, value) => formik.setFieldValue("tags", value)}
               size="small"
